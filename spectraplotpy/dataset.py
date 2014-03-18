@@ -20,7 +20,6 @@ class Dataset():
         self.units_y = None
         self.dim_x = None
         self.dim_y = None
-        self.ndat = None
 
 
     def copy(self):
