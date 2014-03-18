@@ -29,9 +29,31 @@ class Spectrum(object):
         return copied
 
 
-    def sub(self, dataset):
+    def sub(self, other):
         """ substracs two spectra in place"""
-        pass
+        self.dataset.y -= other.dataset.y
+            
+    def __mul__(self, const):
+        """ multiplies a spectrum with number a in place"""
+        copied = self.copy()
+        copied.mul(const)
+        return copied
+        
+    def mul(self, const):
+        """ multiplies a spectrum with a number """
+        self.dataset.y = const * self.dataset.y
+        
+    def __div__(self, const):
+        """ divides a spectrum with number a in place"""
+        copied = self.copy()
+        copied.div(const)
+        return copied
+       
+            
+    def div(self, const):
+        """ multiplies a spectrum with a number """
+        self.dataset.y = self.dataset.y / const
+        
     
     
     def copy(self):
