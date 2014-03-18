@@ -19,9 +19,16 @@ class Exporter(object):
 
     def write_metadata(self):
         """"""
-       self.fichier = open(self.filename , 'w')
-       self.fichier.write('Test Writing\n')
+        self.fichier = open(self.filename , 'w')
+        self.fichier.write('Test Writing\n')
         
     def write_data(self):
         """ """
         pass
+    
+    def plot_data(self,dataset):
+        """ Plotting Data with Matplotlib"""
+        import matplotlib as plt
+        plt.plot(dataset)
+        plt.show()
+        
