@@ -1,8 +1,10 @@
+"""Test for the Importer class"""
 import spectraplotpy as spp
 #import pytest
 
 
-def test_Aviv_importer() :
+def test_AvivImporter():
+    """Test for the AvivImporter"""
     assert spp.AvivImporter('Data/01-CD-Aviv62DS/CSA/CSA.CD')
     #assert spp.AvivImporter('Data/01-CD-Aviv62DS/CSA/blank.CD')
     #assert spp.AvivImporter('Data/01-CD-Aviv62DS/PEP-average/4RNSX.001')
@@ -16,7 +18,8 @@ def test_Aviv_importer() :
 
 
 if __name__ == "__main__":
-    test_Aviv_importer()
+    """Run the test."""
+    test_AvivImporter()
 
 
 
