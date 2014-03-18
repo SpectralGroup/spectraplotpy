@@ -28,7 +28,7 @@ class Exporter(object):
     def plot_data(self, plotype=None):
         """ Plotting Data with Matplotlib
             with arguments
-            lineair
+            linear
             semilogy
             semilogx
             loglog
