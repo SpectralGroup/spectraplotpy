@@ -16,7 +16,6 @@ def plot_spectra(*sp_list , **kwarg):
     by calling their spectra plot method.
     """
     for sp in sp_list:
-        print sp
         sp.plot(**kwarg)
 
 
