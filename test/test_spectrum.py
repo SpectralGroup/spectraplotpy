@@ -1,33 +1,50 @@
 import spectraplotpy as spp
 import numpy as np
 
+def create_fake_dataset():
+    ds = spp.Dataset()
+    ds.x = np.array([1,2,3,4])
+    ds.y = np.array([2,4,6,8])
+    return ds 
+
 def test_construction():
-    ds = [1,2,3,4]   
-    s = spp.Spectrum(ds)
-    assert s
+    ds = spp.Dataset()
+    assert spp.Spectrum(ds)
 
 def test_copy():
-    ds = [1,2,3,4]
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds) 
+    s1 = s.copy()
+    
+    assert all(s.dataset.x == s1.dataset.x)
+    assert all(s.dataset.y == s1.dataset.y)
+    
+    s1.dataset.x[2] = 100
+    assert not all(s.dataset.x == s1.dataset.x)
+    
+    
+def test_add():
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    s1 = s.copy()
+    s2 = s + s1
+    s.add(s1)
+    
+    assert all(s.dataset.x == s2.dataset.x)
+    assert all(s.dataset.y == s2.dataset.y)
+
+def test_add_value():
+    s_y_np = np.array([2,4,6,8])
+    s_y_np1 = s_y_np.copy()
+    s_y_np2 = s_y_np + s_y_np1
+    
+    ds = create_fake_dataset()
     s = spp.Spectrum(ds)
     s1 = s.copy()
     
-    snp = np.array(ds)
-    snp1 = snp.copy()
+    assert all(s.dataset.y == s_y_np)
     
-    assert s1 == snp1 
-#    assert s1 == s
+    s.add(s1)
     
-#def test_add():
-#    ds = [1,2,3,4]
-#    s = spp.Spectrum(ds) 
-#    s1 = s.copy()
-#    s2 = s.add(s1)
-#    
-#    snp = np.array(ds)
-#    snp1 = snp.copy()
-#    snp2 = snp + snp1
-#    
-#    assert s == snp
-#    assert s1 == snp1
-#    assert s2 == snp2
+    assert all(s.dataset.y == s_y_np2)
     
