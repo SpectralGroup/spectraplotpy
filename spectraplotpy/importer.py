@@ -65,15 +65,6 @@ def take_text(filename):
 
 
 
-
-
-
-
-
-
-
-
-
 class Importer(object):
     """
     The importer class allows you to read data from file
@@ -109,6 +100,9 @@ class Importer(object):
         self.set_info(self.dataset.metadata)
         self.parse_data(data_txt)
 
+        print self.dataset.metadata
+        print len(self.dataset.x)
+        print self.dataset.dim_x, self.dataset.dim_y, self.dataset.units_x, self.dataset.units_y
 
 
 
@@ -170,12 +164,12 @@ class AvivImporter(Importer):
 
         The data are included between "_data_" and "_data_end_" lines.
         """
-        metadata_txt = 'filename ' + filename + '\n'
         start = text.index('\n_data_') + 7
         end = text.index('\n_data_end_')
+
         data_txt = (text[start + 7:end]).split('\r\n')
 
-        metadata_txt = 'filename = ' + filename + '\n'
+        metadata_txt = 'filename ' + filename + '\n'
         metadata_txt = metadata_txt + text[0:start] + text[end + 10:]
         return data_txt, metadata_txt
 

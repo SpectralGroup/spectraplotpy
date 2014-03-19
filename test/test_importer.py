@@ -24,21 +24,24 @@ def test_AvivImporter():
 
 
 
-def text_functions():
-    filename = 'sampledata/01-CD-Aviv62DS/CSA/CSA.CD'
+def text_functions(filename):
     #assert take_text()
-    assert take_text(filename)
-    assert get_txt_data_metadata(take_text(filename))
-    assert get_txt_data_metadata(take_text(filename), filename)
-    data_txt, metadata_txt = get_txt_data_metadata(take_text(filename), filename)
-    assert parse_metadata(metadata_txt)
+    assert spp.take_text(filename)
+    assert spp.get_txt_data_metadata(spp.take_text(filename))
+    assert spp.get_txt_data_metadata(spp.take_text(filename), filename)
+    data_txt, metadata_txt = spp.get_txt_data_metadata(spp.take_text(filename), filename)
+    assert spp.parse_metadata(metadata_txt)
+    print spp.parse_metadata(metadata_txt)
 
 
 
 if __name__ == "__main__":
     """Run the test."""
-    test_AvivImporter()
-    text_functions()
+    #test_AvivImporter()
+    filename = 'sampledata/01-CD-Aviv62DS/CSA/CSA.CD'
+    text_functions(filename)
+    filename = 'sampledata/01-CD-Aviv62DS/PEP-average/4RNSX.010'
+    text_functions(filename)
 
 
 
