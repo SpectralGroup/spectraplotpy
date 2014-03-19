@@ -2,6 +2,8 @@
 
 import copy
 import matplotlib.pyplot as plt
+# pylint: disable=W0401
+from custom_exceptions import *
 
 
 class Spectrum(object):    
@@ -31,10 +33,17 @@ class Spectrum(object):
         """ 
         adds two spectra in place
         """
-        self.dataset.y += other.dataset.y
+        x_data = self.dataset.x
+        y_data = self.dataset.y
+        x1_data = other.dataset.x
+        y1_data = other.dataset.y
         
-
-
+        if len(y_data) == len(y1_data) and all(x_data == x1_data):
+            self.dataset.y += other.dataset.y
+        else:
+#            print("Array length don't match")
+            raise LengthError("Array length don't match")
+            
     
     def __sub__(self, other):
         """ 
@@ -49,7 +58,17 @@ class Spectrum(object):
         """ 
         substracs two spectra in place
         """
-        self.dataset.y -= other.dataset.y
+        x_data = self.dataset.x
+        y_data = self.dataset.y
+        x1_data = other.dataset.x
+        y1_data = other.dataset.y
+        
+        if len(y_data) == len(y1_data) and all(x_data == x1_data):
+            self.dataset.y -= other.dataset.y
+        else:
+#            print("Array length don't match")
+            raise LengthError("Array length don't match")
+            
             
             
     def __rmul__(self, const):

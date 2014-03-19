@@ -8,3 +8,4 @@ from exporter import *
 from importer import *
 from spectrum import *
 from plotter_helper import *
+from custom_exceptions import *
