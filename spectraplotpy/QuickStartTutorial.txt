@@ -1,0 +1,54 @@
+spectraplotpy usage
+===================
+
+The basic initial operation is to load the spectraplotpy library, e.g.:
+
+	>>> import spectraplotpy as spp
+
+Loading the file containing the spectral data to be analysed:
+=============================================================
+This is as easy as:
+
+	>>> spec_f = spp.AvivImporter("spectral_data_file_path")
+
+where the string "spectral_data_file_path" is the absolute file path of the text file containing the spectral data to be analysed. Since the file may contain metadata in addition to the spectral data, the data is extracted with the method "spec_f.dataset" as follows:
+
+	>>>  spec_d = spp.Spectrum(spec_f.dataset)
+
+Possible operations to be performed on spectral data:
+====================================================
+spectraplotpy can be used to perform basic operations such as addition, substractions, plotting, averaging, etc. , on spectral data, viz.:
+
+--- Addition of spectral data:
+==============================
+Extract intensity data (y_data) from the the spectral data:
+
+	>>> 
+
+
+--- Subtraction of spectral data:
+=================================
+
+	>>> 
+
+--- Plotting data:
+==================
+The raw spectral data extracted may be ploted with
+
+	>>> spec_d.plot()
+
+The display of this plot depends on the matplotlib library which may be loaded using
+
+	>>> import matplotlib.pyplot as plt
+
+Thereafter, the plot is displayed with:
+
+	>>> plt.show()
+
+--- Exporting data to csv format:
+=================================
+
+	>>> 
+
+
+
