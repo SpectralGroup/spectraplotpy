@@ -1,5 +1,6 @@
 import spectraplotpy as spp
 import numpy as np
+import pytest as pt
 
 def create_fake_dataset():
     ds = spp.Dataset()
@@ -97,3 +98,16 @@ def test_mul_value():
     s1 =  3.0 * s 
     
     assert all(s1.dataset.y == s_y_np1)
+    
+def test_div():
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    with pt.raises(TypeError):
+        3.0 / s
+        
+    s2 = s / 3.0    
+    s.div(3.0)
+    
+    assert all(s.dataset.x == s2.dataset.x)
+    assert all(s.dataset.y == s2.dataset.y)
+
