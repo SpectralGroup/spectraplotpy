@@ -100,9 +100,9 @@ class Importer(object):
         self.set_info(self.dataset.metadata)
         self.parse_data(data_txt)
 
-        print self.dataset.metadata
-        print len(self.dataset.x)
-        print self.dataset.dim_x, self.dataset.dim_y, self.dataset.units_x, self.dataset.units_y
+        #print self.dataset.metadata
+        #print self.dataset.dim_x, self.dataset.dim_y, self.dataset.units_x, self.dataset.units_y
+        #print len(self.dataset.x)
 
 
 
@@ -215,17 +215,15 @@ class MosImporter(Importer):
         It stores dimensions and units in the dataset attributes.
         """
         self.dataset.units_x = metadata['"_UNITX"']
-        try:
-            self.dataset.errors_x = metadata['"_DELTAX"']
-        except:
-            pass
+        self.dataset.errors_x = metadata['"_DELTAX"']
         try:
             self.dataset.units_y = metadata['"_UNITY"']
         except:
             self.dataset.units_y = list()
-            for keys in metadata :
+            for key in metadata :
                 if key.startswith('"_UNITY'):
                     self.dataset.units_y.append(metadata[key])
+
 
 
 
