@@ -48,3 +48,28 @@ def test_add_value():
     
     assert all(s.dataset.y == s_y_np2)
     
+def test_sub():
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    s1 = s.copy()
+    s2 = s - s1
+    s.sub(s1)
+    
+    assert all(s.dataset.x == s2.dataset.x)
+    assert all(s.dataset.y == s2.dataset.y)
+    
+def test_sub_value():
+    s_y_np = np.array([2,4,6,8])
+    s_y_np1 = s_y_np.copy()
+    s_y_np2 = s_y_np - s_y_np1
+    
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    s1 = s.copy()
+    
+    assert all(s.dataset.y == s_y_np)
+    
+    s.sub(s1)
+    
+    assert all(s.dataset.y == s_y_np2)
+    
