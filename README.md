@@ -24,7 +24,7 @@ this will allow you to do `import spectraplotpy` anywhere in your filesystem.
 Testing
 -------
 
-Once you get everithing setted up, you can run the tests using,
+Once you get everything setted up, you can run the tests using,
 
     python setup.py test
 
@@ -32,4 +32,4 @@ Before you do a pull request make sure your code agrees with pylint
 (as far as possible) and passes all tests.
 
 In order to run the tests for the `Importer` classes you'll need to
-provide some sample data available trough the google group.
+provide some sample data available through the google group.
