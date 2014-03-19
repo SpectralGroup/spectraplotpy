@@ -6,6 +6,7 @@ import spectraplotpy as spp
 def test_AvivImporter():
     """Test for the AvivImporter"""
     assert spp.AvivImporter('Data/01-CD-Aviv62DS/CSA/CSA.CD')
+    assert spp.Importer('Data/01-CD-Aviv62DS/CSA/CSA.CD')
     #assert spp.AvivImporter('Data/01-CD-Aviv62DS/CSA/blank.CD')
     #assert spp.AvivImporter('Data/01-CD-Aviv62DS/PEP-average/4RNSX.001')
 
