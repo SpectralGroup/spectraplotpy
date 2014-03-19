@@ -4,7 +4,9 @@ import copy
 
 
 class Spectrum(object):    
-    """ An object class defining a spectrum """
+    """ 
+    An object class defining a spectrum 
+    """
     def __init__(self, dataset):
         """ """
         self.dataset = dataset
@@ -15,7 +17,9 @@ class Spectrum(object):
 
 
     def __add__(self, other):
-        """ adds two spectra, returns third spectrum """
+        """ 
+        adds two spectra, returns third spectrum 
+        """
         copied = self.copy()
         copied.add(other)
         return copied
@@ -23,41 +27,61 @@ class Spectrum(object):
 
 
     def add(self, other):
-        """ adds two spectra in place"""
+        """ 
+        adds two spectra in place
+        """
         self.dataset.y += other.dataset.y
         
 
 
     
     def __sub__(self, other):
-        """ substracs two spectra, returns third spectrum """
+        """ 
+        substracs two spectra, returns third spectrum 
+        """
         copied = self.copy()
         copied.sub(other)
         return copied
 
 
     def sub(self, other):
-        """ substracs two spectra in place"""
+        """ 
+        substracs two spectra in place
+        """
         self.dataset.y -= other.dataset.y
             
             
-            
+    def __rmul__(self, const):
+        """ 
+        reverse multiplication of a number with a spectrum in place 
+        """
+        copied = self.copy()
+        copied.mul(const)
+        return copied
+        
+        
     def __mul__(self, const):
-        """ multiplies a spectrum with number a in place"""
+        """ 
+        multiplies a spectrum with number a in place
+        """
         copied = self.copy()
         copied.mul(const)
         return copied
 
 
-        
+    
     def mul(self, const):
-        """ multiplies a spectrum with a number """
-        self.dataset.y = const * self.dataset.y
+        """ 
+        multiplies a spectrum with a number 
+        """
+        self.dataset.y = self.dataset.y * const
 
 
         
     def __div__(self, const):
-        """ divides a spectrum with number a in place"""
+        """ 
+        divides a spectrum with number a in place
+        """
         copied = self.copy()
         copied.div(const)
         return copied
@@ -65,12 +89,16 @@ class Spectrum(object):
        
             
     def div(self, const):
-        """ multiplies a spectrum with a number """
+        """ 
+        multiplies a spectrum with a number 
+        """
         self.dataset.y = self.dataset.y / const
         
     
     
     def copy(self):
-        """ creates a copy of a spectrum"""
+        """ 
+        creates a copy of a spectrum
+        """
         return copy.deepcopy(self)
         
