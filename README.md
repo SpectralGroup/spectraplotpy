@@ -3,6 +3,40 @@ spectraplotpy
 
 A spectrum manipulation library.
 
+Getting started
+---------------
+
+*spectraplotpy* helps you with common task when analaysing spectral data,
+it provides functionalities for reading and writing several data formats,
+process and plot several kinds of spectra.
+
+In order to install the library you download this repo and build the package
+with setup tools,
+
+    $ git clone https://github.com/odarbelaeze/spectraplotpy.git
+    $ cd spectraplotpy
+    $ python setup.py install
+
+Loadinga a generic spectrum from an Aviv formated file:
+
+    from spectraplotpy import AvivImporter
+    from spectraplotpy import Spectrum
+    a = AvivImporter('filename')
+    s = Spectrum(a.dataset)
+
+Ploting the spectrum with the default plot settings,
+
+    import matplotlib.pyplot as plt
+    s.plot(plt)
+    plt.show()
+
+Explorting the spectrum to a CSVFile:
+
+    from spectraplotpy import CSVExporter
+    csve = CSVExporter(s.dataset)
+    csve.save('myspectrum.csv')
+
+
 Development setup
 -----------------
 
