@@ -6,8 +6,7 @@ import pytest
 def test_AvivImporter():
     """Test for the AvivImporter"""
 
-    filenames= [
-                'sampledata/01-CD-Aviv62DS/CSA/CSA.CD',
+    filenames = [
                 'sampledata/01-CD-Aviv62DS/CSA/CSA.CD',
                 'sampledata/01-CD-Aviv62DS/CSA/blank.CD',
                 'sampledata/01-CD-Aviv62DS/PEP-average/4RNSX.001',
@@ -55,9 +54,9 @@ def text_functions():
         data_txt, metadata_txt = spp.get_txt_data_metadata(spp.take_text(filename), filename)
         assert spp.parse_metadata(metadata_txt)
         data_txt, metadata_txt = spp.get_txt_data_metadata(spp.take_text(filename))
-        print 'metadata_txt = ', metadata_txt
-        assert spp.parse_metadata(metadata_txt)
-        print spp.parse_metadata(metadata_txt)
+        #print 'metadata_txt = ', metadata_txt
+        assert spp.parse_metadata(metadata_txt) == None
+        #print spp.parse_metadata(metadata_txt)
 
 
 
@@ -72,8 +71,4 @@ if __name__ == "__main__":
     #test_baseclass_constructor()
 
     test_MosImporter()
-
-
-
-
 
