@@ -18,6 +18,10 @@ def test_AvivImporter():
         #spp.Importer('Data/01-CD-Aviv62DS/PEP-average/4RNSX.001')
 
 
+def test_MosImporter():
+    """Test for the MosImporter"""
+    assert spp.MosImporter('sampledata/02-CD-Mos500/blank.bka')
+
 
 
 
@@ -37,11 +41,15 @@ def text_functions(filename):
 
 if __name__ == "__main__":
     """Run the test."""
+    #filename = 'sampledata/01-CD-Aviv62DS/CSA/CSA.CD'
+    #text_functions(filename)
+    #filename = 'sampledata/01-CD-Aviv62DS/PEP-average/4RNSX.010'
+    #text_functions(filename)
+
     #test_AvivImporter()
-    filename = 'sampledata/01-CD-Aviv62DS/CSA/CSA.CD'
-    text_functions(filename)
-    filename = 'sampledata/01-CD-Aviv62DS/PEP-average/4RNSX.010'
-    text_functions(filename)
+    test_MosImporter()
+
+
 
 
 

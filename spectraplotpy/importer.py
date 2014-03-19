@@ -190,3 +190,58 @@ class AvivImporter(Importer):
 
 
 
+class MosImporter(Importer):
+    """
+    Importer of Mos500 files.
+    """
+    def get_txt_data_metadata(self, text, filename=None):
+        """
+        Separate data and metadata information form the text file.
+
+        The data follows the marker `"_DATA"`.
+        """
+        start = text.index('"_DATA"')
+
+        data_txt = (text[start + 7:]).split('\r\n')
+        metadata_txt = 'filename ' + filename + '\n'
+        metadata_txt = metadata_txt + text[0:start]
+        return data_txt, metadata_txt
+
+
+    def set_info(self, metadata):
+        """
+        Defines the particular informations needed for a dataset.
+
+        It stores dimensions and units in the dataset attributes.
+        """
+        self.dataset.units_x = metadata['"_UNITX"']
+        try:
+            self.dataset.errors_x = metadata['"_DELTAX"']
+        except:
+            pass
+        try:
+            self.dataset.units_y = metadata['"_UNITY"']
+        except:
+            self.dataset.units_y = list()
+            for keys in metadata :
+                if key.startswith('"_UNITY'):
+                    self.dataset.units_y.append(metadata[key])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
