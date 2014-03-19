@@ -25,9 +25,35 @@ class Exporter(object):
         """ This writes the data to a given file """
         pass
     
-    def plot_data(self):
-        """ Plotting Data with Matplotlib"""
+    def plot_data(self, plotype=None):
+        """ Plotting Data with Matplotlib
+            with arguments
+            linear
+            semilogy
+            semilogx
+            loglog
+            """
+
         import matplotlib.pyplot as plt
-        plt.plot(self.dataset.x, self.dataset.y)
+        
+        if plotype == 'linear':
+            plt.plot(self.dataset.x, self.dataset.y)
+            plt.title('Linear')
+            
+        if plotype == 'semilogy':
+            plt.semilogy(self.dataset.x, self.dataset.y)
+            plt.title('Semilogy')            
+            plt.grid(True)
+            
+        if plotype == 'semilogx':
+            plt.semilogx(self.dataset.x, self.dataset.y)
+            plt.title('Semilogx')
+            plt.grid(True)
+            
+        if plotype == 'loglog':
+            plt.loglog(self.dataset.x, self.dataset.y)
+            plt.title('loglog')
+            plt.grid(True)
+            
         plt.show()
         
