@@ -38,15 +38,18 @@ def parse_metadata(metadata_txt):
     Function that returns a dictionary of the metadata
     from the metadata as a string.
     """
-    metadata = dict()
-    metadata_txt = metadata_txt.split('\n')
-    for line in metadata_txt:
-        line = line.split()
-        if len(line) > 1:
-            keyword = line[0]
-            value = ' '.join(line[1:])
-            metadata[keyword] = value
-    return metadata
+    if metadata_txt is not None:
+        metadata = dict()
+        metadata_txt = metadata_txt.split('\n')
+        for line in metadata_txt:
+            line = line.split()
+            if len(line) > 1:
+                keyword = line[0]
+                value = ' '.join(line[1:])
+                metadata[keyword] = value
+        return metadata
+    else:
+        return None
 
 
 
@@ -99,9 +102,11 @@ class Importer(object):
         self.dataset.metadata = self.parse_metadata(metadata_txt)
         self.set_info(self.dataset.metadata)
         self.parse_data(data_txt)
+        return self.dataset
 
         #print self.dataset.metadata
-        #print self.dataset.dim_x, self.dataset.dim_y, self.dataset.units_x, self.dataset.units_y
+        #print self.dataset.dim_x, self.dataset.dim_y,
+               #self.dataset.units_x, self.dataset.units_y
         #print len(self.dataset.x)
 
 
@@ -164,7 +169,7 @@ class AvivImporter(Importer):
 
         The data are included between "_data_" and "_data_end_" lines.
         """
-        start = text.index('\n_data_') + 7
+        start = text.index('\n_data_')
         end = text.index('\n_data_end_')
 
         data_txt = (text[start + 7:end]).split('\r\n')
@@ -216,11 +221,12 @@ class MosImporter(Importer):
         """
         self.dataset.units_x = metadata['"_UNITX"']
         self.dataset.errors_x = metadata['"_DELTAX"']
+        #print [key for key in metadata.keys() if key.startswith('"_UNITY"')]
         try:
             self.dataset.units_y = metadata['"_UNITY"']
         except:
             self.dataset.units_y = list()
-            for key in metadata :
+            for key in metadata:
                 if key.startswith('"_UNITY'):
                     self.dataset.units_y.append(metadata[key])
 

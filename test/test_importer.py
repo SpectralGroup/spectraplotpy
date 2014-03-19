@@ -43,37 +43,34 @@ def test_MosImporter():
 
 
 
+def text_functions():
+    filenames = [
+                 'sampledata/01-CD-Aviv62DS/PEP-average/4RNSX.010',
+                 'sampledata/01-CD-Aviv62DS/CSA/CSA.CD'
+                 ]
+
+    for filename in filenames:
+        assert spp.take_text(filename)
+        assert spp.get_txt_data_metadata(spp.take_text(filename))
+        assert spp.get_txt_data_metadata(spp.take_text(filename), filename)
+        data_txt, metadata_txt = spp.get_txt_data_metadata(spp.take_text(filename), filename)
+        assert spp.parse_metadata(metadata_txt)
+        data_txt, metadata_txt = spp.get_txt_data_metadata(spp.take_text(filename))
+        #print metadata_txt
+        assert spp.parse_metadata(metadata_txt) == None
+        #print spp.parse_metadata(metadata_txt)
 
 
-
-
-
-
-
-def text_functions(filename):
-    #assert take_text()
-    assert spp.take_text(filename)
-    assert spp.get_txt_data_metadata(spp.take_text(filename))
-    assert spp.get_txt_data_metadata(spp.take_text(filename), filename)
-    data_txt, metadata_txt = spp.get_txt_data_metadata(spp.take_text(filename), filename)
-    data_txt, metadata_txt = spp.get_txt_data_metadata(spp.take_text(filename))
-    #print metadata_txt
-    assert spp.parse_metadata(metadata_txt)
-    print spp.parse_metadata(metadata_txt)
 
 
 
 if __name__ == "__main__":
     """Run the test."""
-
-    filename = 'sampledata/01-CD-Aviv62DS/CSA/CSA.CD'
-    text_functions(filename)
-    filename = 'sampledata/01-CD-Aviv62DS/PEP-average/4RNSX.010'
-    text_functions(filename)
+    text_functions()
 
     test_AvivImporter()
 
-    test_baseclass_constructor()
+    #test_baseclass_constructor()
 
     test_MosImporter()
 
