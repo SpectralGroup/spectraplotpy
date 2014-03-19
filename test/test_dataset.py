@@ -2,7 +2,7 @@
 """
 Created on Tue Mar 18 15:53:31 2014
 
-@author: hnjoku
+@author: ooscar
 """
 
 from spectraplotpy import Dataset

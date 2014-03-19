@@ -35,15 +35,18 @@ def parse_metadata(metadata_txt):
     Function that returns a dictionary of the metadata
     from the metadata as a string.
     """
-    metadata = dict()
-    metadata_txt = metadata_txt.split('\n')
-    for line in metadata_txt:
-        line = line.split()
-        if len(line) > 1:
-            keyword = line[0]
-            value = ' '.join(line[1:])
-            metadata[keyword] = value
-    return metadata
+    if metadata_txt is not None:
+        metadata = dict()
+        metadata_txt = metadata_txt.split('\n')
+        for line in metadata_txt:
+            line = line.split()
+            if len(line) > 1:
+                keyword = line[0]
+                value = ' '.join(line[1:])
+                metadata[keyword] = value
+        return metadata
+    else:
+        return None
 
 
 def take_text(filename):
@@ -91,10 +94,11 @@ class Importer(object):
         self.set_info(self.dataset.metadata)
         self.parse_data(data_txt)
 
-        print self.dataset.metadata
-        print len(self.dataset.x)
-        print self.dataset.dim_x, self.dataset.dim_y,\
-              self.dataset.units_x, self.dataset.units_y
+        #print self.dataset.metadata
+        #print self.dataset.dim_x, self.dataset.dim_y,
+               #self.dataset.units_x, self.dataset.units_y
+        #print len(self.dataset.x)
+        return self.dataset
 
 
     def get_txt_data_metadata(self, text, filename=None):
@@ -155,7 +159,7 @@ class AvivImporter(Importer):
 
         The data are included between "_data_" and "_data_end_" lines.
         """
-        start = text.index('\n_data_') + 7
+        start = text.index('\n_data_')
         end = text.index('\n_data_end_')
 
         data_txt = (text[start + 7:end]).split('\r\n')
@@ -176,3 +180,38 @@ class AvivImporter(Importer):
         self.dataset.units_x = metadata['x_unit']
         self.dataset.units_y = metadata['y_unit']
 
+
+class MosImporter(Importer):
+    """
+    Importer of Mos500 files.
+    """
+    def get_txt_data_metadata(self, text, filename=None):
+        """
+        Separate data and metadata information form the text file.
+
+        The data follows the marker `"_DATA"`.
+        """
+        start = text.index('"_DATA"')
+
+        data_txt = (text[start + 7:]).split('\r\n')
+        metadata_txt = 'filename ' + filename + '\n'
+        metadata_txt = metadata_txt + text[0:start]
+        return data_txt, metadata_txt
+
+
+    def set_info(self, metadata):
+        """
+        Defines the particular informations needed for a dataset.
+
+        It stores dimensions and units in the dataset attributes.
+        """
+        self.dataset.units_x = metadata['"_UNITX"']
+        self.dataset.errors_x = metadata['"_DELTAX"']
+        #print [key for key in metadata.keys() if key.startswith('"_UNITY"')]
+        try:
+            self.dataset.units_y = metadata['"_UNITY"']
+        except:
+            self.dataset.units_y = list()
+            for key in metadata:
+                if key.startswith('"_UNITY'):
+                    self.dataset.units_y.append(metadata[key])
