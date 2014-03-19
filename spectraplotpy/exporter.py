@@ -1,4 +1,7 @@
-""" Exporter Program"""
+""" Exporter Program """
+
+from StringIO import StringIO
+import numpy as np
 
 class Exporter(object):
     """ Class Exporter """
@@ -9,12 +12,10 @@ class Exporter(object):
 
 class BaseTextExporter(Exporter):
     """docstring for BaseTextExporter"""
-    def __init__(self, dataset):
-        super(BaseTextExporter, self).__init__(dataset)
 
     def __str__(self):
         # For instance
-        return self.metadata_to_text() + "\n" + self.data_to_text()
+        return self.text()
 
     def metadata_to_text(self):
         """This writes the metadata to a given file"""
@@ -23,19 +24,55 @@ class BaseTextExporter(Exporter):
 
     def data_to_text(self):
         """ This writes the data to a given file """
-        return "data text"
+        return "Data text"
 
-    def get_whole_text(self):
+    def text(self):
         return self.metadata_to_text() + "\n" + self.data_to_text()
 
-    def write_to_file(self, file_handler, *args, **kwargs):
-        file_handler.write(self.get_whole_text(), *args, **kwargs)
+    def write(self, file_handler, *args, **kwargs):
+        file_handler.write(self.text(), *args, **kwargs)  
+    
+    def save(self, filename, *args, **kwargs):
+        with open(filename, 'w') as file_handler:
+            self.write(file_handler, *args, **kwargs)
+
 
 class BasePlotExporter(Exporter):
     """docstring for BasePlotExporter"""
-    def __init__(self, dataset):
-        super(BasePlotExporter, self).__init__(dataset)
 
     def plot(self, axis, *args, **kwargs):
         # Cases for error bars and labels
         axis.plot(self.dataset.x, self.dataset.y, *args, **kwargs)
+
+
+class CSVExporter(BaseTextExporter):
+    """Saving to CSV file"""
+
+    def metadata_to_text(self):
+        """This writes the metadata to a given csv file"""
+        return "# {0}".format(self.dataset.metadata)
+
+    def data_to_text(self):
+        """ This writes the data to a given csv file """
+        s = StringIO("")
+        np.savetxt(s, np.column_stack((self.dataset.x, self.dataset.y)))
+        s.seek(0)
+        return s.read()
+        
+
+class AvivExporter(CSVExporter):
+    """"""
+
+    def metadata_to_text(self):
+        """This writes the metadata to a given csv file"""
+        text = "data_name something"
+        for key in self.dataset.metadata:
+            text += "\n_{key}_ {value}".format(
+                key=key,
+                value=self.dataset.metadata[key]
+            )
+        return text
+
+    def data_to_text(self):
+        """ This writes the data to a given csv file """
+        return "_data_\n" + super(AvivExporter, self).data_to_text()
