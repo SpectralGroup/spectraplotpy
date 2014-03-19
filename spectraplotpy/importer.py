@@ -50,6 +50,28 @@ def parse_metadata(metadata_txt):
 
 
 
+def take_text(filename):
+    """
+    Read the file and return the text as a string.
+    """
+    whole_text = None
+    with open(filename) as inputfile:
+        whole_text = inputfile.read()
+        return whole_text
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class Importer(object):
@@ -80,22 +102,14 @@ class Importer(object):
          - store the data into the x, y, errors_x, errors_y of the dataset
             (see parse_data).
         """
-        text = self.take_text(filename)
+        self.dataset = Dataset()
+        text = take_text(filename)
         data_txt, metadata_txt = self.get_txt_data_metadata(text, filename)
         self.dataset.metadata = self.parse_metadata(metadata_txt)
         self.set_info(self.dataset.metadata)
         self.parse_data(data_txt)
 
 
-    def take_text(self, filename):
-        """
-        Read the file and return the text as a string.
-        """
-        whole_text = None
-        with open(filename) as inputfile:
-            self.dataset = Dataset()
-            whole_text = inputfile.read()
-            return whole_text
 
 
     def get_txt_data_metadata(self, text, filename=None):
