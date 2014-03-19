@@ -5,7 +5,7 @@ import numpy as np
 
 class Exporter(object):
     """ Class Exporter """
-
+    # pylint: disable=R0903
     def __init__(self, dataset):
         self.dataset = dataset
 
@@ -17,13 +17,16 @@ class BaseTextExporter(Exporter):
         # For instance
         return self.text()
 
+
     def metadata_to_text(self):
         """This writes the metadata to a given file"""
+        # pylint: disable=R0201
         return "Meta data text"
 
 
     def data_to_text(self):
         """ This writes the data to a given file """
+        # pylint: disable=R0201
         return "Data text"
 
     def text(self):
@@ -39,10 +42,9 @@ class BaseTextExporter(Exporter):
         with open(filename, 'w') as file_handler:
             self.write(file_handler, *args, **kwargs)
 
-
 class BasePlotExporter(Exporter):
     """docstring for BasePlotExporter"""
-
+    # pylint: disable=R0903  
     def plot(self, axis, *args, **kwargs):
         """ plotting Data"""
         axis.plot(self.dataset.x, self.dataset.y, *args, **kwargs)
@@ -68,16 +70,17 @@ class AvivExporter(CSVExporter):
     """ Saving to Aviv file"""
 
     def metadata_to_text(self):
-        """This writes the metadata to a given csv file"""
+        """This writes the metadata to a given aviv file"""
         text = "data_name something"
         for key in self.dataset.metadata:
             text += "\n_{key}_ {value}".format(
                 key=key,
                 value=self.dataset.metadata[key]
             )
-        text += "\n_data_end_"
         return text
 
     def data_to_text(self):
         """ This writes the data to a given csv file """
-        return "_data_\n" + super(AvivExporter, self).data_to_text()
+        return "_data_\n" + \
+               super(AvivExporter, self).data_to_text() + \
+               "\n_data_end"
