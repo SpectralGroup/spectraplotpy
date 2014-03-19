@@ -5,23 +5,19 @@ import spectraplotpy as spp
 
 def test_AvivImporter():
     """Test for the AvivImporter"""
-    assert spp.AvivImporter('Data/01-CD-Aviv62DS/CSA/CSA.CD')
-    assert spp.Importer('Data/01-CD-Aviv62DS/CSA/CSA.CD')
-    #assert spp.AvivImporter('Data/01-CD-Aviv62DS/CSA/blank.CD')
-    #assert spp.AvivImporter('Data/01-CD-Aviv62DS/PEP-average/4RNSX.001')
-
-    #print spp.Importer('Data/01-CD-Aviv62DS/PEP-average/4RNSX.001')
+    assert spp.AvivImporter('sampledata/01-CD-Aviv62DS/CSA/CSA.CD')
+    assert spp.Importer('sampledata/01-CD-Aviv62DS/CSA/CSA.CD')
 
 
-#def test_baseclass_constructor():
-    #with pytest.raises(Exception):
-        #spp.Importer('Data/01-CD-Aviv62DS/PEP-average/4RNSX.001')
+def text_functions(filename):
+    """Test the special functions"""
+    assert spp.take_text(filename)
+    assert spp.get_txt_data_metadata(spp.take_text(filename))
+    assert spp.get_txt_data_metadata(spp.take_text(filename), filename)
 
+    data_txt, metadata_txt = spp.get_txt_data_metadata(
+        spp.take_text(filename),
+        filename)
 
-if __name__ == "__main__":
-    """Run the test."""
-    test_AvivImporter()
-
-
-
-
+    assert spp.parse_metadata(metadata_txt)
+    print spp.parse_metadata(metadata_txt)
