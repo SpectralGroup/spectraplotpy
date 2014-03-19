@@ -1,7 +1,10 @@
-""" spectrum.py """
+# -*- coding: utf-8 -*-
+
+"""
+spectrum.py
+"""
 
 import copy
-import matplotlib.pyplot as plt
 # pylint: disable=W0401
 from custom_exceptions import *
 
@@ -14,9 +17,9 @@ class Spectrum(object):
         """ """
         self.dataset = dataset
         
+
 #    def __str__(self):
 #        return 'spectum('self.dataset.metadata.filename))
-
 
 
     def __add__(self, other):
@@ -120,20 +123,56 @@ class Spectrum(object):
         return copy.deepcopy(self)
         
         
-    def plot(self, *args, **kwargs):
+    def plot(self, fig, *args, **kwargs):
         """
-        makes a x-y line plot of the spectrum in place
+        Plots into `fig` using its plot method, the x and y come from
+        the dataset and any other argument you pass will be forwarded to
+        the plot function
         """
 
-        plt.plot(self.dataset.x, self.dataset.y, *args, **kwargs)
-        
-        
-    def y_error_plot(self, *args, **kwargs):
+        if self.dataset.error_x is not None or self.dataset.error_y is not None:
+            if self.dataset.error_x is not None:
+                if self.dataset.error_y is not None:
+                    return self._plot_xy_error(fig, *args, **kwargs)
+                else:
+                    return self._plot_x_error(fig, *args, **kwargs)
+            else:
+                return self._plot_y_error(fig, *args, **kwargs)
+
+        fig.plot(self.dataset.x, self.dataset.y, *args, **kwargs)
+
+
+    def _plot_xy_error(self, fig, *args, **kwargs):
         """
-        makes a plot of the y symmetric error bars of the spectrum in place
+        Private function that calls the auxiliar `errorbar` method provided
+        by the `fig` object and plots the errorbars propertly
         """
-        x_data = self.dataset.x
-        y_data = self.dataset.y        
-        y_error = self.dataset.error_y
-        
-        plt.errorbar(x_data, y_data, yerr = y_error, *args, **kwargs)
+        return fig.errorbar(
+            self.dataset.x, self.dataset.y,
+            self.dataset.error_x, self.dataset.error_y,
+            *args, **kwargs
+        )
+
+
+    def _plot_x_error(self, fig, *args, **kwargs):
+        """
+        Private function that calls the auxiliar `errorbar` method provided
+        by the `fig` object and plots the errorbars propertly
+        """
+        return fig.errorbar(
+            self.dataset.x, self.dataset.y,
+            self.dataset.error_x,
+            *args, **kwargs
+        )
+
+
+    def _plot_y_error(self, fig, *args, **kwargs):
+        """
+        Private function that calls the auxiliar `errorbar` method provided
+        by the `fig` object and plots the errorbars propertly
+        """
+        return fig.errorbar(
+            self.dataset.x, self.dataset.y,
+            yerr=self.dataset.error_y,
+            *args, **kwargs
+        )
