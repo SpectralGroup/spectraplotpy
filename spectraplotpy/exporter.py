@@ -27,12 +27,15 @@ class BaseTextExporter(Exporter):
         return "Data text"
 
     def text(self):
+        """ This return metadata and data to handler file"""
         return self.metadata_to_text() + "\n" + self.data_to_text()
 
     def write(self, file_handler, *args, **kwargs):
+        """ This write metadata and data to handler file"""
         file_handler.write(self.text(), *args, **kwargs)  
     
     def save(self, filename, *args, **kwargs):
+        """ This save metadata and data to handler file"""
         with open(filename, 'w') as file_handler:
             self.write(file_handler, *args, **kwargs)
 
@@ -41,7 +44,7 @@ class BasePlotExporter(Exporter):
     """docstring for BasePlotExporter"""
 
     def plot(self, axis, *args, **kwargs):
-        # Cases for error bars and labels
+        """ plotting Data"""
         axis.plot(self.dataset.x, self.dataset.y, *args, **kwargs)
 
 
@@ -54,14 +57,15 @@ class CSVExporter(BaseTextExporter):
 
     def data_to_text(self):
         """ This writes the data to a given csv file """
-        s = StringIO("")
-        np.savetxt(s, np.column_stack((self.dataset.x, self.dataset.y)))
-        s.seek(0)
-        return s.read()
+        strhandler = StringIO("")
+        np.savetxt(strhandler,
+                   np.column_stack((self.dataset.x, self.dataset.y)))
+        strhandler.seek(0)
+        return strhandler.read()
         
 
 class AvivExporter(CSVExporter):
-    """"""
+    """ Saving to Aviv file"""
 
     def metadata_to_text(self):
         """This writes the metadata to a given csv file"""
@@ -71,6 +75,7 @@ class AvivExporter(CSVExporter):
                 key=key,
                 value=self.dataset.metadata[key]
             )
+        text += "\n_data_end_"
         return text
 
     def data_to_text(self):
