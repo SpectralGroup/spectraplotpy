@@ -9,8 +9,6 @@ import numpy as np
 import re
 
 
-
-
 def get_txt_data_metadata(text, filename=None):
     """
     Function that takes a text (as a single string)
@@ -32,7 +30,6 @@ def get_txt_data_metadata(text, filename=None):
     return data_txt, metadata_txt
 
 
-
 def parse_metadata(metadata_txt):
     """
     Function that returns a dictionary of the metadata
@@ -49,7 +46,6 @@ def parse_metadata(metadata_txt):
     return metadata
 
 
-
 def take_text(filename):
     """
     Read the file and return the text as a string.
@@ -58,11 +54,6 @@ def take_text(filename):
     with open(filename) as inputfile:
         whole_text = inputfile.read()
         return whole_text
-
-
-
-
-
 
 
 class Importer(object):
@@ -102,8 +93,8 @@ class Importer(object):
 
         print self.dataset.metadata
         print len(self.dataset.x)
-        print self.dataset.dim_x, self.dataset.dim_y, self.dataset.units_x, self.dataset.units_y
-
+        print self.dataset.dim_x, self.dataset.dim_y,\
+              self.dataset.units_x, self.dataset.units_y
 
 
     def get_txt_data_metadata(self, text, filename=None):
@@ -173,6 +164,7 @@ class AvivImporter(Importer):
         metadata_txt = metadata_txt + text[0:start] + text[end + 10:]
         return data_txt, metadata_txt
 
+
     def set_info(self, metadata):
         """
         Defines the particular informations needed for a dataset.
@@ -183,10 +175,4 @@ class AvivImporter(Importer):
         self.dataset.dim_y = metadata['_y_type_']
         self.dataset.units_x = metadata['x_unit']
         self.dataset.units_y = metadata['y_unit']
-
-
-
-
-
-
 
