@@ -12,20 +12,27 @@ class Dataset():
     """
     DAta structure holding a 2D representation of an spectrum.
     """
-    def __init__(self):
-        self.data_x = None
-        self.data_y = None
-        self.metadata = {}
-        self.errors_x = None
-        self.errors_y = None
-        self.units_x = None
-        self.units_y = None
-        self.dim_x = None
-        self.dim_y = None
+    def __init__(
+            self,
+            x=np.array([]), y=np.array([]),
+            metadata={},
+            errors_x=None, errors_y=None, 
+            units_x=None, units_y=None, 
+            dim_x=None, dim_y=None
+        ):
+        self.x = x
+        self.y = y
+        self.metadata = metadata
+        self.errors_x = errors_x
+        self.errors_y = errors_y
+        self.units_x = units_x
+        self.units_y = units_y
+        self.dim_x = dim_x
+        self.dim_y = dim_y
 
     def _validate_data(self):
         """Check that x and y data match"""
-        if (len(self.data_x) != len(self.data_y)):
+        if len(self.x) != len(self.y):
             return False
         return True
 
@@ -38,7 +45,7 @@ class Dataset():
         if isinstance(self.errors_x, np.ndarray) \
         and isinstance(self.errors_y, np.ndarray):
             if len(self.errors_x) == len(self.errors_y) \
-            and len(self.data_x) == len(self.errors_x):
+            and len(self.x) == len(self.errors_x):
                 return True
             else:
                 return False
@@ -71,6 +78,11 @@ class Dataset():
                self._validate_units() and \
                self._validate_dims()
 
+    def length(self):
+        """
+        Returns the len of the dataset assuming that the dataset is valid...
+        """
+        return len(self.x)
 
     def copy(self):
         """
