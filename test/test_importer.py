@@ -1,6 +1,6 @@
 """Test for the Importer class"""
 import spectraplotpy as spp
-#import pytest
+import pytest
 
 
 def test_AvivImporter():
@@ -20,7 +20,7 @@ def test_AvivImporter():
 
 #def test_baseclass_constructor():
     #with pytest.raises(Exception):
-        #spp.Importer('sampledata/01-CD-Aviv62DS/PEP-average/4RNSX.001')
+        #spp.Importer('sampledata/01-CD-Aviv62DS/CSA/CSA_corrupted.CD4')
 
 
 def test_MosImporter():
@@ -42,7 +42,6 @@ def test_MosImporter():
 
 
 
-
 def text_functions():
     filenames = [
                  'sampledata/01-CD-Aviv62DS/PEP-average/4RNSX.010',
@@ -56,9 +55,9 @@ def text_functions():
         data_txt, metadata_txt = spp.get_txt_data_metadata(spp.take_text(filename), filename)
         assert spp.parse_metadata(metadata_txt)
         data_txt, metadata_txt = spp.get_txt_data_metadata(spp.take_text(filename))
-        #print metadata_txt
-        assert spp.parse_metadata(metadata_txt) == None
-        #print spp.parse_metadata(metadata_txt)
+        print 'metadata_txt = ', metadata_txt
+        assert spp.parse_metadata(metadata_txt)
+        print spp.parse_metadata(metadata_txt)
 
 
 
