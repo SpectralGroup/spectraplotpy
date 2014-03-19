@@ -1,6 +1,7 @@
 """ spectrum.py """
 
 import copy
+import matplotlib.pyplot as plt
 
 
 class Spectrum(object):    
@@ -68,13 +69,12 @@ class Spectrum(object):
         copied.mul(const)
         return copied
 
-
     
     def mul(self, const):
         """ 
         multiplies a spectrum with a number 
         """
-        self.dataset.y = self.dataset.y * const
+        self.dataset.y = const * self.dataset.y 
 
 
         
@@ -86,7 +86,6 @@ class Spectrum(object):
         copied.div(const)
         return copied
 
-       
             
     def div(self, const):
         """ 
@@ -95,10 +94,27 @@ class Spectrum(object):
         self.dataset.y = self.dataset.y / const
         
     
-    
     def copy(self):
         """ 
         creates a copy of a spectrum
         """
         return copy.deepcopy(self)
         
+        
+    def plot(self, *args, **kwargs):
+        """
+        makes a x-y line plot of the spectrum in place
+        """
+
+        plt.plot(self.dataset.x, self.dataset.y, *args, **kwargs)
+        
+        
+    def y_error_plot(self, *args, **kwargs):
+        """
+        makes a plot of the y symmetric error bars of the spectrum in place
+        """
+        x_data = self.dataset.x
+        y_data = self.dataset.y        
+        y_error = self.dataset.error_y
+        
+        plt.errorbar(x_data, y_data, yerr = y_error, *args, **kwargs)
