@@ -1,11 +1,20 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Mar 17 2014
+
+@author: ariamania
+"""
+
 import spectraplotpy as spp
 import numpy as np
 import pytest as pt
+from mock import MagicMock, Mock 
 
 def create_fake_dataset():
     ds = spp.Dataset()
     ds.x = np.array([1,2,3,4])
     ds.y = np.array([2,4,6,8])
+    ds.error_y = np.array([1,1,1,1])    
     return ds 
 
 def test_construction():
@@ -22,7 +31,21 @@ def test_copy():
     
     s1.dataset.x[2] = 100
     assert not all(s.dataset.x == s1.dataset.x)
+
+def test_Length_Error_exception():
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    ds1 = spp.Dataset()
+    ds1.x = np.array([1,2,3])
+    ds1.y = np.array([2,4,6])
+    s1 = spp.Spectrum(ds1)
     
+    with pt.raises(spp.LengthError):
+        s + s1
+        
+    with pt.raises(spp.LengthError):
+        s - s1
+        
     
 def test_add():
     ds = create_fake_dataset()
@@ -33,6 +56,7 @@ def test_add():
     
     assert all(s.dataset.x == s2.dataset.x)
     assert all(s.dataset.y == s2.dataset.y)
+
 
 def test_add_value():
     s_y_np = np.array([2,4,6,8])
@@ -110,4 +134,33 @@ def test_div():
     
     assert all(s.dataset.x == s2.dataset.x)
     assert all(s.dataset.y == s2.dataset.y)
+    
+
+def test_mock_plot():
+    """
+    create a mock test for the plot method
+    """
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    
+    plt = MagicMock()
+    plt.plot = MagicMock(return_value = "mock")
+    plt.plot("mock")
+    plt.plot.assert_called_once_with("mock")
+    s.plot()
+    
+    
+def test_mock_y_error_plot():
+    """
+    create a mock test for the y_error_plot method
+    """
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    
+    plt = MagicMock()
+    plt.y_error_plot = MagicMock(return_value = "mock")
+    plt.y_error_plot("mock")
+    plt.y_error_plot.assert_called_once_with("mock")
+    s.y_error_plot()
+    
 
