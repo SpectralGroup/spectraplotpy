@@ -1,3 +1,5 @@
+[read the docs](http://spectraplotpy.readthedocs.org/en/latest/)
+
 spectraplotpy
 =============
 

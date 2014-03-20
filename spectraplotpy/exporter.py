@@ -103,7 +103,7 @@ class AvivExporter(CSVExporter):
                super(AvivExporter, self).data_to_text() + \
                "\n_data_end"
                
-class GraphicExporter(Exporter):
+class BaseGraphicExporter(Exporter):
     """ Export Plot To PNG file from matplolib"""   
         
     def plot(self, axis, *args, **kwargs):
