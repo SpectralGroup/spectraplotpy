@@ -1,7 +1,10 @@
-""" spectrum.py """
+# -*- coding: utf-8 -*-
+
+"""
+spectrum.py
+"""
 
 import copy
-import matplotlib.pyplot as plt
 # pylint: disable=W0401
 from custom_exceptions import *
 
@@ -14,9 +17,9 @@ class Spectrum(object):
         """ """
         self.dataset = dataset
         
+
 #    def __str__(self):
 #        return 'spectum('self.dataset.metadata.filename))
-
 
 
     def __add__(self, other):
@@ -120,20 +123,31 @@ class Spectrum(object):
         return copy.deepcopy(self)
         
         
-    def plot(self, *args, **kwargs):
+    def plot(self, fig, *args, **kwargs):
         """
-        makes a x-y line plot of the spectrum in place
+        Plots into `fig` using its plot method, the x and y come from
+        the dataset and any other argument you pass will be forwarded to
+        the plot method
         """
 
-        plt.plot(self.dataset.x, self.dataset.y, *args, **kwargs)
-        
-        
-    def y_error_plot(self, *args, **kwargs):
+        return fig.plot(self.dataset.x, self.dataset.y, *args, **kwargs)
+
+    def errorbar(self, fig, *args, **kwargs):
         """
-        makes a plot of the y symmetric error bars of the spectrum in place
+        Plots into `fig` using its errorbar method, the x and y come from
+        the dataset and any other argument you pass will be forwarded to
+        the errorbar method
+
+        Example
+        =======
+
+        >>> import matplotlib.pyplot as plt
+        >>> sp.errorbar(plt, '--o')
+
+
         """
-        x_data = self.dataset.x
-        y_data = self.dataset.y        
-        y_error = self.dataset.error_y
-        
-        plt.errorbar(x_data, y_data, yerr = y_error, *args, **kwargs)
+
+        return fig.errorbar(
+            self.dataset.x, self.dataset.y,
+            self.dataset.errors_y, self.dataset.errors_x,
+            *args, **kwargs)

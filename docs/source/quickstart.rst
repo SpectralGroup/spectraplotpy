@@ -1,23 +1,22 @@
-spectraplotpy
-=============
-
-A spectrum manipulation library.
-
 Getting started
 ---------------
 
-*spectraplotpy* helps you with common task when analaysing spectral data,
+**spectraplotpy** helps you with common task when analaysing spectral data,
 it provides functionalities for reading and writing several data formats,
 process and plot several kinds of spectra.
 
 In order to install the library you download this repository and build the
 package with setup tools,
 
+.. code:: bash
+
     $ git clone https://github.com/odarbelaeze/spectraplotpy.git
     $ cd spectraplotpy
     $ python setup.py install
 
 Loading a generic spectrum from an Aviv formated file:
+
+.. code:: python
 
     from spectraplotpy import AvivImporter
     from spectraplotpy import Spectrum
@@ -26,11 +25,15 @@ Loading a generic spectrum from an Aviv formated file:
 
 Plotting the spectrum with the default plot settings,
 
+.. code:: python
+
     import matplotlib.pyplot as plt
     s.plot(plt)
     plt.show()
 
 Exporting the spectrum to a CSVFile:
+
+.. code:: python
 
     from spectraplotpy import CSVExporter
     csve = CSVExporter(s.dataset)
@@ -42,6 +45,8 @@ Development setup
 
 The basic dependencies to develop the project are,
 
+.. code:: bash
+
     matplotlib
     scipy
     numpy
@@ -51,11 +56,15 @@ The basic dependencies to develop the project are,
 
 You can install de dependecies through pip,
 
+.. code:: bash
+
     $ pip install matplotlib scipy numpy pytest sphinx pylint
 
 or just let the setup script to install them for you.
 
 In order to develop using virtual env, within your virtual env just call
+
+.. code:: bash
 
     $ python setup.py develop
 
@@ -66,7 +75,9 @@ Testing
 
 Once you get everything set up, you can run the tests using,
 
-    python setup.py test
+.. code:: bash
+
+    $ python setup.py test
 
 Before you do a pull request make sure your code agrees with pylint
 (as far as possible) and passes all tests.
