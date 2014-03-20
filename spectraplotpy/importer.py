@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mar 17 2014
+Created on March 17 2014
 
 @author: lbressan
 
