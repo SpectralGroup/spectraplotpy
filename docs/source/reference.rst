@@ -8,7 +8,7 @@ The dataset module defines the datastructure shared among the **spectraplotpy**
 classes, you need to implement a similar interface in order to leverage the class.
 
 .. autoclass:: spectraplotpy.Dataset
-   :members:
+   :members:        
 
 Importer Module
 ---------------
