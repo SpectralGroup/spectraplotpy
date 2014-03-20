@@ -17,7 +17,7 @@ def create_fake_dataset():
 
 
 
-def test_plotter_helper():
+def test_plot_spectra():
     mock_fig = plt.figure();
     mock_fig.plot = MagicMock()
 
@@ -27,34 +27,19 @@ def test_plotter_helper():
     spp.plot_spectra(mock_fig, [sp, sp.copy()])
     
     assert mock_fig.plot.call_count == 2 
+    
+def test_average_spectra():
+    ds = create_fake_dataset()
+    sp = spp.Spectrum(ds)
+    sp1 = sp.copy()
+    sp2 = sp.copy()
+    
+    sp3 = spp.average_spectra([sp, sp1, sp2])
 
+    sp_y1 = sp.dataset.y[1]
+    sp1_y1 = sp1.dataset.y[1]
+    sp2_y1 = sp2.dataset.y[1]
+    
+    assert sp3.dataset.y[1] == (sp_y1 + sp1_y1 + sp2_y1)/3     
     
     
-def make_plots():    
-    plt.figure()
-    filename1 = 'sampledata/01-CD-Aviv62DS/CSA/CSA.CD'
-    filename2 = 'sampledata/01-CD-Aviv62DS/CSA/blank.CD'
-    imp1 = spp.AvivImporter(filename1)
-    sp1 = spp.Spectrum(imp1.dataset)
-    imp2 = spp.AvivImporter(filename2)
-    sp2 = spp.Spectrum(imp2.dataset)
-    spp.plot_spectra(plt, [sp1, sp2])
-    plt.show()
-
-    fig2 = plt.figure(2)
-    ax1 = fig2.add_subplot(2,1,2)
-    filename1 = 'sampledata/02-CD-Mos500/csa.bka'
-    filename2 = 'sampledata/02-CD-Mos500/p07-10tfe.bka'
-    imp1 = spp.MosImporter(filename1)
-    sp1 = spp.Spectrum(imp1.dataset)
-    imp2 = spp.MosImporter(filename2)
-    sp2 = spp.Spectrum(imp2.dataset)
-    spp.plot_spectra(ax1, [sp1, sp2], '--o',color='g')
-    plt.show()
-    
-    
-if __name__ == "__main__":
-    """
-    Make the figures.
-    """
-    make_plots()
