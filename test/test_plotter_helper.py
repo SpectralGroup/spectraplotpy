@@ -17,7 +17,7 @@ def create_fake_dataset():
 
 
 
-def test_plotter_helper():
+def test_plot_spectra():
     mock_fig = plt.figure();
     mock_fig.plot = MagicMock()
 
