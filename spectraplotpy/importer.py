@@ -1,4 +1,9 @@
+# -*- coding: utf-8 -*-
 """
+Created on Mar 17 2014
+
+@author: lbressan
+
 The importer class.
 
 It is used to read data from a file and

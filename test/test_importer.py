@@ -1,4 +1,11 @@
-"""Test for the Importer class"""
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Mar 17 2014
+
+@author: lbressan
+
+Test for the Importer class
+"""
 import spectraplotpy as spp
 import pytest
 
