@@ -5,10 +5,10 @@ A couple of tests for the Exporter class and subclasses
 """
 
 from spectraplotpy import Exporter
-from spectraplotpy import BasePlotExporter
 from spectraplotpy import BaseTextExporter
 from spectraplotpy import CSVExporter
 from spectraplotpy import AvivExporter
+#from spectraplotpy import GraphicExporter
 
 from spectraplotpy import Dataset
 
@@ -49,8 +49,5 @@ def test_csv_construction():
     assert CSVExporter(ds)
 
 
-def test_plot_construction():
-    """Test construction of the class BasePlotExporter"""
-    assert BasePlotExporter([])
 
 
