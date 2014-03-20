@@ -1,11 +1,11 @@
 Getting started
 ---------------
 
-**spectraplotpy** helps you with common task when analaysing spectral data,
-it provides functionalities for reading and writing several data formats,
+**spectraplotpy** helps you with common task when analaysing spectral data, 
+providing functionalities for reading and writing several data formats,
 process and plot several kinds of spectra.
 
-In order to install the library you download this repository and build the
+In order to install the library, you download this repository and build the
 package with setup tools,
 
 .. code:: bash
@@ -14,15 +14,23 @@ package with setup tools,
     $ cd spectraplotpy
     $ python setup.py install
 
-Loading a generic spectrum from an Aviv formated file:
+Loading a generic spectrum from an Aviv formated file in the python environment:
 
 .. code:: python
 
-    from spectraplotpy import AvivImporter
-    from spectraplotpy import Spectrum
-    a = AvivImporter('filename')
-    s = Spectrum(a.dataset)
+    >>> from spectraplotpy import AvivImporter
+    >>> from spectraplotpy import Spectrum
+    >>> a = AvivImporter('spectral_data_file_path/filename')
+    >>> s = Spectrum(a.dataset)
+    
+Adding two spectral datasets:
 
+.. code:: python
+
+    >>> a1 = AvivImporter('spectral_data_file_path/filename2')
+    >>> s1 = Spectrum(a1.dataset)
+    >>> s2 = s.sub(s1)	# s2 = s - s1
+    
 Plotting the spectrum with the default plot settings,
 
 .. code:: python
@@ -38,10 +46,11 @@ Exporting the spectrum to a CSVFile:
     from spectraplotpy import CSVExporter
     csve = CSVExporter(s.dataset)
     csve.save('myspectrum.csv')
+    
+Futher operations can be gotten from the detailed documentation.
 
-
-Development setup
------------------
+Development setup (for developer)
+---------------------------------
 
 The basic dependencies to develop the project are,
 
