@@ -22,6 +22,9 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   quickstart
+   reference
+
 
 
 Indices and tables

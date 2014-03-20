@@ -1,8 +1,3 @@
-spectraplotpy
-=============
-
-A spectrum manipulation library.
-
 Getting started
 ---------------
 
