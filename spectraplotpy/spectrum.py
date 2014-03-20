@@ -5,6 +5,7 @@ spectrum.py
 """
 
 import copy
+import numpy
 # pylint: disable=W0401
 from custom_exceptions import *
 
@@ -151,3 +152,31 @@ class Spectrum(object):
             self.dataset.x, self.dataset.y,
             self.dataset.errors_y, self.dataset.errors_x,
             *args, **kwargs)
+
+    def smooth(self, window_len=11, window='hanning'):
+        """
+        Smoothens spectral data using hanning, hamming, bartlett, and blackman
+        schemes and returns smooth data
+        """
+        if self.dataset.y.ndim != 1:
+            raise ValueError, "smooth only accepts 1 dimension arrays."
+ 
+        if self.dataset.y.size < window_len:
+            raise ValueError, "Input vector needs to be bigger than window size" 
+
+        if window_len < 3:
+            return self.dataset.y
+ 
+        if not window in ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']:
+            raise ValueError, "Window is on of 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'"
+ 
+
+        holdspec = numpy.r_[self.dataset.y[window_len-1:0:-1], self.dataset.y, self.dataset.y[-1:-window_len:-1]]
+        #print(len(s))
+        if window == 'flat': #moving average
+            holdwindow = numpy.ones(window_len,'d')
+        else:
+            holdwindow = eval('numpy.'+window+'(window_len)')
+ 
+        smoothout = numpy.convolve(holdwindow/holdwindow.sum(), holdspec, mode='valid')
+        return smoothout
