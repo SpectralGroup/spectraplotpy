@@ -178,5 +178,4 @@ class Spectrum(object):
         else:
             holdwindow = eval('numpy.'+window+'(window_len)')
  
-        smoothout = numpy.convolve(holdwindow/holdwindow.sum(), holdspec, mode='valid')
-        return smoothout
+        self.dataset.y = numpy.convolve(holdwindow/holdwindow.sum(), holdspec, mode='valid')
