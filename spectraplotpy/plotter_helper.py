@@ -16,3 +16,16 @@ def plot_spectra(fig, sp_list, *args, **kwarg):
     """
     for sp in sp_list:
         sp.plot(fig, *args, **kwarg)
+
+def average_spectra(spectrum, sp_list, *args, **kwarg):
+    """
+    Function that creates an average spectra from a list of spectra.
+    It takes as input the list of spectra and returns a new spectrum 
+    """
+    
+    for sp in sp_list:
+        spectrum += sp
+        
+    spectrum = spectrum / len(sp_list)
+
+    return spectrum     
