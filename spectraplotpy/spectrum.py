@@ -130,12 +130,15 @@ class Spectrum(object):
         the plot function
         """
 
-        if self.dataset.error_x is not None or self.dataset.error_y is not None:
-            if self.dataset.error_x is not None:
-                if self.dataset.error_y is not None:
+        if self.dataset.errors_x is not None \
+           or self.dataset.errors_y is not None:
+
+            if self.dataset.errors_x is not None:
+                if self.dataset.errors_y is not None:
                     return self._plot_xy_error(fig, *args, **kwargs)
                 else:
                     return self._plot_x_error(fig, *args, **kwargs)
+
             else:
                 return self._plot_y_error(fig, *args, **kwargs)
 
@@ -149,7 +152,7 @@ class Spectrum(object):
         """
         return fig.errorbar(
             self.dataset.x, self.dataset.y,
-            self.dataset.error_x, self.dataset.error_y,
+            self.dataset.errors_x, self.dataset.errors_y,
             *args, **kwargs
         )
 
@@ -161,7 +164,7 @@ class Spectrum(object):
         """
         return fig.errorbar(
             self.dataset.x, self.dataset.y,
-            self.dataset.error_x,
+            self.dataset.errors_x,
             *args, **kwargs
         )
 
@@ -173,6 +176,6 @@ class Spectrum(object):
         """
         return fig.errorbar(
             self.dataset.x, self.dataset.y,
-            yerr=self.dataset.error_y,
+            yerr=self.dataset.errors_y,
             *args, **kwargs
         )
