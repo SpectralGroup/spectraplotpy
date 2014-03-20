@@ -8,7 +8,8 @@ Created on Mon Mar 17 2014
 import spectraplotpy as spp
 import numpy as np
 import pytest as pt
-from mock import MagicMock, Mock 
+from mock import MagicMock
+
 
 def create_fake_dataset():
     ds = spp.Dataset()
@@ -143,24 +144,27 @@ def test_mock_plot():
     ds = create_fake_dataset()
     s = spp.Spectrum(ds)
     
-    plt = MagicMock()
-    plt.plot = MagicMock(return_value = "mock")
-    plt.plot("mock")
-    plt.plot.assert_called_once_with("mock")
-    s.plot()
+    mock_fig = MagicMock()
+    mock_fig.plot = MagicMock()
+    s.plot(mock_fig)
+    mock_fig.plot.assert_called_once_with(s.dataset.x, s.dataset.y)
     
     
-def test_mock_y_error_plot():
+def test_errorbar():
     """
-    create a mock test for the y_error_plot method
+    create a mock test for the plot_errorbar method
     """
     ds = create_fake_dataset()
     s = spp.Spectrum(ds)
+    x_data = s.dataset.x
+    y_data = s.dataset.y
+    x_errors = s.dataset.errors_x
+    y_errors = s.dataset.errors_y
     
-    plt = MagicMock()
-    plt.y_error_plot = MagicMock(return_value = "mock")
-    plt.y_error_plot("mock")
-    plt.y_error_plot.assert_called_once_with("mock")
-    s.y_error_plot()
+    mock_fig = MagicMock()
+    mock_fig.errorbar = MagicMock()
+    s.errorbar(mock_fig)
+    mock_fig.errorbar.assert_called_once_with(x_data, y_data, 
+                                              y_errors, x_errors) 
     
 
