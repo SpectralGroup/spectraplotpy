@@ -6,10 +6,24 @@
 Welcome to spectraplotpy's documentation!
 =========================================
 
+Intro
+-----
+
+*spectraplotpy* intents to implement input, processing and output functionalities
+specific for spectral data on top of the scientific python stack (scipy, numpy and
+matplotlib).
+
+
+
+
+
 Contents:
 
 .. toctree::
    :maxdepth: 2
+
+   quickstart
+   reference
 
 
 
