@@ -1,11 +1,22 @@
-""" Exporter Program """
+""" 
+Exporter classes : Exporting data to file
+
+Class BaseTextExporter is used as a template for exporting data to 
+differents file
+
+Class CSVExporter export Metada and Data to csv file
+
+Class AvivExporter export Metada and Data to aviv file
+
+Class GraphicExporter export Metada and Data to png file
+
+"""
 
 from StringIO import StringIO
 import numpy as np
 
 class Exporter(object):
     """ Class Exporter """
-    # pylint: disable=R0903
     def __init__(self, dataset):
         self.dataset = dataset
 
@@ -20,13 +31,11 @@ class BaseTextExporter(Exporter):
 
     def metadata_to_text(self):
         """This writes the metadata to a given file"""
-        # pylint: disable=R0201
         return "Meta data text"
 
 
     def data_to_text(self):
         """ This writes the data to a given file """
-        # pylint: disable=R0201
         return "Data text"
 
     def text(self):
@@ -42,13 +51,6 @@ class BaseTextExporter(Exporter):
         with open(filename, 'w') as file_handler:
             self.write(file_handler, *args, **kwargs)
 
-class BasePlotExporter(Exporter):
-    """docstring for BasePlotExporter"""
-    # pylint: disable=R0903  
-    def plot(self, axis, *args, **kwargs):
-        """ plotting Data"""
-        axis.plot(self.dataset.x, self.dataset.y, *args, **kwargs)
-
 
 class CSVExporter(BaseTextExporter):
     """Saving to CSV file"""
@@ -60,8 +62,24 @@ class CSVExporter(BaseTextExporter):
     def data_to_text(self):
         """ This writes the data to a given csv file """
         strhandler = StringIO("")
-        np.savetxt(strhandler,
-                   np.column_stack((self.dataset.x, self.dataset.y)))
+        stack = np.column_stack((self.dataset.x, self.dataset.y))
+
+        if self.dataset.errors_y is not None:
+
+            if self.dataset.errors_x is not None:
+                try:
+                    np.column_stack((stack, self.dataset.errors_x))
+                except ValueError:
+                    error = self.dataset.errors_x * np.ones_like(self.dataset.x)
+                    np.column_stack((stack, error))
+
+            try:
+                np.column_stack((stack, self.dataset.errors_y))
+            except ValueError:
+                error = self.dataset.error_y * np.ones_like(self.dataset.y)
+                np.column_stack((stack, error))
+
+        np.savetxt(strhandler, stack)
         strhandler.seek(0)
         return strhandler.read()
         
@@ -84,3 +102,11 @@ class AvivExporter(CSVExporter):
         return "_data_\n" + \
                super(AvivExporter, self).data_to_text() + \
                "\n_data_end"
+               
+class GraphicExporter(Exporter):
+    """ Export Plot To PNG file from matplolib"""   
+        
+    def plot(self, axis, *args, **kwargs):
+        """ Ploting Data """
+        return axis.plot(self.dataset.x, self.dataset.y, *args, **kwargs)
+ 
