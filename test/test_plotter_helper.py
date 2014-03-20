@@ -27,5 +27,19 @@ def test_plot_spectra():
     spp.plot_spectra(mock_fig, [sp, sp.copy()])
     
     assert mock_fig.plot.call_count == 2 
+    
+def test_average_spectra():
+    ds = create_fake_dataset()
+    sp = spp.Spectrum(ds)
+    sp1 = sp.copy()
+    sp2 = sp.copy()
+    
+    sp3 = spp.average_spectra([sp, sp1, sp2])
 
+    sp_y1 = sp.dataset.y[1]
+    sp1_y1 = sp1.dataset.y[1]
+    sp2_y1 = sp2.dataset.y[1]
+    
+    assert sp3.dataset.y[1] == (sp_y1 + sp1_y1 + sp2_y1)/3     
+    
     
