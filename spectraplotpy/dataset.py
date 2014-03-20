@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Mar 18 15:53:31 2014
-
-@author: hnjoku
+The Dataset class receives and holds inputs from the importer class and holds
+them for further operations by the spectrum and exporter classes.
 """
 
 import copy
