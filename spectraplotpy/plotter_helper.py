@@ -7,7 +7,6 @@ Created on Wed March 19 22:36:41 2014
 """
 It plots multiple spectra.
 """
-import  spectraplotpy as spp
 
 
 def plot_spectra(fig, sp_list, *args, **kwarg):

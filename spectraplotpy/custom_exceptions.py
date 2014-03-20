@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Mar 19 2014
+Created on Wed March 19 2014
 
 @author: ariamania, lbressan
 """

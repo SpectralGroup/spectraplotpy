@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Mar 17 2014
+Created on March 17 2014
 
 @author: lbressan
 
@@ -31,7 +31,14 @@ def test_AvivImporter():
 
 def test_MosImporter():
     """
-    Test for the MosImporter
+    Test for the MosImporter.
+    
+    It verifies that the method MosImporter(filename) works with the 
+    selected files:
+        sampledata/02-CD-Mos500/blank.bka
+        sampledata/02-CD-Mos500/csa.bka
+        sampledata/02-CD-Mos500/p07-10tfe.bka
+        sampledata/02-CD-Mos500/blank-po7-10tfe.bka
     """
     filename = 'sampledata/02-CD-Mos500/blank.bka'
     assert spp.MosImporter(filename)
