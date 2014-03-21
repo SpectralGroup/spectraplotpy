@@ -24,7 +24,7 @@ Created on March 17 2014
 Test for the Importer class
 """
 import spectraplotpy as spp
-import pytest
+import pytest as pt
 
 
 def test_AvivImporter():
@@ -41,9 +41,9 @@ def test_AvivImporter():
         assert spp.AvivImporter(filename)
 
 
-#def test_baseclass_constructor():
-    #with pytest.raises(Exception):
-        #spp.Importer('sampledata/01-CD-Aviv62DS/CSA/CSA_corrupted.CD4')
+def test_baseclass_constructor():
+    with pt.raises(Exception):
+        spp.Importer('sampledata/01-CD-Aviv62DS/CSA/CSA_corrupted.CD4')
 
 
 def test_MosImporter():
@@ -68,7 +68,10 @@ def test_MosImporter():
 
 
 
-
+def text_exception():
+    filename = 'sampledata/01-CD-Aviv62DS/CSA/CSA_1c.CD'
+    with pt.raises(Exception):
+        imp = spp.Importer(filename)
 
 
 
@@ -85,9 +88,9 @@ def text_functions():
         data_txt, metadata_txt = spp.get_txt_data_metadata(spp.take_text(filename), filename)
         assert spp.parse_metadata(metadata_txt)
         data_txt, metadata_txt = spp.get_txt_data_metadata(spp.take_text(filename))
-        #print 'metadata_txt = ', metadata_txt
+        print 'metadata_txt = ', metadata_txt
         assert spp.parse_metadata(metadata_txt) == None
-        #print spp.parse_metadata(metadata_txt)
+        print spp.parse_metadata(metadata_txt)
 
 
 
@@ -99,7 +102,8 @@ if __name__ == "__main__":
 
     test_AvivImporter()
 
-    #test_baseclass_constructor()
+    test_baseclass_constructor()
 
     test_MosImporter()
 
+    text_exception()
