@@ -1,5 +1,8 @@
+Quick Start
+===========
+
 Getting started
-===============
+---------------
 
 **spectraplotpy** helps you with common task when analaysing spectral data, 
 providing functionalities for reading and writing several data formats,
@@ -8,7 +11,7 @@ process and plot several kinds of spectra.
 In order to install the library, you download this repository and build the
 package with setup tools,
 
-.. code:: bash
+.. code::
 
     $ git clone https://github.com/odarbelaeze/spectraplotpy.git
     $ cd spectraplotpy
@@ -54,7 +57,7 @@ Development setup (for developer)
 
 The basic dependencies to develop the project are,
 
-.. code:: bash
+.. code::
 
     matplotlib
     scipy
@@ -65,7 +68,7 @@ The basic dependencies to develop the project are,
 
 You can install de dependecies through pip,
 
-.. code:: bash
+.. code::
 
     $ pip install matplotlib scipy numpy pytest sphinx pylint
 
@@ -73,7 +76,7 @@ or just let the setup script to install them for you.
 
 In order to develop using virtual env, within your virtual env just call
 
-.. code:: bash
+.. code::
 
     $ python setup.py develop
 
@@ -84,7 +87,7 @@ Testing
 
 Once you get everything set up, you can run the tests using,
 
-.. code:: bash
+.. code::
 
     $ python setup.py test
 
