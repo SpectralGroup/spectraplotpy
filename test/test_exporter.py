@@ -24,9 +24,11 @@ from spectraplotpy import Exporter
 from spectraplotpy import BaseTextExporter
 from spectraplotpy import CSVExporter
 from spectraplotpy import AvivExporter
-#from spectraplotpy import GraphicExporter
+from spectraplotpy import BaseGraphicExporter
 
 from spectraplotpy import Dataset
+
+from mock import Mock, patch
 
 def test_construction():
     """Test the constructor of the class Exporter"""
@@ -38,32 +40,82 @@ def test_txt_construction():
 
 def test_default_function():
     """Test for basic functionality"""
-    ds = Dataset()
-    bte = BaseTextExporter(ds)
+    dataset = Dataset()
+    bte = BaseTextExporter(dataset)
     
-    with open('.testfile.txt', 'w') as f:
-        assert bte.write(f) is None
+    fmock = Mock()
+    bte.write(fmock)
 
-    assert bte.text()
+    assert fmock.write.assert_called()
+    assert bte.text() == str(bte)
+    
     assert bte.save('.testfile.txt') is None
+    import os.path
+    assert os.path.isfile('.testfile.txt')
+    os.remove('.testfile.txt')
+
 
 def test_aviv_exporter():
     """Test for specific functionality of the AvivExporter"""
-    ds = Dataset(x=[1, 2, 3], y=[1, 2, 3],
-                 metadata={'temp': 10, 'date': 'today'})
-    ave = AvivExporter(ds)
     
-    with open('.testfile.cd', 'w') as f:
-        assert ave.write(f) is None
+    import os.path
 
-    assert ave.text()
+    dataset = Dataset(x=[1, 2, 3], y=[1, 2, 3],
+                 metadata={'temp': 10, 'date': 'today'})
+
+    ave = AvivExporter(dataset)
+
+    with open('.testfile.cd', 'w') as fhandler:
+        assert ave.write(fhandler) is None
+
+    assert os.path.isfile('.testfile.cd')
+    os.remove('.testfile.cd')
+
     assert ave.save('.testfile.cd') is None
+    assert os.path.isfile('.testfile.cd')
+    os.remove('.testfile.cd')
+
+    assert ave.text() == str(ave)
 
 
 def test_csv_construction():
-    ds = Dataset()
-    assert CSVExporter(ds)
+    """Test the construction of the CSVExporter"""
+    dataset = Dataset()
+    assert CSVExporter(dataset)
 
 
+def test_csv_exporter():
+    """Test for specific functionality of the CSVExporter"""
+    
+    import os.path
+
+    dataset = Dataset(x=[1, 2, 3], y=[1, 2, 3],
+                 metadata={'temp': 10, 'date': 'today'})
+
+    ave = CSVExporter(dataset)
+
+    with open('.testfile.csv', 'w') as fhandler:
+        assert ave.write(fhandler) is None
+
+    assert os.path.isfile('.testfile.csv')
+    os.remove('.testfile.csv')
+
+    assert ave.save('.testfile.csv') is None
+    assert os.path.isfile('.testfile.csv')
+    os.remove('.testfile.csv')
+
+    assert ave.text() == str(ave)
 
 
+def test_csv_exporter_x_errors():
+    """Test if the exporter does not stack standalone x errors."""
+
+    dataset = Dataset(x=[1, 2, 3], y=[1, 2, 3], errors_x = -1,
+                      metadata={'temp': 10, 'date': 'today'})
+    csv_val = CSVExporter(dataset)
+    assert not '-1' in csv_val.text()
+
+    dataset = Dataset(x=[1, 2, 3], y=[1, 2, 3], errors_x=[-1, -1, -1],
+                      metadata={'temp': 10, 'date': 'today'})
+    csv_val = CSVExporter(dataset)
+    assert not '-1' in csv_val.text()

@@ -94,7 +94,7 @@ class CSVExporter(BaseTextExporter):
             try:
                 np.column_stack((stack, self.dataset.errors_y))
             except ValueError:
-                error = self.dataset.error_y * np.ones_like(self.dataset.y)
+                error = self.dataset.errors_y * np.ones_like(self.dataset.y)
                 np.column_stack((stack, error))
 
         np.savetxt(strhandler, stack)
@@ -120,7 +120,8 @@ class AvivExporter(CSVExporter):
         return "_data_\n" + \
                super(AvivExporter, self).data_to_text() + \
                "\n_data_end"
-               
+
+
 class BaseGraphicExporter(Exporter):
     """ Export Plot To PNG file from matplolib"""   
         
