@@ -1,5 +1,5 @@
 Getting started
----------------
+===============
 
 **spectraplotpy** helps you with common task when analaysing spectral data, 
 providing functionalities for reading and writing several data formats,
