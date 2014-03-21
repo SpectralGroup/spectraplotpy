@@ -40,7 +40,7 @@ def get_txt_data_metadata(text, filename=None):
     It identifies every lines starting with "#", "_" or with a letter
     as metadata, and the rest as data.
     """
-    text = text.split('\n')
+    text = text.split('\r\n')
     data_txt = [line for line in text
                      if not (line.startswith('_')
                              or line.startswith('#')
@@ -155,11 +155,9 @@ class Importer(object):
         in the dataset attributes.
         """
         data = np.loadtxt(data_txt)
-        self.dataset.x = data[:, 0]
-        self.dataset.y = data[:, 1]
-        if data.shape[1] < 2:
+        if len(data.shape) < 2:
             raise Exception('Invalid data')
-        elif data.shape[1] >= 2:
+        else:
             self.dataset.x = data[:, 0]
             self.dataset.y = data[:, 1]
             if data.shape[1] > 2:
