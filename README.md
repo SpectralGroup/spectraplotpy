@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/odarbelaeze/spectraplotpy.svg?branch=master)](https://travis-ci.org/odarbelaeze/spectraplotpy)
+[![Build Status](https://travis-ci.org/SpectralGroup/spectraplotpy.svg?branch=master)](https://travis-ci.org/SpectralGroup/spectraplotpy)
 
 [read the docs](http://spectraplotpy.readthedocs.org/en/latest/)
 
