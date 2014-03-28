@@ -40,7 +40,7 @@ def get_txt_data_metadata(text, filename=None):
     It identifies every lines starting with "#", "_" or with a letter
     as metadata, and the rest as data.
     """
-    text = text.split('\r\n')
+    text = text.splitlines()
     data_txt = [line for line in text
                      if not (line.startswith('_')
                              or line.startswith('#')
