@@ -27,6 +27,32 @@ import spectraplotpy as spp
 import pytest as pt
 
 
+basic_format = \
+"""
+data_name dh201.cd
+_date_  10-18-2013              
+"_UNITX"	"nm"
+
+_start_
+185	-31.6863
+-47.5356  123
+1.1e-5 123
+#end
+"""
+
+def test_get_txt_data_metadata():
+    "test to see if lines are categorized coorectly"
+    
+    data,metadata = spp.get_txt_data_metadata(basic_format)
+    assert data == ['185\t-31.6863', '-47.5356  123', '1.1e-5 123']
+    assert metadata == ['data_name dh201.cd', '_date_  10-18-2013', 
+                        '"_UNITX"\t"nm"', '_start_', '#end']
+                        
+def test_parse_metadata():
+    data,metadata = spp.get_txt_data_metadata(basic_format)
+    print spp.parse_metadata(metadata)                   
+    
+
 def test_AvivImporter():
     """Test for the AvivImporter"""
 
@@ -35,7 +61,7 @@ def test_AvivImporter():
                 'sampledata/01-CD-Aviv62DS/CSA/blank.CD',
                 'sampledata/01-CD-Aviv62DS/PEP-average/4RNSX.001',
                 ]
-    assert spp.Importer(filenames[0])
+    #assert spp.Importer(filenames[0])
 
     for filename in filenames:
         assert spp.AvivImporter(filename)
@@ -98,12 +124,5 @@ def text_functions():
 
 if __name__ == "__main__":
     """Run the test."""
-    text_functions()
-
-    test_AvivImporter()
-
-    test_baseclass_constructor()
-
-    test_MosImporter()
-
-    text_exception()
+    test_get_txt_data_metadata()
+    test_parse_metadata()

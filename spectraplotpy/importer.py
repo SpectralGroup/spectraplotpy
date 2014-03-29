@@ -30,6 +30,7 @@ from  spectraplotpy.dataset import Dataset
 import numpy as np
 import re
 from StringIO import StringIO
+import shlex
 
 def get_txt_data_metadata(text, filename=None):
     """
@@ -67,23 +68,39 @@ def get_txt_data_metadata(text, filename=None):
     return data_lines, meta_lines
 
 
-def parse_metadata(metadata_txt):
+def parse_metadata(meta_lines):
     """
     Function that returns a dictionary of the metadata
-    from the metadata as a string of line.
+    from the meta_lines as a list of strings.
+    
+    Quotes are handled correctly. 
+    Valid examples:
+      - key = value
+      - key value
+      - "long key" = "long value"
+      - "long key" "long value"
     """
-    if metadata_txt is not None:
-        metadata = dict()
-        metadata_txt = metadata_txt.splitlines()
-        for line in metadata_txt:
-            line = line.split()
-            if len(line) > 1:
-                keyword = line[0]
-                value = ' '.join(line[1:])
-                metadata[keyword] = value
-        return metadata
-    else:
-        return None
+    metadata = dict()
+    for line in meta_lines:
+        sline = line.strip()        
+        if sline == "": continue
+
+        # split on whitespace, but preserve quoted strings        
+        p = shlex.split(sline)
+        #filter for lone =
+        p = filter(lambda l: l != '=', p)        
+        
+                        
+        key = p[0]
+
+
+        if len(p) > 1:            
+            metadata[key] = ' '.join(p[1:])         
+        else:     
+            # just mark the presence of a flag                    
+            metadata[key] = True
+        
+    return metadata
 
 
 def take_text(filename):
