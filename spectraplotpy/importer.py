@@ -29,27 +29,40 @@ store the data and metadata in a dataset.
 from  spectraplotpy.dataset import Dataset
 import numpy as np
 import re
-
+from StringIO import StringIO
 
 def get_txt_data_metadata(text, filename=None):
     """
     Function that takes a text (as a single string)
-    and returns the text containing the metadata (as a string)
+    and returns the text containing the metadata (as a list of strings)
     and the data (as a list of strings).
 
-    It identifies every lines starting with "#", "_" or with a letter
-    as metadata, and the rest as data.
+    It identifies every lines starting with a number as data and the rest 
+    as metadata. Examples of valid numbers
+        123
+        123.321
+        12.23e5
+        -123
+        .23
+        +123
     """
-    text = text.splitlines()
-    data_txt = [line for line in text
-                     if not (line.startswith('_')
-                             or line.startswith('#')
-                             or re.match('[a-zA-Z]', line))]
+
+    data_lines = []
+    meta_lines = []
+    #matches any line that starts with a number.    
+    number_re = re.compile('\A[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?')
+    for line in text.splitlines():
+        sline = line.strip()        
+        if number_re.matche(number_re, sline):
+            data_lines.append(sline)
+        else:
+            meta_lines.append(sline)
+    
+
     if filename is not None:
-        metadata_txt = 'filename ' + filename + '\n'
-    else:
-        metadata_txt = None
-    return data_txt, metadata_txt
+        meta_lines.append('filename ' + filename)
+    
+    return data_lines, meta_lines
 
 
 def parse_metadata(metadata_txt):
@@ -59,7 +72,7 @@ def parse_metadata(metadata_txt):
     """
     if metadata_txt is not None:
         metadata = dict()
-        metadata_txt = metadata_txt.split('\n')
+        metadata_txt = metadata_txt.splitlines()
         for line in metadata_txt:
             line = line.split()
             if len(line) > 1:
@@ -154,7 +167,7 @@ class Importer(object):
         Parse the text containing the data and store the x, y and errors
         in the dataset attributes.
         """
-        data = np.loadtxt(data_txt)
+        data = np.loadtxt(StringIO(data_txt))
         if len(data.shape) < 2:
             raise Exception('Invalid data')
         else:
@@ -182,10 +195,10 @@ class AvivImporter(Importer):
         start = text.index('\n_data_')
         end = text.index('\n_data_end_')
 
-        data_txt = (text[start + 7:end]).split('\r\n')
+        data_txt = text[(start + len('\n_data_') + 1):end]
 
         metadata_txt = 'filename ' + filename + '\n'
-        metadata_txt = metadata_txt + text[0:start] + text[end + 10:]
+        metadata_txt = metadata_txt + text[0:start] + text[end + len('\n_data_end_'):]
         return data_txt, metadata_txt
 
 
