@@ -52,8 +52,10 @@ def get_txt_data_metadata(text, filename=None):
     #matches any line that starts with a number.    
     number_re = re.compile('\A[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?')
     for line in text.splitlines():
-        sline = line.strip()        
-        if number_re.matche(number_re, sline):
+        sline = line.strip()     
+        if sline == "": continue 
+            
+        if re.match(number_re, sline):
             data_lines.append(sline)
         else:
             meta_lines.append(sline)
@@ -68,7 +70,7 @@ def get_txt_data_metadata(text, filename=None):
 def parse_metadata(metadata_txt):
     """
     Function that returns a dictionary of the metadata
-    from the metadata as a string.
+    from the metadata as a string of line.
     """
     if metadata_txt is not None:
         metadata = dict()
