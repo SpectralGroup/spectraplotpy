@@ -25,13 +25,14 @@ Test for the Importer class
 """
 import spectraplotpy as spp
 import pytest as pt
+from collections import OrderedDict
 
 
 basic_format = \
 """
 data_name dh201.cd
 _date_  10-18-2013              
-"_UNITX"	"nm"
+"_UNIT X"	"nm" "wavelength"
 
 _start_
 185	-31.6863
@@ -46,12 +47,16 @@ def test_get_txt_data_metadata():
     data,metadata = spp.get_txt_data_metadata(basic_format)
     assert data == ['185\t-31.6863', '-47.5356  123', '1.1e-5 123']
     assert metadata == ['data_name dh201.cd', '_date_  10-18-2013', 
-                        '"_UNITX"\t"nm"', '_start_', '#end']
+                        '"_UNIT X"\t"nm" "wavelength"', '_start_', '#end']
                         
 def test_parse_metadata():
-    data,metadata = spp.get_txt_data_metadata(basic_format)
-    print spp.parse_metadata(metadata)                   
-    
+    data_lines,metadata_lines = spp.get_txt_data_metadata(basic_format)
+    #print spp.parse_metadata(metadata)                   
+    assert spp.parse_metadata(metadata_lines) == OrderedDict([
+                        ('data_name', 'dh201.cd'), ('_date_', '10-18-2013'), 
+                        ('_UNIT X', 'nm wavelength'), ('_start_', True),
+                        ('#end', True)])
+            
 
 def test_AvivImporter():
     """Test for the AvivImporter"""

@@ -31,6 +31,7 @@ import numpy as np
 import re
 from StringIO import StringIO
 import shlex
+from collections import OrderedDict
 
 def get_txt_data_metadata(text, filename=None):
     """
@@ -80,7 +81,7 @@ def parse_metadata(meta_lines):
       - "long key" = "long value"
       - "long key" "long value"
     """
-    metadata = dict()
+    metadata = OrderedDict()
     for line in meta_lines:
         sline = line.strip()        
         if sline == "": continue
