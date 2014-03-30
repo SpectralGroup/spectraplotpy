@@ -90,10 +90,8 @@ def parse_metadata(meta_lines):
         p = shlex.split(sline)
         #filter for lone =
         p = filter(lambda l: l != '=', p)        
-        
-                        
+                                
         key = p[0]
-
 
         if len(p) > 1:            
             metadata[key] = ' '.join(p[1:])         

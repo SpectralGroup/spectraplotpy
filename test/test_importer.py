@@ -56,8 +56,13 @@ def test_parse_metadata():
                         ('data_name', 'dh201.cd'), ('_date_', '10-18-2013'), 
                         ('_UNIT X', 'nm wavelength'), ('_start_', True),
                         ('#end', True)])
-            
 
+def test_parse_metadata_empty_lines():
+   metadata_lines = ['data_name dh201.cd', '','_date_  10-18-2013']
+   #print spp.parse_metadata(metadata_lines)                   
+   assert spp.parse_metadata(metadata_lines) == OrderedDict([
+                            ('data_name', 'dh201.cd'), ('_date_', '10-18-2013')])
+   
 def test_AvivImporter():
     """Test for the AvivImporter"""
 
@@ -131,3 +136,4 @@ if __name__ == "__main__":
     """Run the test."""
     test_get_txt_data_metadata()
     test_parse_metadata()
+    test_parse_metadata_empty_lines()
