@@ -147,10 +147,10 @@ class Importer(object):
         self.set_info(self.dataset.metadata)
         self.parse_data(data_txt)
 
-        print self.dataset.metadata
-        print self.dataset.dim_x, self.dataset.dim_y, \
-              self.dataset.units_x, self.dataset.units_y
-        print len(self.dataset.x)
+#        print self.dataset.metadata
+#        print self.dataset.dim_x, self.dataset.dim_y, \
+#              self.dataset.units_x, self.dataset.units_y
+#        print len(self.dataset.x)
         return self.dataset
 
 
@@ -192,12 +192,12 @@ class Importer(object):
         else:
             self.dataset.x = data[:, 0]
             self.dataset.y = data[:, 1]
-            if data.shape[1] > 2:
-                if data.shape[1] == 3:
-                    self.dataset.errors_y = data[:, 2]
-                if data.shape[1] == 4:
-                    self.dataset.errors_x = data[:, 2]
-                    self.dataset.errors_y = data[:, 3]
+#            if data.shape[1] > 2:
+#                if data.shape[1] == 3:
+#                    self.dataset.errors_y = data[:, 2]
+#                if data.shape[1] == 4:
+#                    self.dataset.errors_x = data[:, 2]
+#                    self.dataset.errors_y = data[:, 3]
 
 
 
