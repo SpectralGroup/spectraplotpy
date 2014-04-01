@@ -147,10 +147,10 @@ class Importer(object):
         self.set_info(self.dataset.metadata)
         self.parse_data(data_txt)
 
-        #print self.dataset.metadata
-        #print self.dataset.dim_x, self.dataset.dim_y,
-               #self.dataset.units_x, self.dataset.units_y
-        #print len(self.dataset.x)
+        print self.dataset.metadata
+        print self.dataset.dim_x, self.dataset.dim_y, \
+              self.dataset.units_x, self.dataset.units_y
+        print len(self.dataset.x)
         return self.dataset
 
 
@@ -185,9 +185,10 @@ class Importer(object):
         Parse the text containing the data and store the x, y and errors
         in the dataset attributes.
         """
-        data = np.loadtxt(StringIO(data_txt))
+        data = np.loadtxt(StringIO("\n".join(data_txt)))
         if len(data.shape) < 2:
-            raise Exception('Invalid data')
+            raise Exception('Invalid data shape. Expecting at least two columns\
+            but recived only one.')
         else:
             self.dataset.x = data[:, 0]
             self.dataset.y = data[:, 1]
@@ -204,21 +205,6 @@ class AvivImporter(Importer):
     """
     Importer of Aviv files.
     """
-    def get_txt_data_metadata(self, text, filename=None):
-        """
-        Separate data and metadata information form the text file.
-
-        The data are included between "_data_" and "_data_end_" lines.
-        """
-        start = text.index('\n_data_')
-        end = text.index('\n_data_end_')
-
-        data_txt = text[(start + len('\n_data_') + 1):end]
-
-        metadata_txt = 'filename ' + filename + '\n'
-        metadata_txt = metadata_txt + text[0:start] + text[end + len('\n_data_end_'):]
-        return data_txt, metadata_txt
-
 
     def set_info(self, metadata):
         """

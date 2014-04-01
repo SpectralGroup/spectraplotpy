@@ -134,6 +134,7 @@ def text_functions():
 
 if __name__ == "__main__":
     """Run the test."""
-    test_get_txt_data_metadata()
-    test_parse_metadata()
-    test_parse_metadata_empty_lines()
+    #est_get_txt_data_metadata()
+    #test_parse_metadata()
+    #test_parse_metadata_empty_lines()
+    test_AvivImporter()
