@@ -92,7 +92,9 @@ def test_AvivImporter_sample_data():
     #assert spp.Importer(filenames[0])
 
     for filename in filenames:
+        #TODO test that the data is in fact correctly loaded
         assert spp.AvivImporter(filename)
+        
 
 
 #def test_baseclass_constructor():
@@ -126,29 +128,6 @@ def test_AvivImporter_sample_data():
 #    filename = 'sampledata/01-CD-Aviv62DS/CSA/CSA_1c.CD'
 #    with pt.raises(Exception):
 #        imp = spp.Importer(filename)
-
-
-
-def text_functions():
-    filenames = [
-                 'sampledata/01-CD-Aviv62DS/PEP-average/4RNSX.010',
-                 'sampledata/01-CD-Aviv62DS/CSA/CSA.CD'
-                 ]
-
-    for filename in filenames:
-        assert spp.take_text(filename)
-        assert spp.get_txt_data_metadata(spp.take_text(filename))
-        assert spp.get_txt_data_metadata(spp.take_text(filename), filename)
-        data_txt, metadata_txt = spp.get_txt_data_metadata(spp.take_text(filename), filename)
-        assert spp.parse_metadata(metadata_txt)
-        data_txt, metadata_txt = spp.get_txt_data_metadata(spp.take_text(filename))
-        print 'metadata_txt = ', metadata_txt
-        assert spp.parse_metadata(metadata_txt) == None
-        print spp.parse_metadata(metadata_txt)
-
-
-
-
 
 if __name__ == "__main__":
     """Run the test."""
