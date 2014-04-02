@@ -88,8 +88,8 @@ def test_take_text_filer():
     
 def test_AvivImporter_basic():    
     imp = spp.AvivImporter('sampledata/01-CD-Aviv62DS/CSA/CSA-tiny.CD')
-    print imp.dataset.x
-    print imp.dataset.y
+    #print imp.dataset.x
+    #print imp.dataset.y
     assert all(imp.dataset.x == [ 320.,   319.5,  319. ])
     assert all(imp.dataset.y == [ 5.396,  6.374,  7.288])
     assert imp.dataset.dim_x == 'wavelength'    
@@ -115,12 +115,43 @@ def test_AvivImporter_sample_data():
         #TODO test that the data is in fact correctly loaded
         assert spp.AvivImporter(filename)
         
-
+mos_multiline="""\
+"BIO-KINE MULTI-Y ASCII FILE"
+"_UNITX"	"nm"
+"_NBY"	3
+"_UNITY1"	"MilliDegree"
+"_UNITY2"	"AU"
+"_UNITY3"	"Volt"
+"_DATA"
+185	-31.6863	1.34487 	687     
+186	-47.5356	1.32574 	608     
+187	-61.078 	1.29144 	549     
+"""
+mos_basic="""\
+"BIO-KINE ASCII FILE"
+"_UNITX"	"nm"
+"_UNITY"	""
+"_DELTAX"	0
+"_DATA"
+185	-6.36455
+186	-5.60259
+187	-4.94525
+"""
 
 #def test_baseclass_constructor():
 #    with pt.raises(Exception):
 #        spp.Importer('sampledata/01-CD-Aviv62DS/CSA/CSA_corrupted.CD4')
 
+def test_MosImporter_basic():
+    imp = spp.MosImporter(StringIO(mos_basic))
+    #print imp
+    assert all(imp.dataset.x == [ 185.,  186.,  187.])
+    assert all(imp.dataset.y == [-6.36455, -5.60259, -4.94525])
+    assert imp.dataset.dim_x == 'wavelength'    
+    #assert imp.dataset.dim_y == 'millidegrees'
+    assert imp.dataset.units_x == 'nm'
+    assert imp.dataset.units_y == ''
+    
 
 #def test_MosImporter():
 #    """
@@ -141,7 +172,7 @@ def test_AvivImporter_sample_data():
 #    assert spp.MosImporter(filename)
 #    filename = 'sampledata/02-CD-Mos500/blank-po7-10tfe.bka'
 #    assert spp.MosImporter(filename)
-#
+##
 #
 #
 #def text_exception():
@@ -150,8 +181,5 @@ def test_AvivImporter_sample_data():
 #        imp = spp.Importer(filename)
 
 if __name__ == "__main__":
-    """Run the test."""
-    #est_get_txt_data_metadata()
-    #test_parse_metadata()
-    #test_parse_metadata_empty_lines()
-    test_AvivImporter_basic()
+    """Run selected tests."""
+    test_MosImporter_basic()
