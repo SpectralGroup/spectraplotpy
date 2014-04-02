@@ -19,7 +19,7 @@
 """
 Created on March 17 2014
 
-@author: lbressan
+@author: lbressan, ajasja
 
 The importer class.
 
@@ -102,14 +102,21 @@ def parse_metadata(meta_lines):
     return metadata
 
 
-def take_text(filename):
+def take_text(filename_or_fdesc):
     """
-    Read the file and return the text as a string.
+    Read the file or a file descriptor and return the text as a string.
     """
+    
     whole_text = None
-    with open(filename) as inputfile:
-        whole_text = inputfile.read()
-        return whole_text
+    #TODO the isnstance comaprison mises unicode strings in python 2.7
+    #should use six.str_types?
+    if isinstance(filename_or_fdesc, str):        
+        with open(filename_or_fdesc) as inputfile:
+            whole_text = inputfile.read()
+    else:
+        whole_text = filename_or_fdesc.read()
+
+    return whole_text        
 
 
 class Importer(object):

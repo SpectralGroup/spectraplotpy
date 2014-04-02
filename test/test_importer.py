@@ -26,6 +26,7 @@ Test for the Importer class
 import spectraplotpy as spp
 import pytest as pt
 from collections import OrderedDict
+from StringIO import StringIO
 
 
 
@@ -63,9 +64,28 @@ def test_parse_metadata_empty_lines():
    #print spp.parse_metadata(metadata_lines)                   
    assert spp.parse_metadata(metadata_lines) == OrderedDict([
                             ('data_name', 'dh201.cd'), ('_date_', '10-18-2013')])
-   
 
+def test_take_text_file_descriptor():
+    whole_text = spp.take_text(StringIO(basic_format))
+    assert whole_text == basic_format
 
+basic_aviv = """\
+data_name csa.cd
+_n_points  3
+x_unit nanometers
+y_unit millidegrees
+_y_type_   millidegrees
+_data_
+320.00 5.396
+319.50 6.374
+319.00 7.288
+_data_end_
+"""
+
+def test_take_text_filer():
+    whole_text = spp.take_text('sampledata/01-CD-Aviv62DS/CSA/CSA-tiny.CD')
+    assert whole_text == basic_aviv
+    
 def test_AvivImporter_basic():    
     imp = spp.AvivImporter('sampledata/01-CD-Aviv62DS/CSA/CSA-tiny.CD')
     print imp.dataset.x
