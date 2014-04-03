@@ -194,13 +194,13 @@ class Importer(object):
         Parse the text containing the data and store the x, y and errors
         in the dataset attributes.
         """
-        data = np.loadtxt(StringIO("\n".join(data_txt)))
-        if len(data.shape) < 2:
+        self.parsed_data = np.loadtxt(StringIO("\n".join(data_txt)))
+        if len(self.parsed_data.shape) < 2:
             raise Exception('Invalid data shape. Expecting at least two columns\
             but recived only one.')
         else:
-            self.dataset.x = data[:, 0]
-            self.dataset.y = data[:, 1]
+            self.dataset.x = self.parsed_data[:, 0]
+            self.dataset.y = self.parsed_data[:, 1]
 #            if data.shape[1] > 2:
 #                if data.shape[1] == 3:
 #                    self.dataset.errors_y = data[:, 2]
@@ -280,5 +280,14 @@ class MosImporter(Importer):
         if self.ascii_type() == 'multi':        
             self.set_info_multi(metadata)
 
+
+    def parse_data(self, data_txt):
+        super(MosImporter, self).parse_data(data_txt)
+        
+        #assign other datasets as well        
+        if self.ascii_type() == 'multi':
+            for n in range(1, len(self.datasets)):       
+                self.datasets[n].x = self.parsed_data[:, 0]
+                self.datasets[n].y = self.parsed_data[:, n+1]
             
         

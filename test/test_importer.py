@@ -147,7 +147,7 @@ mos_multiline="""\
 "_UNITX"	"nm"
 "_NBY"	3
 "_COMMENT1"  "First comment"
-"_COMMENT1"  "Second comment"
+"_COMMENT1"  "some more first comment"
 "_UNITY1"	"MilliDegree"
 "_UNITY2"	"AU"
 "_UNITY3"	"Volt"
@@ -164,10 +164,20 @@ def check_first_multiline_dataset(dataset):
     assert dataset.units_x == 'nm'    
     assert dataset.units_y == 'MilliDegree'    
     
+def check_second_multiline_dataset(dataset):
+    assert all(dataset.x == [ 185.,  186.,  187.])
+    assert all(dataset.y == [1.34487, 1.32574, 1.29144])
+    assert dataset.dim_x == 'wavelength'    
+    assert dataset.units_x == 'nm'    
+    assert dataset.units_y == 'AU'   
+    
+def check_third_multiline_dataset(dataset):
+    assert all(dataset.x == [ 185.,  186.,  187.])
+    assert all(dataset.y == [ 687.,  608.,  549.])
+    assert dataset.dim_x == 'wavelength'    
+    assert dataset.units_x == 'nm'    
+    assert dataset.units_y == 'Volt'   
 
-    #assert imp.dataset.dim_y == 'millidegrees'
-    #assert imp.dataset.units_x == 'nm'
-    #assert imp.dataset.units_y == ''    
 
 def test_MosImporter_mutiline():
     imp = spp.MosImporter(StringIO(mos_multiline))
@@ -177,7 +187,9 @@ def test_MosImporter_mutiline():
     assert len(imp.datasets) == 3
     
     check_first_multiline_dataset(imp.dataset)
-        
+    check_first_multiline_dataset(imp.datasets[0])
+    check_second_multiline_dataset(imp.datasets[1])    
+    check_third_multiline_dataset(imp.datasets[2])   
     print imp
 
 #def test_MosImporter():
