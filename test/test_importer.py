@@ -132,6 +132,8 @@ mos_basic="""\
 def test_MosImporter_basic():
     imp = spp.MosImporter(StringIO(mos_basic))
     #print imp
+    
+    assert imp.ascii_type() == 'simple'        
     assert all(imp.dataset.x == [ 185.,  186.,  187.])
     assert all(imp.dataset.y == [-6.36455, -5.60259, -4.94525])
     assert imp.dataset.dim_x == 'wavelength'    
@@ -144,6 +146,8 @@ mos_multiline="""\
 "BIO-KINE MULTI-Y ASCII FILE"
 "_UNITX"	"nm"
 "_NBY"	3
+"_COMMENT1"  "First comment"
+"_COMMENT1"  "Second comment"
 "_UNITY1"	"MilliDegree"
 "_UNITY2"	"AU"
 "_UNITY3"	"Volt"
@@ -153,8 +157,24 @@ mos_multiline="""\
 187	-61.078 	1.29144 	549     
 """   
 
+def check_first_multiline_dataset(dataset):
+    assert all(dataset.x == [ 185.,  186.,  187.])
+    #assert all(imp.dataset.y == [-6.36455, -5.60259, -4.94525])
+    #assert imp.dataset.dim_x == 'wavelength'    
+    #assert imp.dataset.dim_y == 'millidegrees'
+    #assert imp.dataset.units_x == 'nm'
+    #assert imp.dataset.units_y == ''    
+
 def test_MosImporter_mutiline():
-    pass
+    imp = spp.MosImporter(StringIO(mos_multiline))
+    assert imp.ascii_type() == 'multi'
+
+    #has three datasets
+    assert len(imp.datasets) == 3
+    
+    check_first_multiline_dataset(imp.dataset)
+        
+    print imp
 
 #def test_MosImporter():
 #    """
@@ -185,4 +205,4 @@ def test_MosImporter_mutiline():
 
 if __name__ == "__main__":
     """Run selected tests."""
-    test_MosImporter_basic()
+    test_MosImporter_mutiline()

@@ -148,8 +148,10 @@ class Importer(object):
             (see parse_data).
         """
         self.dataset = Dataset()
+        self.datasets = [self.dataset]
         text = take_text(filename)
         data_txt, metadata_txt = self.get_txt_data_metadata(text, filename)
+        
         self.dataset.metadata = self.parse_metadata(metadata_txt)
         self.set_info(self.dataset.metadata)
         self.parse_data(data_txt)
@@ -229,14 +231,48 @@ class MosImporter(Importer):
     """
     Importer of Mos500 files.
     """
+    def ascii_type(self):
+        """
+        Returns the type of biokine ascii file. Can be either multi or 
+        simple. If None should an exception be raised?
+        
+        The type is determined by the first line
+        """
+        result = None        
+        if self.dataset.metadata.get('BIO-KINE ASCII FILE', False):
+            result = 'simple'
+        if self.dataset.metadata.get('BIO-KINE MULTI-Y ASCII FILE', False):
+            result = 'multi'
+        return result
 
+    def set_info_simple(self, metadata):
+        self.dataset.units_x = metadata['_UNITX']
+        self.dataset.units_y = metadata['_UNITY']
+        self.dataset.dim_x = 'wavelength'
+    
+    def set_info_multi(self, metadata):  
+        """
+        Sets the information and creates the datasets in case there are multiple
+        datasets.
+        """
+        num_sets = int(metadata['_NBY'])
+        # create additional datasets. The first one is allready created         
+        if num_sets > 1:
+            for n in range(1,num_sets):
+                self.datasets.append(Dataset())
+            
+        
     def set_info(self, metadata):
         """
         Defines the particular informations needed for a dataset.
 
         It stores dimensions and units in the dataset attributes.
-        """
-        self.dataset.units_x = metadata['_UNITX']
-        self.dataset.units_y = metadata['_UNITY']
-        self.dataset.dim_x = 'wavelength'
+        """        
+        if self.ascii_type() == 'simple':        
+            self.set_info_simple(metadata)
+            
+        if self.ascii_type() == 'multi':        
+            self.set_info_multi(metadata)
+
+            
         
