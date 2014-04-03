@@ -109,24 +109,11 @@ def test_AvivImporter_sample_data():
                 'sampledata/01-CD-Aviv62DS/CSA/blank.CD',
                 'sampledata/01-CD-Aviv62DS/PEP-average/4RNSX.001',
                 ]
-    #assert spp.Importer(filenames[0])
-
+                
     for filename in filenames:
         #TODO test that the data is in fact correctly loaded
         assert spp.AvivImporter(filename)
         
-mos_multiline="""\
-"BIO-KINE MULTI-Y ASCII FILE"
-"_UNITX"	"nm"
-"_NBY"	3
-"_UNITY1"	"MilliDegree"
-"_UNITY2"	"AU"
-"_UNITY3"	"Volt"
-"_DATA"
-185	-31.6863	1.34487 	687     
-186	-47.5356	1.32574 	608     
-187	-61.078 	1.29144 	549     
-"""
 mos_basic="""\
 "BIO-KINE ASCII FILE"
 "_UNITX"	"nm"
@@ -151,7 +138,23 @@ def test_MosImporter_basic():
     #assert imp.dataset.dim_y == 'millidegrees'
     assert imp.dataset.units_x == 'nm'
     assert imp.dataset.units_y == ''
-    
+   
+   
+mos_multiline="""\
+"BIO-KINE MULTI-Y ASCII FILE"
+"_UNITX"	"nm"
+"_NBY"	3
+"_UNITY1"	"MilliDegree"
+"_UNITY2"	"AU"
+"_UNITY3"	"Volt"
+"_DATA"
+185	-31.6863	1.34487 	687     
+186	-47.5356	1.32574 	608     
+187	-61.078 	1.29144 	549     
+"""   
+
+def test_MosImporter_mutiline():
+    pass
 
 #def test_MosImporter():
 #    """
