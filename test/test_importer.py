@@ -159,8 +159,12 @@ mos_multiline="""\
 
 def check_first_multiline_dataset(dataset):
     assert all(dataset.x == [ 185.,  186.,  187.])
-    #assert all(imp.dataset.y == [-6.36455, -5.60259, -4.94525])
-    #assert imp.dataset.dim_x == 'wavelength'    
+    assert all(dataset.y == [-31.6863, -47.5356, -61.078])
+    assert dataset.dim_x == 'wavelength'    
+    assert dataset.units_x == 'nm'    
+    assert dataset.units_y == 'MilliDegree'    
+    
+
     #assert imp.dataset.dim_y == 'millidegrees'
     #assert imp.dataset.units_x == 'nm'
     #assert imp.dataset.units_y == ''    

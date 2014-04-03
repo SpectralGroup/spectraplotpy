@@ -260,6 +260,12 @@ class MosImporter(Importer):
         if num_sets > 1:
             for n in range(1,num_sets):
                 self.datasets.append(Dataset())
+        
+        # iterate over datasets and set metadata        
+        for n in range(num_sets):
+            self.datasets[n].dim_x = 'wavelength'
+            self.datasets[n].units_x = metadata['_UNITX']
+            self.datasets[n].units_y = metadata['_UNITY'+str(n+1)]
             
         
     def set_info(self, metadata):
