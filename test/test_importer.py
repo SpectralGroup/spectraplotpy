@@ -19,12 +19,12 @@
 """
 Created on March 17 2014
 
-@author: lbressan
+@author: lbressan, ajasja
 
 Test for the Importer class
 """
 import spectraplotpy as spp
-import pytest as pt
+#import pytest as pt
 from collections import OrderedDict
 from StringIO import StringIO
 
