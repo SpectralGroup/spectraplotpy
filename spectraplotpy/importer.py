@@ -32,6 +32,7 @@ import re
 from StringIO import StringIO
 import shlex
 from collections import OrderedDict
+import string 
 
 def get_txt_data_metadata(text, filename=None):
     """
@@ -267,8 +268,7 @@ class MosImporter(Importer):
             self.datasets[n].dim_x = 'wavelength'
             self.datasets[n].units_x = metadata['_UNITX']
             self.datasets[n].units_y = metadata['_UNITY'+str(n+1)]
-            
-        
+
     def set_info(self, metadata):
         """
         Defines the particular informations needed for a dataset.
@@ -281,9 +281,8 @@ class MosImporter(Importer):
         if self.ascii_type() == 'multi':        
             self.set_info_multi(metadata)
 
-
-    def parse_data(self, data_txt):
-        super(MosImporter, self).parse_data(data_txt)
+    def parse_data(self, data_lines):
+        super(MosImporter, self).parse_data(data_lines)
         
         #assign other datasets as well        
         if self.ascii_type() == 'multi':
@@ -292,3 +291,16 @@ class MosImporter(Importer):
                 self.datasets[n].y = self.parsed_data[:, n+1]
             
         
+class CSVImporter(Importer):
+    """ Importer of various CSV files and similar formats. """
+
+    def parse_data(self, data_lines):
+        #translate separators to whitespace so that it will be loaded correctly.
+        #this is very hacky... Better would be to pass a delimiter to parse_data.
+        #Should really implement kwargs passing.
+        trans_table = string.maketrans(";,", "  ")
+        data_lines = map(lambda l: l.translate(trans_table), data_lines)
+
+        super(CSVImporter, self).parse_data(data_lines)
+        
+         

@@ -219,6 +219,17 @@ def test_MosImporter_mutiline():
 #    with pt.raises(Exception):
 #        imp = spp.Importer(filename)
 
+csv_basic = """\
+nm, A
+320.000000, 0.402335
+319.000000, 0.402692
+318.000000, 0.402974
+"""
+
+def test_CSVImporter_basic():
+    imp = spp.CSVImporter(StringIO(csv_basic))
+    print imp
+
 if __name__ == "__main__":
     """Run selected tests."""
     test_MosImporter_mutiline()
