@@ -26,7 +26,7 @@ The importer class.
 It is used to read data from a file and
 store the data and metadata in a dataset.
 """
-from  spectraplotpy.dataset import Dataset
+from spectraplotpy.dataset import Dataset
 import numpy as np
 import re
 from StringIO import StringIO
@@ -129,6 +129,7 @@ class Importer(object):
         Constructor: it calls the load function.
         """
         self.dataset = self.load(filename)
+        self.parsed_data = []
 
 
     def load(self, filename):
@@ -150,11 +151,11 @@ class Importer(object):
         self.dataset = Dataset()
         self.datasets = [self.dataset]
         text = take_text(filename)
-        data_txt, metadata_txt = self.get_txt_data_metadata(text, filename)
+        data_lines, metadata_lines = self.get_txt_data_metadata(text, filename)
         
-        self.dataset.metadata = self.parse_metadata(metadata_txt)
+        self.dataset.metadata = self.parse_metadata(metadata_lines)
         self.set_info(self.dataset.metadata)
-        self.parse_data(data_txt)
+        self.parse_data(data_lines)
 
 #        print self.dataset.metadata
 #        print self.dataset.dim_x, self.dataset.dim_y, \
@@ -173,11 +174,11 @@ class Importer(object):
         return get_txt_data_metadata(text, filename)
 
 
-    def parse_metadata(self, metadata_txt):
+    def parse_metadata(self, metadata_lines):
         """
         Return the metadata information as a dictionary.
         """
-        return  parse_metadata(metadata_txt)
+        return  parse_metadata(metadata_lines)
 
 
     def set_info(self, metadata):
@@ -189,12 +190,12 @@ class Importer(object):
         pass
 
 
-    def parse_data(self, data_txt):
+    def parse_data(self, data_lines):
         """
         Parse the text containing the data and store the x, y and errors
         in the dataset attributes.
         """
-        self.parsed_data = np.loadtxt(StringIO("\n".join(data_txt)))
+        self.parsed_data = np.loadtxt(StringIO("\n".join(data_lines)))
         if len(self.parsed_data.shape) < 2:
             raise Exception('Invalid data shape. Expecting at least two columns\
             but recived only one.')
