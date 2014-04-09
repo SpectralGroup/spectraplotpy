@@ -32,7 +32,7 @@ import re
 from StringIO import StringIO
 import shlex
 from collections import OrderedDict
-import string 
+import string
 
 def get_txt_data_metadata(text, filename=None):
     """
@@ -40,7 +40,7 @@ def get_txt_data_metadata(text, filename=None):
     and returns the text containing the metadata (as a list of strings)
     and the data (as a list of strings).
 
-    It identifies every lines starting with a number as data and the rest 
+    It identifies every lines starting with a number as data and the rest
     as metadata. Examples of valid numbers
         123
         123.321
@@ -52,21 +52,21 @@ def get_txt_data_metadata(text, filename=None):
 
     data_lines = []
     meta_lines = []
-    #matches any line that starts with a number.    
+    #matches any line that starts with a number.
     number_re = re.compile('\A[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?')
     for line in text.splitlines():
-        sline = line.strip()     
-        if sline == "": continue 
-            
+        sline = line.strip()
+        if sline == "": continue
+
         if re.match(number_re, sline):
             data_lines.append(sline)
         else:
             meta_lines.append(sline)
-    
+
 
     if (filename is not None) and isinstance(filename , str):
         meta_lines.append('filename ' + filename)
-    
+
     return data_lines, meta_lines
 
 
@@ -74,8 +74,8 @@ def parse_metadata(meta_lines):
     """
     Function that returns a dictionary of the metadata
     from the meta_lines as a list of strings.
-    
-    Quotes are handled correctly. 
+
+    Quotes are handled correctly.
     Valid examples:
       - key = value
       - key value
@@ -84,22 +84,22 @@ def parse_metadata(meta_lines):
     """
     metadata = OrderedDict()
     for line in meta_lines:
-        sline = line.strip()        
+        sline = line.strip()
         if sline == "": continue
 
-        # split on whitespace, but preserve quoted strings        
+        # split on whitespace, but preserve quoted strings
         p = shlex.split(sline)
         #filter for lone =
-        p = filter(lambda l: l != '=', p)        
-                                
+        p = filter(lambda l: l != '=', p)
+
         key = p[0]
 
-        if len(p) > 1:            
-            metadata[key] = ' '.join(p[1:])         
-        else:     
-            # just mark the presence of a flag                    
+        if len(p) > 1:
+            metadata[key] = ' '.join(p[1:])
+        else:
+            # just mark the presence of a flag
             metadata[key] = True
-        
+
     return metadata
 
 
@@ -107,17 +107,17 @@ def take_text(filename_or_fdesc):
     """
     Read the file or a file descriptor and return the text as a string.
     """
-    
+
     whole_text = None
     #TODO the isnstance comaprison mises unicode strings in python 2.7
     #should use six.str_types?
-    if isinstance(filename_or_fdesc, str):        
+    if isinstance(filename_or_fdesc, str):
         with open(filename_or_fdesc) as inputfile:
             whole_text = inputfile.read()
     else:
         whole_text = filename_or_fdesc.read()
 
-    return whole_text        
+    return whole_text
 
 
 class Importer(object):
@@ -153,7 +153,7 @@ class Importer(object):
         self.datasets = [self.dataset]
         text = take_text(filename)
         data_lines, metadata_lines = self.get_txt_data_metadata(text, filename)
-        
+
         self.dataset.metadata = self.parse_metadata(metadata_lines)
         self.set_info(self.dataset.metadata)
         self.parse_data(data_lines)
@@ -197,7 +197,8 @@ class Importer(object):
         in the dataset attributes.
         """
         self.parsed_data = np.loadtxt(StringIO("\n".join(data_lines)))
-        if len(self.parsed_data.shape) < 2:
+        #TODO: test this further
+        if self.parsed_data.shape[1] < 2:
             raise Exception('Invalid data shape. Expecting at least two columns\
             but recived only one.')
         else:
@@ -235,12 +236,12 @@ class MosImporter(Importer):
     """
     def ascii_type(self):
         """
-        Returns the type of biokine ascii file. Can be either multi or 
+        Returns the type of biokine ascii file. Can be either multi or
         simple. If None should an exception be raised?
-        
+
         The type is determined by the first line
         """
-        result = None        
+        result = None
         if self.dataset.metadata.get('BIO-KINE ASCII FILE', False):
             result = 'simple'
         if self.dataset.metadata.get('BIO-KINE MULTI-Y ASCII FILE', False):
@@ -251,19 +252,19 @@ class MosImporter(Importer):
         self.dataset.units_x = metadata['_UNITX']
         self.dataset.units_y = metadata['_UNITY']
         self.dataset.dim_x = 'wavelength'
-    
-    def set_info_multi(self, metadata):  
+
+    def set_info_multi(self, metadata):
         """
         Sets the information and creates the datasets in case there are multiple
         datasets.
         """
         num_sets = int(metadata['_NBY'])
-        # create additional datasets. The first one is allready created         
+        # create additional datasets. The first one is allready created
         if num_sets > 1:
             for n in range(1,num_sets):
                 self.datasets.append(Dataset())
-        
-        # iterate over datasets and set metadata        
+
+        # iterate over datasets and set metadata
         for n in range(num_sets):
             self.datasets[n].dim_x = 'wavelength'
             self.datasets[n].units_x = metadata['_UNITX']
@@ -274,33 +275,57 @@ class MosImporter(Importer):
         Defines the particular informations needed for a dataset.
 
         It stores dimensions and units in the dataset attributes.
-        """        
-        if self.ascii_type() == 'simple':        
+        """
+        if self.ascii_type() == 'simple':
             self.set_info_simple(metadata)
-            
-        if self.ascii_type() == 'multi':        
+
+        if self.ascii_type() == 'multi':
             self.set_info_multi(metadata)
 
     def parse_data(self, data_lines):
         super(MosImporter, self).parse_data(data_lines)
-        
-        #assign other datasets as well        
+
+        #assign other datasets as well
         if self.ascii_type() == 'multi':
-            for n in range(1, len(self.datasets)):       
+            for n in range(1, len(self.datasets)):
                 self.datasets[n].x = self.parsed_data[:, 0]
                 self.datasets[n].y = self.parsed_data[:, n+1]
-            
-        
+
+
 class CSVImporter(Importer):
     """ Importer of various CSV files and similar formats. """
 
+    def __init__(self, filename, csv_type = "XYYY"):
+        """
+        Constructor: it calls the load function.
+        """
+        self.csv_type = csv_type
+        self.dataset = self.load(filename)
+        self.parsed_data = []
+
+    def create_datasets_XYYY(self):
+        num_sets =  self.parsed_data.shape[1] - 1
+        for n in range(1, num_sets):
+            ds = Dataset()
+            ds.x = self.parsed_data[:, 0]
+            ds.y = self.parsed_data[:, n+1]
+            self.datasets.append(ds)
+                    
+
     def parse_data(self, data_lines):
-        #translate separators to whitespace so that it will be loaded correctly.
-        #this is very hacky... Better would be to pass a delimiter to parse_data.
-        #Should really implement kwargs passing.
+        # translate separators to whitespace so that it will be loaded correctly.
+        # this is very hacky... Better would be to pass a delimiter to parse_data.
+        # Should really implement kwargs passing.
         trans_table = string.maketrans(";,", "  ")
         data_lines = map(lambda l: l.translate(trans_table), data_lines)
 
         super(CSVImporter, self).parse_data(data_lines)
-        
-         
+
+        # if there are more than two columns
+        if self.parsed_data.shape[1] > 2:
+            if self.csv_type == "XYYY":
+                self.create_datasets_XYYY()
+
+
+
+

@@ -237,15 +237,29 @@ def test_CSVImporter_basic():
     #assert imp.dataset.units_y == ''
     
     
-csv_multicol_XYY = """\
+csv_multicol_XYYY = """\
 ;FL Blank.Sample.Raw.sp;FL p07 v oc po cent.Sample.Raw.sp
 Wavelength [nm];Absorbance; Absorbance
-230;0,68722;4,6999
-231;0,64781;4,7001
+230;0.68722;4.6999
+231;0.64781;4.7001
 """
-
-
+def test_CSVImporter_multicol_XYYY():
+    imp = spp.CSVImporter(StringIO(csv_multicol_XYYY))
+    
+    def check_first(ds):
+        assert all(ds.x == [230.,  231.])
+        assert all(ds.y == [0.68722, 0.64781])
+    
+    def check_second(ds):
+        assert all(ds.x == [230.,  231.])
+        assert all(ds.y == [4.6999, 4.7001])
+        
+    assert len(imp.datasets) == 2
+    check_first(imp.dataset)   
+    check_first(imp.datasets[0])   
+    
+    check_second(imp.datasets[1])
 
 if __name__ == "__main__":
     """Run selected tests."""
-    test_CSVImporter_basic()
+    test_CSVImporter_multicol_XYYY()
