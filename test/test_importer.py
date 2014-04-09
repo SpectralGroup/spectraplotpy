@@ -226,10 +226,26 @@ nm, A
 318.000000, 0.402974
 """
 
+
 def test_CSVImporter_basic():
     imp = spp.CSVImporter(StringIO(csv_basic))
-    print imp
+    assert all(imp.dataset.x == [320.,  319.,  318.])
+    assert all(imp.dataset.y == [0.402335, 0.402692, 0.402974])
+    #assert imp.dataset.dim_x == 'wavelength'    
+    #assert imp.dataset.dim_y == 'millidegrees'
+    #assert imp.dataset.units_x == 'nm'
+    #assert imp.dataset.units_y == ''
+    
+    
+csv_multicol_XYY = """\
+;FL Blank.Sample.Raw.sp;FL p07 v oc po cent.Sample.Raw.sp
+Wavelength [nm];Absorbance; Absorbance
+230;0,68722;4,6999
+231;0,64781;4,7001
+"""
+
+
 
 if __name__ == "__main__":
     """Run selected tests."""
-    test_MosImporter_mutiline()
+    test_CSVImporter_basic()
