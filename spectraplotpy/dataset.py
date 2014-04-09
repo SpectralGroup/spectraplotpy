@@ -31,7 +31,7 @@ class Dataset():
     def __init__(
             self,
             x=np.array([]), y=np.array([]),
-            metadata={},
+            metadata={}, name="",
             errors_x=None, errors_y=None, 
             units_x=None, units_y=None, 
             dim_x=None, dim_y=None
@@ -45,6 +45,7 @@ class Dataset():
         self.units_y = units_y
         self.dim_x = dim_x
         self.dim_y = dim_y
+        self.name = name
 
     def length(self):
         """
