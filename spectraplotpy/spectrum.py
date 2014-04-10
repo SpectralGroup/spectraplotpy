@@ -22,9 +22,8 @@ spectrum.py
 
 import copy
 import numpy
-# pylint: disable=W0401
 from custom_exceptions import *
-
+import matplotlib.pyplot as plt
 
 class Spectrum(object):    
     """ 
@@ -140,13 +139,14 @@ class Spectrum(object):
         return copy.deepcopy(self)
         
         
-    def plot(self, fig, *args, **kwargs):
+    def plot(self, fig=None, *args, **kwargs):
         """
         Plots into `fig` using its plot method, the x and y come from
         the dataset and any other argument you pass will be forwarded to
         the plot method
         """
-
+        if fig == None:
+            fig = plt
         return fig.plot(self.dataset.x, self.dataset.y, *args, **kwargs)
 
     def errorbar(self, fig, *args, **kwargs):

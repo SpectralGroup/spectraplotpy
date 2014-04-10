@@ -41,7 +41,7 @@ def test_plot_spectra():
     ds = create_fake_dataset()
     sp = spp.Spectrum(ds)
     
-    spp.plot_spectra(mock_fig, [sp, sp.copy()])
+    spp.plot_spectra(sp, sp.copy(), fig=mock_fig)
     
     assert mock_fig.plot.call_count == 2 
     

@@ -21,7 +21,7 @@ This uses the *spectraplotpy* library for easy ploting
 """
 
 from spectraplotpy import AvivImporter
-from spectraplotpy import BasePlotExporter
+#from spectraplotpy import BasePlotExporter
 from spectraplotpy import Spectrum
 
 import matplotlib.pyplot as plt
