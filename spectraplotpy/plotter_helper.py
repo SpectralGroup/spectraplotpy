@@ -34,6 +34,8 @@ def plot_spectra(*sp_list,  **kwargs):
     fig=kwargs.get('fig', plt)   
     for sp in sp_list:
         sp.plot(fig)
+        
+    return fig    
 
 
 def average_spectra(sp_list, *args, **kwarg):
