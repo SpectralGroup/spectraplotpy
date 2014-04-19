@@ -241,7 +241,6 @@ class MosImporter(Importer):
 
         The type is determined by the first line
         """
-        
         if   self.dataset.metadata.get('BIO-KINE ASCII FILE', False):
             return 'simple'
         elif self.dataset.metadata.get('BIO-KINE MULTI-Y ASCII FILE', False):
@@ -334,7 +333,7 @@ class CSVImporter(Importer):
         if self.parsed_data.shape[1] > 2:
             if self.csv_type == "XYYY":
                 self.create_datasets_XYYY()
-            if self.csv_type == "XYXY":
+            elif self.csv_type == "XYXY":
                 self.create_datasets_XYXY()                
 
 
