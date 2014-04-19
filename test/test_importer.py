@@ -44,15 +44,15 @@ _start_
 """
 
 def test_get_txt_data_metadata():
-    "test to see if lines are categorized coorectly"
+    "test to see if lines are categorized correctly"
 
-    data,metadata = spp.get_txt_data_metadata(basic_format)
+    data, metadata = spp.get_txt_data_metadata(basic_format)
     assert data == ['185\t-31.6863', '-47.5356  123', '1.1e-5 123']
     assert metadata == ['data_name dh201.cd', '_date_  10-18-2013',
                         '"_UNIT X"\t"nm" "wavelength"', '_start_', '#end']
 
 def test_parse_metadata():
-    data_lines,metadata_lines = spp.get_txt_data_metadata(basic_format)
+    data_lines, metadata_lines = spp.get_txt_data_metadata(basic_format)
     #print spp.parse_metadata(metadata)
     assert spp.parse_metadata(metadata_lines) == OrderedDict([
                         ('data_name', 'dh201.cd'), ('_date_', '10-18-2013'),
@@ -60,9 +60,9 @@ def test_parse_metadata():
                         ('#end', True)])
 
 def test_parse_metadata_empty_lines():
-   metadata_lines = ['data_name dh201.cd', '','_date_  10-18-2013']
-   #print spp.parse_metadata(metadata_lines)
-   assert spp.parse_metadata(metadata_lines) == OrderedDict([
+    metadata_lines = ['data_name dh201.cd', '', '_date_  10-18-2013']
+    #print spp.parse_metadata(metadata_lines)
+    assert spp.parse_metadata(metadata_lines) == OrderedDict([
                             ('data_name', 'dh201.cd'), ('_date_', '10-18-2013')])
 
 def test_take_text_file_descriptor():
@@ -103,7 +103,6 @@ def test_AvivImporter_basic():
 
 def test_AvivImporter_sample_data():
     """Test for the AvivImporter"""
-
     filenames = [
                 'sampledata/01-CD-Aviv62DS/CSA/CSA.CD',
                 'sampledata/01-CD-Aviv62DS/CSA/blank.CD',
