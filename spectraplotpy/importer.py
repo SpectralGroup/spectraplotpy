@@ -241,12 +241,13 @@ class MosImporter(Importer):
 
         The type is determined by the first line
         """
-        result = None
-        if self.dataset.metadata.get('BIO-KINE ASCII FILE', False):
-            result = 'simple'
-        if self.dataset.metadata.get('BIO-KINE MULTI-Y ASCII FILE', False):
-            result = 'multi'
-        return result
+        
+        if   self.dataset.metadata.get('BIO-KINE ASCII FILE', False):
+            return 'simple'
+        elif self.dataset.metadata.get('BIO-KINE MULTI-Y ASCII FILE', False):
+            return 'multi'
+        else:
+            return None
 
     def set_info_simple(self, metadata):
         self.dataset.units_x = metadata['_UNITX']
