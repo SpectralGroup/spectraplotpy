@@ -1,0 +1,10 @@
+data_name csa.cd
+_n_points  3
+x_unit nanometers
+y_unit millidegrees
+_y_type_   millidegrees
+_data_
+320.00 5.396
+319.50 6.374
+319.00 7.288
+_data_end_

@@ -59,4 +59,3 @@ def test_average_spectra():
     
     assert sp3.dataset.y[1] == (sp_y1 + sp1_y1 + sp2_y1)/3     
     
-    

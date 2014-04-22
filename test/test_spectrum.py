@@ -183,5 +183,4 @@ def test_errorbar():
     s.errorbar(mock_fig)
     mock_fig.errorbar.assert_called_once_with(x_data, y_data, 
                                               y_errors, x_errors) 
-    
-
+                                              
