@@ -26,16 +26,19 @@ It plots multiple spectra.
 """
 import matplotlib.pyplot as plt
 
+
 def plot_spectra(*sp_list,  **kwargs):
     """
     Function that takes a list of spectra in input and plots them
     by calling their spectra plot method.
     """
-    axes=kwargs.get('axes', plt.gca())   
+    axes = kwargs.get('axes', plt.gca())
     for sp in sp_list:
-        sp.plot(axes)
-        
-    return axes    
+        # here we pass an axes named argument the value of the axes
+        # local variable
+        sp.plot(axes=axes)
+
+    return axes
 
 
 def average_spectra(sp_list, *args, **kwarg):
@@ -52,4 +55,3 @@ def average_spectra(sp_list, *args, **kwarg):
     spectrum = spectrum / len(sp_list)
 
     return spectrum
-    

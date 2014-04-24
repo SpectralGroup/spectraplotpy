@@ -137,18 +137,17 @@ class Spectrum(object):
         creates a copy of a spectrum
         """
         return copy.deepcopy(self)
-        
-    def plot(self, axes=None, *args, **kwargs):
+
+    def plot(self, *args, **kwargs):
         """
         Plots into `axes` using its plot method, the x and y come from
         the dataset and any other argument you pass will be forwarded to
         the plot method
         """
-        if axes == None:
-            axes = plt.gca()
+        axes = kwargs.get('axes', plt.gca())
         return axes.plot(self.dataset.x, self.dataset.y, *args, **kwargs)
 
-    def errorbar(self, axes=None, *args, **kwargs):
+    def errorbar(self, *args, **kwargs):
         """
         Plots into `axes` using its errorbar method, the x and y come from
         the dataset and any other argument you pass will be forwarded to
@@ -162,8 +161,7 @@ class Spectrum(object):
 
 
         """
-        if axes == None:
-            axes = plt.gca()            
+        axes = kwargs.get('axes', plt.gca())
         return axes.errorbar(
             self.dataset.x, self.dataset.y,
             self.dataset.errors_y, self.dataset.errors_x,
