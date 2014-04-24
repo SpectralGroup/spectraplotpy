@@ -241,12 +241,12 @@ class MosImporter(Importer):
 
         The type is determined by the first line
         """
-        result = None
-        if self.dataset.metadata.get('BIO-KINE ASCII FILE', False):
-            result = 'simple'
-        if self.dataset.metadata.get('BIO-KINE MULTI-Y ASCII FILE', False):
-            result = 'multi'
-        return result
+        if   self.dataset.metadata.get('BIO-KINE ASCII FILE', False):
+            return 'simple'
+        elif self.dataset.metadata.get('BIO-KINE MULTI-Y ASCII FILE', False):
+            return 'multi'
+        else:
+            return None
 
     def set_info_simple(self, metadata):
         self.dataset.units_x = metadata['_UNITX']
@@ -312,13 +312,13 @@ class CSVImporter(Importer):
             self.datasets.append(ds)
 
     def create_datasets_XYXY(self):
-        #Todo: check for correct dimensions        
-        num_sets =  self.parsed_data.shape[1]/2 
+        #Todo: check for correct dimensions
+        num_sets =  self.parsed_data.shape[1]/2
         for n in range(1, num_sets):
             ds = Dataset()
             ds.x = self.parsed_data[:, 2*n]
             ds.y = self.parsed_data[:, 2*n+1]
-            self.datasets.append(ds)                    
+            self.datasets.append(ds)
 
     def parse_data(self, data_lines):
         # translate separators to whitespace so that it will be loaded correctly.
@@ -333,9 +333,5 @@ class CSVImporter(Importer):
         if self.parsed_data.shape[1] > 2:
             if self.csv_type == "XYYY":
                 self.create_datasets_XYYY()
-            if self.csv_type == "XYXY":
-                self.create_datasets_XYXY()                
-
-
-
-
+            elif self.csv_type == "XYXY":
+                self.create_datasets_XYXY()
