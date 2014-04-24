@@ -161,10 +161,10 @@ def test_mock_plot():
     ds = create_fake_dataset()
     s = spp.Spectrum(ds)
     
-    mock_fig = MagicMock()
-    mock_fig.plot = MagicMock()
-    s.plot(mock_fig)
-    mock_fig.plot.assert_called_once_with(s.dataset.x, s.dataset.y)
+    mock_axes = MagicMock()
+    mock_axes.plot = MagicMock()
+    s.plot(mock_axes)
+    mock_axes.plot.assert_called_once_with(s.dataset.x, s.dataset.y)
     
     
 def test_errorbar():
@@ -178,9 +178,9 @@ def test_errorbar():
     x_errors = s.dataset.errors_x
     y_errors = s.dataset.errors_y
     
-    mock_fig = MagicMock()
-    mock_fig.errorbar = MagicMock()
-    s.errorbar(mock_fig)
-    mock_fig.errorbar.assert_called_once_with(x_data, y_data, 
+    mock_axes = MagicMock()
+    mock_axes.errorbar = MagicMock()
+    s.errorbar(mock_axes)
+    mock_axes.errorbar.assert_called_once_with(x_data, y_data, 
                                               y_errors, x_errors) 
                                               
