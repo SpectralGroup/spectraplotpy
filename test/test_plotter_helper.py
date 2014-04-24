@@ -35,15 +35,15 @@ def create_fake_dataset():
 
 
 def test_plot_spectra():
-    mock_fig = plt.figure();
-    mock_fig.plot = MagicMock()
+    mock_axes = MagicMock()
+    mock_axes.plot = MagicMock()
 
     ds = create_fake_dataset()
     sp = spp.Spectrum(ds)
     
-    spp.plot_spectra(sp, sp.copy(), fig=mock_fig)
+    spp.plot_spectra(sp, sp.copy(), axes=mock_axes)
     
-    assert mock_fig.plot.call_count == 2 
+    assert mock_axes.plot.call_count == 2 
     
 def test_average_spectra():
     ds = create_fake_dataset()

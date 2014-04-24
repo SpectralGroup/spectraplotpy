@@ -31,11 +31,11 @@ def plot_spectra(*sp_list,  **kwargs):
     Function that takes a list of spectra in input and plots them
     by calling their spectra plot method.
     """
-    fig=kwargs.get('fig', plt)   
+    axes=kwargs.get('axes', plt.gca())   
     for sp in sp_list:
-        sp.plot(fig)
+        sp.plot(axes)
         
-    return fig    
+    return axes    
 
 
 def average_spectra(sp_list, *args, **kwarg):
