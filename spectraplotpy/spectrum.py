@@ -23,7 +23,7 @@ spectrum.py
 import copy
 import numpy
 from custom_exceptions import *
-
+import matplotlib.pyplot as plt
 
 class Spectrum(object):
     """
@@ -138,19 +138,18 @@ class Spectrum(object):
         """
         return copy.deepcopy(self)
 
-
-    def plot(self, fig, *args, **kwargs):
+    def plot(self, *args, **kwargs):
         """
-        Plots into `fig` using its plot method, the x and y come from
+        Plots into `axes` using its plot method, the x and y come from
         the dataset and any other argument you pass will be forwarded to
         the plot method
         """
+        axes = kwargs.get('axes', plt.gca())
+        return axes.plot(self.dataset.x, self.dataset.y, *args, **kwargs)
 
-        return fig.plot(self.dataset.x, self.dataset.y, *args, **kwargs)
-
-    def errorbar(self, fig, *args, **kwargs):
+    def errorbar(self, *args, **kwargs):
         """
-        Plots into `fig` using its errorbar method, the x and y come from
+        Plots into `axes` using its errorbar method, the x and y come from
         the dataset and any other argument you pass will be forwarded to
         the errorbar method
 
@@ -162,8 +161,8 @@ class Spectrum(object):
 
 
         """
-
-        return fig.errorbar(
+        axes = kwargs.get('axes', plt.gca())
+        return axes.errorbar(
             self.dataset.x, self.dataset.y,
             self.dataset.errors_y, self.dataset.errors_x,
             *args, **kwargs)
