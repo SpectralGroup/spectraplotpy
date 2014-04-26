@@ -22,7 +22,7 @@ Created on Wed March 19 22:36:41 2014
 @author: lbressan
 """
 import spectraplotpy as spp
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 from mock import MagicMock
 
 def create_fake_dataset():
@@ -53,9 +53,7 @@ def test_average_spectra():
 
     sp3 = spp.average_spectra(sp, sp1, sp2)
 
-    sp_y1 = sp.dataset.y[1]
-    sp1_y1 = sp1.dataset.y[1]
-    sp2_y1 = sp2.dataset.y[1]
-
-    assert sp3.dataset.y[1] == (sp_y1 + sp1_y1 + sp2_y1)/3
+    assert all(sp3.dataset.y == ( sp.dataset.y +  sp1.dataset.y +  sp2.dataset.y)/3)
+    
+    
 
