@@ -51,7 +51,7 @@ def test_average_spectra():
     sp1 = sp.copy()
     sp2 = sp.copy()
 
-    sp3 = spp.average_spectra([sp, sp1, sp2])
+    sp3 = spp.average_spectra(sp, sp1, sp2)
 
     sp_y1 = sp.dataset.y[1]
     sp1_y1 = sp1.dataset.y[1]
