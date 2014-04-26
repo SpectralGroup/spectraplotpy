@@ -39,8 +39,13 @@ def test_length():
     
     
 def test_copy():
-    ds = spp.Dataset(x=[1, 2, 3], y=[1, 2, 3]) 
-    assert ds.copy()
+    ds1 = spp.Dataset(x=[1, 2, 3], y=[1, 2, 3]) 
+    ds2 = ds1.copy()   
+    ds2.x = [4, 5, 6]
+    #a copy should not reflect changes on the original    
+    assert not np.array_equal(ds1.x, ds2.x)
+    #y remains unchanged     
+    assert np.array_equal(ds1.y, ds2.y)
     
 def test_make_numpy_array():
     x = [1, 2, 3]    
