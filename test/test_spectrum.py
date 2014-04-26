@@ -64,6 +64,18 @@ def test_Length_Error_exception():
     with pt.raises(spp.XCompatibilityError):
         s - s1
 
+def test_different_x_values_exception():
+    """Test for exception raised if x-values are diffrent"""
+    ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6])
+    ds2 = spp.Dataset(x=[1, 2, 4], y=[4, 5, 6])
+    s1 = spp.Spectrum(ds1)
+    s2 = spp.Spectrum(ds2)
+
+    with pt.raises(spp.XCompatibilityError):
+        s1 + s2
+
+    with pt.raises(spp.XCompatibilityError):
+        s1 - s2
 
 def test_add():
     ds = create_fake_dataset()
