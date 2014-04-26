@@ -46,28 +46,43 @@ class Spectrum(object):
         copied.add(other)
         return copied
 
-    def check_compatible_x(self, other_spec):
+    def check_compatible_x(self, other_spec, raise_exception=True):
         """
-        Checks if two spectra can be added or substracted.
+        Checks if two spectra can be added or subtracted.
         
         The x values must be of the same length and all must have the same value.
-        The lenght of the y values is checked as well (this is a bit redundant)        
+        The length of the y values is checked as well (this is a bit redundant)        
         
         Parameters
         ----------
         other_spec: Spectrum
             The other spectrum that is checked for compatibility against self.
         
+        raise_exception=True: bool 
+            If false exceptions are not raised
+        
+        Returns
+        -------
+        True if spectra are compatible, false otherwise.        
+        
         Raises
         ------
         custom_exceptions.XCompatibilityError
         """            
         if len(self.dataset.x) != len(other_spec.dataset.x):
-            fmtstr = "Lengths of dataset.x are not equal! ({l1} != {l2})"            
-            raise custom_exceptions.XCompatibilityError(
-              fmtstr.format(l1=len(self.dataset.x), l2=len(other_spec.dataset.x)))
+            if raise_exception:            
+                fmtstr = "Lengths of dataset.x are not equal! ({l1} != {l2})"            
+                raise custom_exceptions.XCompatibilityError(
+                    fmtstr.format(l1=len(self.dataset.x), l2=len(other_spec.dataset.x)))
+            return False        
             
-        
+        if not all(self.dataset.x == (other_spec.dataset.x)): 
+            if raise_exception:            
+                fmtstr = "Not all values of dataset.x are the same!"
+                raise custom_exceptions.XCompatibilityError(fmtstr)
+            return False    
+              
+        return True              
 
     def add(self, other):
         """
