@@ -22,7 +22,7 @@ spectrum.py
 
 import copy
 import numpy
-from custom_exceptions import *
+import custom_exceptions 
 import matplotlib.pyplot as plt
 
 class Spectrum(object):
@@ -46,7 +46,28 @@ class Spectrum(object):
         copied.add(other)
         return copied
 
-
+    def check_compatible_x(self, other_spec):
+        """
+        Checks if two spectra can be added or substracted.
+        
+        The x values must be of the same length and all must have the same value.
+        The lenght of the y values is checked as well (this is a bit redundant)        
+        
+        Parameters
+        ----------
+        other_spec: Spectrum
+            The other spectrum that is checked for compatibility against self.
+        
+        Raises
+        ------
+        custom_exceptions.XCompatibilityError
+        """            
+        if len(self.dataset.x) != len(other_spec.dataset.x):
+            fmtstr = "Lengths of dataset.x are not equal! ({l1} != {l2})"            
+            raise custom_exceptions.XCompatibilityError(
+              fmtstr.format(l1=len(self.dataset.x), l2=len(other_spec.dataset.x)))
+            
+        
 
     def add(self, other):
         """
@@ -61,7 +82,7 @@ class Spectrum(object):
             self.dataset.y += other.dataset.y
         else:
 #            print("Array length don't match")
-            raise LengthError("Array length don't match")
+            raise custom_exceptions.XCompatibilityError("Array length don't match")
 
 
     def __sub__(self, other):
@@ -86,7 +107,7 @@ class Spectrum(object):
             self.dataset.y -= other.dataset.y
         else:
 #            print("Array length don't match")
-            raise LengthError("Array length don't match")
+            raise custom_exceptions.XCompatibilityError("Array length don't match")
 
 
 

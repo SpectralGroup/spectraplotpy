@@ -58,10 +58,10 @@ def test_Length_Error_exception():
     ds1.y = np.array([2, 4, 6])
     s1 = spp.Spectrum(ds1)
 
-    with pt.raises(spp.LengthError):
+    with pt.raises(spp.XCompatibilityError):
         s + s1
 
-    with pt.raises(spp.LengthError):
+    with pt.raises(spp.XCompatibilityError):
         s - s1
 
 
