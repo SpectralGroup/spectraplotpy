@@ -22,23 +22,36 @@ Created on Tue Mar 18 15:53:31 2014
 @author: ooscar
 """
 
-import pytest as pt
+#import pytest as pt
+import numpy as np
 
-
-from spectraplotpy import Dataset
+import spectraplotpy as spp
 
 def test_construction():
     """Tests the construction of an empty dataset structure"""
-    assert Dataset()
-    assert Dataset(x=[1, 2, 3], y=[1, 2, 3])
+    assert spp.Dataset()
+    assert spp.Dataset(x=[1, 2, 3], y=[1, 2, 3])
     
     
 def test_length():
-    ds = Dataset(x=[1, 2, 3], y=[1, 2, 3]) 
+    ds = spp.Dataset(x=[1, 2, 3], y=[1, 2, 3]) 
     assert ds.length() == 3
     
     
 def test_copy():
-    ds = Dataset(x=[1, 2, 3], y=[1, 2, 3]) 
+    ds = spp.Dataset(x=[1, 2, 3], y=[1, 2, 3]) 
     assert ds.copy()
     
+def test_make_numpy_array():
+    x = [1, 2, 3]    
+    xnp = spp.make_numpy_array(x)    
+    assert isinstance(xnp, np.ndarray)
+    
+def test_make_numpy_array_no_copy():
+    x = np.array([1, 2, 3])    
+    y = spp.make_numpy_array(x)    
+    assert isinstance(y, np.ndarray)    
+    
+    #check that both x and y are modified
+    y[1] = 10
+    assert all(x==y)

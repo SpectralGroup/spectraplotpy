@@ -24,6 +24,16 @@ them for further operations by the spectrum and exporter classes.
 import copy
 import numpy as np
 
+def make_numpy_array(in_array):
+    """
+    Ensures the in_array is converted to a `numpy.ndarray`. If the in array 
+    is already an numpy.ndarray the same object is returned
+    """
+    if isinstance(in_array, np.ndarray):
+        return in_array
+    else:
+        return np.array(in_array)
+    
 class Dataset():
     """
     DAta structure holding a 2D representation of an spectrum.
@@ -36,8 +46,8 @@ class Dataset():
             units_x=None, units_y=None, 
             dim_x=None, dim_y=None
         ):
-        self.x = x
-        self.y = y
+        self.x = make_numpy_array(x) 
+        self.y = make_numpy_array(y)
         self.metadata = metadata
         self.errors_x = errors_x
         self.errors_y = errors_y
