@@ -92,7 +92,7 @@ class Spectrum(object):
 
     def __rmul__(self, const):
         """
-        reverse multiplication of a number with a spectrum in place
+        reverse multiplication of a number with a spectrum
         """
         copied = self.copy()
         copied.mul(const)
@@ -101,7 +101,7 @@ class Spectrum(object):
 
     def __mul__(self, const):
         """
-        multiplies a spectrum with number a in place
+        multiplies a spectrum with number returns copy
         """
         copied = self.copy()
         copied.mul(const)
@@ -110,7 +110,7 @@ class Spectrum(object):
 
     def mul(self, const):
         """
-        multiplies a spectrum with a number
+        multiplies a spectrum with a number in place
         """
         self.dataset.y = const * self.dataset.y
 
@@ -118,7 +118,7 @@ class Spectrum(object):
 
     def __div__(self, const):
         """
-        divides a spectrum with number a in place
+        divides a spectrum with number 
         """
         copied = self.copy()
         copied.div(const)
@@ -127,7 +127,7 @@ class Spectrum(object):
 
     def div(self, const):
         """
-        multiplies a spectrum with a number
+        multiplies a spectrum with a number a in place
         """
         self.dataset.y = self.dataset.y / const
 
