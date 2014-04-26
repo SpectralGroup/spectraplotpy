@@ -21,9 +21,48 @@ spectrum.py
 """
 
 import copy
-import numpy
+import numpy as np
 import custom_exceptions 
 import matplotlib.pyplot as plt
+
+
+def check_compatible_x(first_spec, other_spec, raise_exception=True):
+    """
+    Checks if two spectra can be added or subtracted.
+    
+    The x values must be of the same length and all must have the same value.
+    The length of the y values is checked as well (this is a bit redundant)        
+    
+    Parameters
+    ----------
+    other_spec: Spectrum
+        The other spectrum that is checked for compatibility against first_spec.
+    
+    raise_exception=True: bool 
+        If false exceptions are not raised
+    
+    Returns
+    -------
+    True if spectra are compatible, false otherwise.        
+    
+    Raises
+    ------
+    custom_exceptions.XCompatibilityError
+    """            
+    if len(first_spec.dataset.x) != len(other_spec.dataset.x):
+        if raise_exception:            
+            fmtstr = "Lengths of dataset.x are not equal! ({l1} != {l2})"            
+            raise custom_exceptions.XCompatibilityError(
+                fmtstr.format(l1=len(first_spec.dataset.x), l2=len(other_spec.dataset.x)))
+        return False        
+        
+    if not np.array_equal(first_spec.dataset.x, other_spec.dataset.x): 
+        if raise_exception:            
+            fmtstr = "Not all values of dataset.x are the same!"
+            raise custom_exceptions.XCompatibilityError(fmtstr)
+        return False    
+          
+    return True   
 
 class Spectrum(object):
     """
@@ -44,60 +83,14 @@ class Spectrum(object):
         """
         copied = self.copy()
         copied.add(other)
-        return copied
-
-    def check_compatible_x(self, other_spec, raise_exception=True):
-        """
-        Checks if two spectra can be added or subtracted.
-        
-        The x values must be of the same length and all must have the same value.
-        The length of the y values is checked as well (this is a bit redundant)        
-        
-        Parameters
-        ----------
-        other_spec: Spectrum
-            The other spectrum that is checked for compatibility against self.
-        
-        raise_exception=True: bool 
-            If false exceptions are not raised
-        
-        Returns
-        -------
-        True if spectra are compatible, false otherwise.        
-        
-        Raises
-        ------
-        custom_exceptions.XCompatibilityError
-        """            
-        if len(self.dataset.x) != len(other_spec.dataset.x):
-            if raise_exception:            
-                fmtstr = "Lengths of dataset.x are not equal! ({l1} != {l2})"            
-                raise custom_exceptions.XCompatibilityError(
-                    fmtstr.format(l1=len(self.dataset.x), l2=len(other_spec.dataset.x)))
-            return False        
-            
-        if not all(self.dataset.x == (other_spec.dataset.x)): 
-            if raise_exception:            
-                fmtstr = "Not all values of dataset.x are the same!"
-                raise custom_exceptions.XCompatibilityError(fmtstr)
-            return False    
-              
-        return True              
+        return copied           
 
     def add(self, other):
         """
         adds two spectra in place
         """
-        x_data = self.dataset.x
-        y_data = self.dataset.y
-        x1_data = other.dataset.x
-        y1_data = other.dataset.y
-
-        if len(y_data) == len(y1_data) and all(x_data == x1_data):
-            self.dataset.y += other.dataset.y
-        else:
-#            print("Array length don't match")
-            raise custom_exceptions.XCompatibilityError("Array length don't match")
+        check_compatible_x(self, other)
+        self.dataset.y += other.dataset.y
 
 
     def __sub__(self, other):
@@ -113,18 +106,9 @@ class Spectrum(object):
         """
         substracs two spectra in place
         """
-        x_data = self.dataset.x
-        y_data = self.dataset.y
-        x1_data = other.dataset.x
-        y1_data = other.dataset.y
-
-        if len(y_data) == len(y1_data) and all(x_data == x1_data):
-            self.dataset.y -= other.dataset.y
-        else:
-#            print("Array length don't match")
-            raise custom_exceptions.XCompatibilityError("Array length don't match")
-
-
+        check_compatible_x(self, other)
+        self.dataset.y -= other.dataset.y
+        
 
     def __rmul__(self, const):
         """
@@ -221,11 +205,11 @@ class Spectrum(object):
             raise ValueError, "Window is on of 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'"
 
 
-        holdspec = numpy.r_[self.dataset.y[window_len-1:0:-1], self.dataset.y, self.dataset.y[-1:-window_len:-1]]
+        holdspec = np.r_[self.dataset.y[window_len-1:0:-1], self.dataset.y, self.dataset.y[-1:-window_len:-1]]
         #print(len(s))
         if window == 'flat': #moving average
-            holdwindow = numpy.ones(window_len,'d')
+            holdwindow = np.ones(window_len,'d')
         else:
             holdwindow = eval('numpy.'+window+'(window_len)')
 
-        self.dataset.y = numpy.convolve(holdwindow/holdwindow.sum(), holdspec, mode='valid')
+        self.dataset.y = np.convolve(holdwindow/holdwindow.sum(), holdspec, mode='valid')
