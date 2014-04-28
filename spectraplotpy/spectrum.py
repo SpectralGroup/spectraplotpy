@@ -19,7 +19,6 @@
 """
 spectrum.py
 """
-
 import copy
 import numpy as np
 import custom_exceptions 
