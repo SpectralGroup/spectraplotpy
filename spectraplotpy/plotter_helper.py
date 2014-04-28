@@ -24,6 +24,7 @@ Created on Wed March 19 22:36:41 2014
 It plots multiple spectra.
 """
 import custom_exceptions as ce
+import warnings 
 import matplotlib.pyplot as plt
 import spectraplotpy as spp
 import numpy as np
@@ -72,6 +73,10 @@ def average_spectra(*sp_list, **kwargs):
 
     spectrum = sp_list[0].copy()
 
+    if N == 1:
+        warnings.warn("Only one spectrum passed to average_spectra().")
+        return spectrum
+
     #Check that all spectra are compatible (ie have same x-values, etc)
     #TODO: Append to exception msg, which two spectra are incompatible   
     for sp in sp_list[1:]:
@@ -81,10 +86,7 @@ def average_spectra(*sp_list, **kwargs):
     for sp in sp_list[1:]:
         spectrum.dataset.y += sp.dataset.y
     spectrum.dataset.y /= N
-    
-     
-    if N == 1:
-        return spectrum
+
     #get the standard deviation
     st_dev=np.zeros_like(spectrum.dataset.y)    
     for sp in sp_list:
