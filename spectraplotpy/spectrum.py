@@ -177,8 +177,6 @@ class Spectrum(object):
 
         >>> import matplotlib.pyplot as plt
         >>> sp.errorbar(plt, '--o')
-
-
         """
         axes = kwargs.get('axes', plt.gca())
         return axes.errorbar(
