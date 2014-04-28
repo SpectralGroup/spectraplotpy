@@ -206,14 +206,18 @@ class Spectrum(object):
         """
         axes = kwargs.get('axes', plt.gca())
         color = kwargs.get('color', axes._get_lines.color_cycle.next())        
-        alpha_fill = kwargs.get('alpha_fill', 0.3)   
+        alpha_fill = kwargs.pop('alpha_fill', 0.3)   
         
+        axes.plot(self.dataset.x, self.dataset.y, color=color, *args, **kwargs)
+        
+        if self.dataset.errors_y is None:
+            return
+
         if np.isscalar(self.dataset.errors_y) or len(self.dataset.errors_y) == len(self.dataset.y):
             ymin = self.dataset.y - self.dataset.errors_y
             ymax = self.dataset.y + self.dataset.errors_y
         elif len(self.dataset.errors_y) == 2:
             ymin, ymax = self.dataset.errors_y
-        axes.plot(self.dataset.x, self.dataset.y, color=color, *args, **kwargs)
         axes.fill_between(self.dataset.x, ymax, ymin, color=color, alpha=alpha_fill)
 
     def smooth(self, window_len=11, window='hanning'):

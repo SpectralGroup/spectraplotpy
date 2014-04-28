@@ -196,3 +196,38 @@ def test_errorbar():
     mock_axes.errorbar.assert_called_once_with(x_data, y_data,
                                                y_errors, x_errors,
                                                axes=mock_axes)
+
+def test_errorfill():
+    #ds = spp.Dataset(x=[1, 2, 3], y = [1, 2, 5], errors_y = [0.1, 0.2, 0.5])
+    ds = create_fake_dataset()    
+    s = spp.Spectrum(ds)
+
+    mock_axes = MagicMock()
+    mock_axes.plot = MagicMock()
+    mock_axes.fill_between = MagicMock()    
+    s.errorfill(axes=mock_axes)
+    mock_axes.plot.assert_called_once()
+    mock_axes.fill_between.assert_called_once()
+
+def test_errorfill_alpha_fill():
+    ds = spp.Dataset(x=[1, 2, 3], y = [1, 2, 5], errors_y = [0.1, 0.2, 0.5])
+    ds = create_fake_dataset()    
+    s = spp.Spectrum(ds)
+
+    mock_axes = MagicMock()
+    mock_axes.plot = MagicMock()
+    mock_axes.fill_between = MagicMock()    
+    s.errorfill(axes=mock_axes, alpha_fill=0.1)
+    mock_axes.plot.assert_called_once()
+    mock_axes.fill_between.assert_called_once()
+
+def test_errorfill_no_erros():
+    """ What happens if no errors are present ... just plot """
+    ds = create_fake_dataset()    
+    s = spp.Spectrum(ds)
+
+    mock_axes = MagicMock()
+    mock_axes.plot = MagicMock()
+    mock_axes.fill_between = MagicMock()    
+    s.errorfill(axes=mock_axes)
+    mock_axes.plot.assert_called_once()
