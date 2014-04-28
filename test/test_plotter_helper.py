@@ -19,14 +19,15 @@
 """
 Created on Wed March 19 22:36:41 2014
 
-@author: lbressan
+@author: lbressan, ajasja
 """
 import spectraplotpy as spp
 #import matplotlib.pyplot as plt
 from mock import MagicMock
+import numpy as np
 
 def create_fake_dataset():
-    import numpy as np
+
     ds = spp.Dataset()
     ds.x = np.array([1, 2, 3, 4])
     ds.y = np.array([2, 4, 6, 8])
@@ -46,14 +47,16 @@ def test_plot_spectra():
     assert mock_axes.plot.call_count == 2
 
 def test_average_spectra():
-    ds = create_fake_dataset()
-    sp = spp.Spectrum(ds)
-    sp1 = sp.copy()
-    sp2 = sp.copy()
+    ds1 = spp.Dataset(x=[1, 2, 3], y=[1, 2, 3])
+    ds2 = spp.Dataset(x=[1, 2, 3], y=[1, 3, 4])
+    ds3 = spp.Dataset(x=[1, 2, 3], y=[1, 1, 2])    
+    sp1 = spp.Spectrum(ds1)
+    sp2 = spp.Spectrum(ds2)
+    sp3 = spp.Spectrum(ds3)
 
-    sp3 = spp.average_spectra(sp, sp1, sp2)
+    sp3 = spp.average_spectra(sp1, sp2, sp3)
 
-    assert all(sp3.dataset.y == ( sp.dataset.y +  sp1.dataset.y +  sp2.dataset.y)/3)
+    assert np.array_equal(sp3.dataset.y, ( sp1.dataset.y +  sp2.dataset.y +  sp2.dataset.y)/3)
     
     
 

@@ -24,7 +24,9 @@ Created on Wed March 19 22:36:41 2014
 """
 It plots multiple spectra.
 """
+import custom_exceptions as ce
 import matplotlib.pyplot as plt
+import spectraplotpy as spp
 
 
 def plot_spectra(*sp_list,  **kwargs):
@@ -47,11 +49,18 @@ def average_spectra(*sp_list, **kwarg):
     It takes as input the list of spectra and returns a new spectrum
     """
 
-    spectrum = sp_list[0]
+    spectrum = sp_list[0].copy()
 
+    #Check that all spectra are compatible (ie have same x-values, etc)
+    #TODO: Append to exception msg, which two spectra are incompatible   
     for sp in sp_list[1:]:
-        spectrum += sp
+        spp.check_compatible_x(spectrum, sp)         
+        
+    #get the mean        
+    for sp in sp_list[1:]:
+        spectrum.dataset.y += sp.dataset.y
+    spectrum.dataset.y = spectrum.dataset.y / len(sp_list)
 
-    spectrum = spectrum / len(sp_list)
+    #get the 
 
     return spectrum
