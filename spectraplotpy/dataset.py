@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with spectraplotpy.  If not, see <http://www.gnu.org/licenses/>.
 #
-
 """
 The Dataset class receives and holds inputs from the importer class and holds
 them for further operations by the spectrum and exporter classes.
