@@ -91,8 +91,8 @@ def test_add():
     assert np.array_equal(s.dataset.y_errors, ds1.y_errors + ds2.y_errors)
 
 def test_add_errors_scalar():
-    ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6], x_errors=[0.1, 0.2, 0.3], y_errors=[0.1, 0.1, 0.1])
-    ds2 = spp.Dataset(x=[1, 2, 3], y=[2, 3, 4], x_errors=0.1, y_errors=0.2)
+    ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6], x_errors=[0.1, 0.2, 0.3], y_errors=0.2)
+    ds2 = spp.Dataset(x=[1, 2, 3], y=[2, 3, 4], x_errors=0.1, y_errors=[0.1, 0.1, 0.1])
     s1 = spp.Spectrum(ds1)
     s2 = spp.Spectrum(ds2)
 
