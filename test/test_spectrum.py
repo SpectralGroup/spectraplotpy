@@ -187,8 +187,8 @@ def test_errorbar():
     s = spp.Spectrum(ds)
     x_data = s.dataset.x
     y_data = s.dataset.y
-    x_errors = s.dataset.errors_x
-    y_errors = s.dataset.errors_y
+    x_errors = s.dataset.x_errors
+    y_errors = s.dataset.y_errors
 
     mock_axes = MagicMock()
     mock_axes.errorbar = MagicMock()
@@ -198,7 +198,7 @@ def test_errorbar():
                                                axes=mock_axes)
 
 def test_errorfill():
-    #ds = spp.Dataset(x=[1, 2, 3], y = [1, 2, 5], errors_y = [0.1, 0.2, 0.5])
+    #ds = spp.Dataset(x=[1, 2, 3], y = [1, 2, 5], y_errors = [0.1, 0.2, 0.5])
     ds = create_fake_dataset()    
     s = spp.Spectrum(ds)
 
@@ -210,7 +210,7 @@ def test_errorfill():
     mock_axes.fill_between.assert_called_once()
 
 def test_errorfill_alpha_fill():
-    ds = spp.Dataset(x=[1, 2, 3], y = [1, 2, 5], errors_y = [0.1, 0.2, 0.5])
+    ds = spp.Dataset(x=[1, 2, 3], y = [1, 2, 5], y_errors = [0.1, 0.2, 0.5])
     ds = create_fake_dataset()    
     s = spp.Spectrum(ds)
 

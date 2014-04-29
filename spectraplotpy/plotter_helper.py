@@ -98,6 +98,6 @@ def average_spectra(*sp_list, **kwargs):
     if error_type.lower() == 'st_err':
         st_dev/= np.sqrt(N) # should it be here N - ddof as well?
 
-    spectrum.dataset.errors_y = st_dev
+    spectrum.dataset.y_errors = st_dev
 
     return spectrum

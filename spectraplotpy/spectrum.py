@@ -172,12 +172,12 @@ class Spectrum(object):
         axes = kwargs.get('axes', plt.gca())
         return axes.errorbar(
             self.dataset.x, self.dataset.y,
-            self.dataset.errors_y, self.dataset.errors_x,
+            self.dataset.y_errors, self.dataset.x_errors,
             *args, **kwargs)
 
     def errorfill(self, *args, **kwargs):
         """
-        Plots error bands, using the spectrum errors_y.
+        Plots error bands, using the spectrum y_errors.
 
         Parameters
         ----------
@@ -200,14 +200,14 @@ class Spectrum(object):
 
         axes.plot(self.dataset.x, self.dataset.y, color=color, *args, **kwargs)
 
-        if self.dataset.errors_y is None:
+        if self.dataset.y_errors is None:
             return
 
-        if np.isscalar(self.dataset.errors_y) or len(self.dataset.errors_y) == len(self.dataset.y):
-            ymin = self.dataset.y - self.dataset.errors_y
-            ymax = self.dataset.y + self.dataset.errors_y
-        elif len(self.dataset.errors_y) == 2:
-            ymin, ymax = self.dataset.errors_y
+        if np.isscalar(self.dataset.y_errors) or len(self.dataset.y_errors) == len(self.dataset.y):
+            ymin = self.dataset.y - self.dataset.y_errors
+            ymax = self.dataset.y + self.dataset.y_errors
+        elif len(self.dataset.y_errors) == 2:
+            ymin, ymax = self.dataset.y_errors
         axes.fill_between(self.dataset.x, ymax, ymin, color=color, alpha=alpha_fill)
 
     def smooth(self, window_len=11, window='hanning'):

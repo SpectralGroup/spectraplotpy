@@ -64,11 +64,11 @@ def test_average_spectra():
     #assert np.array_equal(sp3.dataset.y, ( sp1.dataset.y +  sp2.dataset.y +  sp2.dataset.y)/3)
     assert np.array_equal(sp.dataset.y, mean)    
     #test st dev
-    assert np.array_equal(sp.dataset.errors_y, st_err)
+    assert np.array_equal(sp.dataset.y_errors, st_err)
     
     sp = spp.average_spectra(sp1, sp2, sp3, error_type='st_dev')
     assert np.array_equal(sp.dataset.y, mean)    
-    assert np.array_equal(sp.dataset.errors_y, st_dev)
+    assert np.array_equal(sp.dataset.y_errors, st_dev)
     
     #TODO: ddof testing...
    

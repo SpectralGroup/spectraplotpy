@@ -41,19 +41,19 @@ class Dataset():
             self,
             x=np.array([]), y=np.array([]),
             metadata={}, name="",
-            errors_x=None, errors_y=None, 
-            units_x=None, units_y=None, 
-            dim_x=None, dim_y=None
+            x_errors=None, y_errors=None, 
+            x_unit=None, y_unit=None, 
+            x_quantity=None, y_quantity=None
         ):
         self.x = make_numpy_array(x) 
         self.y = make_numpy_array(y)
         self.metadata = metadata
-        self.errors_x = errors_x
-        self.errors_y = errors_y
-        self.units_x = units_x
-        self.units_y = units_y
-        self.dim_x = dim_x
-        self.dim_y = dim_y
+        self.x_errors = x_errors
+        self.y_errors = y_errors
+        self.x_unit = x_unit
+        self.y_unit = y_unit
+        self.x_quantity = x_quantity
+        self.y_quantity = y_quantity
         self.name = name
 
     def length(self):

@@ -146,7 +146,7 @@ class Importer(object):
             (see parse_metadata);
          - store the needed information (as for example units, dimensions, ...)
             of the data in the dataset.metadata instance (see set_info);
-         - store the data into the x, y, errors_x, errors_y of the dataset
+         - store the data into the x, y, x_errors, y_errors of the dataset
             (see parse_data).
         """
         self.dataset = Dataset()
@@ -159,8 +159,8 @@ class Importer(object):
         self.parse_data(data_lines)
 
 #        print self.dataset.metadata
-#        print self.dataset.dim_x, self.dataset.dim_y, \
-#              self.dataset.units_x, self.dataset.units_y
+#        print self.dataset.x_quantity, self.dataset.y_quantity, \
+#              self.dataset.x_unit, self.dataset.y_unit
 #        print len(self.dataset.x)
         return self.dataset
 
@@ -206,10 +206,10 @@ class Importer(object):
             self.dataset.y = self.parsed_data[:, 1]
 #            if data.shape[1] > 2:
 #                if data.shape[1] == 3:
-#                    self.dataset.errors_y = data[:, 2]
+#                    self.dataset.y_errors = data[:, 2]
 #                if data.shape[1] == 4:
-#                    self.dataset.errors_x = data[:, 2]
-#                    self.dataset.errors_y = data[:, 3]
+#                    self.dataset.x_errors = data[:, 2]
+#                    self.dataset.y_errors = data[:, 3]
 
 
 
@@ -224,10 +224,10 @@ class AvivImporter(Importer):
 
         It stores dimensions and units in the dataset attributes.
         """
-        self.dataset.dim_x = 'wavelength'
-        self.dataset.dim_y = metadata['_y_type_']
-        self.dataset.units_x = metadata['x_unit']
-        self.dataset.units_y = metadata['y_unit']
+        self.dataset.x_quantity = 'wavelength'
+        self.dataset.y_quantity = metadata['_y_type_']
+        self.dataset.x_unit = metadata['x_unit']
+        self.dataset.y_unit = metadata['y_unit']
 
 
 class MosImporter(Importer):
@@ -249,9 +249,9 @@ class MosImporter(Importer):
             return None
 
     def set_info_simple(self, metadata):
-        self.dataset.units_x = metadata['_UNITX']
-        self.dataset.units_y = metadata['_UNITY']
-        self.dataset.dim_x = 'wavelength'
+        self.dataset.x_unit = metadata['_UNITX']
+        self.dataset.y_unit = metadata['_UNITY']
+        self.dataset.x_quantity = 'wavelength'
 
     def set_info_multi(self, metadata):
         """
@@ -266,9 +266,9 @@ class MosImporter(Importer):
 
         # iterate over datasets and set metadata
         for n in range(num_sets):
-            self.datasets[n].dim_x = 'wavelength'
-            self.datasets[n].units_x = metadata['_UNITX']
-            self.datasets[n].units_y = metadata['_UNITY'+str(n+1)]
+            self.datasets[n].x_quantity = 'wavelength'
+            self.datasets[n].x_unit = metadata['_UNITX']
+            self.datasets[n].y_unit = metadata['_UNITY'+str(n+1)]
 
     def set_info(self, metadata):
         """
