@@ -78,13 +78,14 @@ def test_different_x_values_exception():
         s1 - s2
 
 def test_add():
-    ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6])
-    ds2 = spp.Dataset(x=[1, 2, 3], y=[2, 3, 4])
+    ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6], x_errors=[0.1, 0.2, 0.3], y_errors=[0.1, 0.1, 0.1])
+    ds2 = spp.Dataset(x=[1, 2, 3], y=[2, 3, 4], x_errors=[0.1, 0.1, 0.1], y_errors=[0.2, 0.2, 0.2])
     s1 = spp.Spectrum(ds1)
     s2 = spp.Spectrum(ds2)
-    
-    s = s1 + s2
 
+    s = s1 + s2
+    print s.dataset.x_errors
+    
     assert np.array_equal(s.dataset.x, ds1.x)
     assert np.array_equal(s.dataset.y, ds1.y + ds2.y)
     assert np.array_equal(s.dataset.x_errors, ds1.x_errors + ds2.x_errors)
@@ -202,35 +203,35 @@ def test_errorbar():
 
 def test_errorfill():
     #ds = spp.Dataset(x=[1, 2, 3], y = [1, 2, 5], y_errors = [0.1, 0.2, 0.5])
-    ds = create_fake_dataset()    
+    ds = create_fake_dataset()
     s = spp.Spectrum(ds)
 
     mock_axes = MagicMock()
     mock_axes.plot = MagicMock()
-    mock_axes.fill_between = MagicMock()    
+    mock_axes.fill_between = MagicMock()
     s.errorfill(axes=mock_axes)
     mock_axes.plot.assert_called_once()
     mock_axes.fill_between.assert_called_once()
 
 def test_errorfill_alpha_fill():
     ds = spp.Dataset(x=[1, 2, 3], y = [1, 2, 5], y_errors = [0.1, 0.2, 0.5])
-    ds = create_fake_dataset()    
+    ds = create_fake_dataset()
     s = spp.Spectrum(ds)
 
     mock_axes = MagicMock()
     mock_axes.plot = MagicMock()
-    mock_axes.fill_between = MagicMock()    
+    mock_axes.fill_between = MagicMock()
     s.errorfill(axes=mock_axes, alpha_fill=0.1)
     mock_axes.plot.assert_called_once()
     mock_axes.fill_between.assert_called_once()
 
 def test_errorfill_no_erros():
     """ What happens if no errors are present ... just plot """
-    ds = create_fake_dataset()    
+    ds = create_fake_dataset()
     s = spp.Spectrum(ds)
 
     mock_axes = MagicMock()
     mock_axes.plot = MagicMock()
-    mock_axes.fill_between = MagicMock()    
+    mock_axes.fill_between = MagicMock()
     s.errorfill(axes=mock_axes)
     mock_axes.plot.assert_called_once()

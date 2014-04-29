@@ -90,6 +90,8 @@ class Spectrum(object):
         """
         check_compatible_x(self, other)
         self.dataset.y += other.dataset.y
+        self.dataset.x_errors += other.dataset.x_errors
+        self.dataset.y_errors += other.dataset.y_errors
 
     def __sub__(self, other):
         """
@@ -227,7 +229,7 @@ class Spectrum(object):
         if not window in ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']:
             raise(ValueError, "Window is on of 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'")
 
-        holdspec = np.r_[self.dataset.y[window_len-1:0:-1], 
+        holdspec = np.r_[self.dataset.y[window_len-1:0:-1],
                          self.dataset.y, self.dataset.y[-1:-window_len:-1]]
         #print(len(s))
         if window == 'flat': #moving average
