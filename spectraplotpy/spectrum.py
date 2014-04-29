@@ -21,47 +21,48 @@ spectrum.py
 """
 import copy
 import numpy as np
-import custom_exceptions 
+import custom_exceptions
 import matplotlib.pyplot as plt
 
 
 def check_compatible_x(first_spec, other_spec, raise_exception=True):
     """
     Checks if two spectra can be added or subtracted.
-    
+
     The x values must be of the same length and all must have the same value.
-    The length of the y values is checked as well (this is a bit redundant)        
-    
+    The length of the y values is checked as well (this is a bit redundant)
+
     Parameters
     ----------
     other_spec: Spectrum
         The other spectrum that is checked for compatibility against first_spec.
-    
-    raise_exception=True: bool 
+
+    raise_exception=True: bool
         If false exceptions are not raised
-    
+
     Returns
     -------
-    True if spectra are compatible, false otherwise.        
-    
+    True if spectra are compatible, false otherwise.
+
     Raises
     ------
     custom_exceptions.XCompatibilityError
-    """            
+    """
     if len(first_spec.dataset.x) != len(other_spec.dataset.x):
-        if raise_exception:            
-            fmtstr = "Lengths of dataset.x are not equal! ({l1} != {l2})"            
+        if raise_exception:
+            fmtstr = "Lengths of dataset.x are not equal! ({l1} != {l2})"
             raise custom_exceptions.XCompatibilityError(
                 fmtstr.format(l1=len(first_spec.dataset.x), l2=len(other_spec.dataset.x)))
-        return False        
-        
-    if not np.array_equal(first_spec.dataset.x, other_spec.dataset.x): 
-        if raise_exception:            
+        return False
+
+    if not np.array_equal(first_spec.dataset.x, other_spec.dataset.x):
+        if raise_exception:
             fmtstr = "Not all values of dataset.x are the same!"
             raise custom_exceptions.XCompatibilityError(fmtstr)
-        return False    
-          
-    return True   
+        return False
+
+    return True
+
 
 class Spectrum(object):
     """
@@ -75,14 +76,13 @@ class Spectrum(object):
 #    def __str__(self):
 #        return 'spectum('self.dataset.metadata.filename))
 
-
     def __add__(self, other):
         """
         adds two spectra, returns third spectrum
         """
         copied = self.copy()
         copied.add(other)
-        return copied           
+        return copied
 
     def add(self, other):
         """
@@ -90,7 +90,6 @@ class Spectrum(object):
         """
         check_compatible_x(self, other)
         self.dataset.y += other.dataset.y
-
 
     def __sub__(self, other):
         """
@@ -100,14 +99,12 @@ class Spectrum(object):
         copied.sub(other)
         return copied
 
-
     def sub(self, other):
         """
         substracs two spectra in place
         """
         check_compatible_x(self, other)
         self.dataset.y -= other.dataset.y
-        
 
     def __rmul__(self, const):
         """
@@ -117,7 +114,6 @@ class Spectrum(object):
         copied.mul(const)
         return copied
 
-
     def __mul__(self, const):
         """
         multiplies a spectrum with number returns copy
@@ -126,30 +122,25 @@ class Spectrum(object):
         copied.mul(const)
         return copied
 
-
     def mul(self, const):
         """
         multiplies a spectrum with a number in place
         """
         self.dataset.y = const * self.dataset.y
 
-
-
     def __div__(self, const):
         """
-        divides a spectrum with number 
+        divides a spectrum with number
         """
         copied = self.copy()
         copied.div(const)
         return copied
-
 
     def div(self, const):
         """
         multiplies a spectrum with a number a in place
         """
         self.dataset.y = self.dataset.y / const
-
 
     def copy(self):
         """
@@ -184,32 +175,31 @@ class Spectrum(object):
             self.dataset.errors_y, self.dataset.errors_x,
             *args, **kwargs)
 
-    
     def errorfill(self, *args, **kwargs):
         """
         Plots error bands, using the spectrum errors_y.
-        
+
         Parameters
         ----------
         axes: matplotlib.Axes()
-            Axes into witch to draw.        
+            Axes into witch to draw.
         color = None
             The color with with to draw. If None is given, one is choshen automatically.
         alpha_fill : float = 0.3
             The alpha level of the error band.
-            
+
         All the other parameters are passed to `Axes.plot()`
-        
+
         Notes
         -----
         Inspired by http://tonysyu.github.io/plotting-error-bars.html
         """
         axes = kwargs.get('axes', plt.gca())
-        color = kwargs.get('color', axes._get_lines.color_cycle.next())        
-        alpha_fill = kwargs.pop('alpha_fill', 0.3)   
-        
+        color = kwargs.get('color', axes._get_lines.color_cycle.next())
+        alpha_fill = kwargs.pop('alpha_fill', 0.3)
+
         axes.plot(self.dataset.x, self.dataset.y, color=color, *args, **kwargs)
-        
+
         if self.dataset.errors_y is None:
             return
 
@@ -226,19 +216,19 @@ class Spectrum(object):
         schemes and returns smooth data
         """
         if self.dataset.y.ndim != 1:
-            raise ValueError, "smooth only accepts 1 dimension arrays."
+            raise(ValueError, "smooth only accepts 1 dimension arrays.")
 
         if self.dataset.y.size < window_len:
-            raise ValueError, "Input vector needs to be bigger than window size"
+            raise(ValueError, "Input vector needs to be bigger than window size")
 
         if window_len < 3:
             return self.dataset.y
 
         if not window in ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']:
-            raise ValueError, "Window is on of 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'"
+            raise(ValueError, "Window is on of 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'")
 
-
-        holdspec = np.r_[self.dataset.y[window_len-1:0:-1], self.dataset.y, self.dataset.y[-1:-window_len:-1]]
+        holdspec = np.r_[self.dataset.y[window_len-1:0:-1], 
+                         self.dataset.y, self.dataset.y[-1:-window_len:-1]]
         #print(len(s))
         if window == 'flat': #moving average
             holdwindow = np.ones(window_len,'d')
