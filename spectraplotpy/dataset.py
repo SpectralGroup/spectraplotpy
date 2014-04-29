@@ -33,23 +33,36 @@ def make_numpy_array(in_array):
     else:
         return np.array(in_array)
     
+def make_numpy_array_or_scalar(in_arg):
+    """
+    Ensures the in_arg is converted to a `numpy.ndarray` or a valid scalar value. 
+    
+    See also
+    --------
+    - make_numpy_array 
+    """
+    if np.isscalar(in_arg):
+        return in_arg
+    else:   
+        return make_numpy_array(in_arg)     
+        
 class Dataset():
     """
-    DAta structure holding a 2D representation of an spectrum.
+    Data structure holding a 2D representation of an spectrum.
     """
     def __init__(
             self,
             x=np.array([]), y=np.array([]),
             metadata={}, name="",
-            x_errors=None, y_errors=None, 
+            x_errors=0, y_errors=0, 
             x_unit=None, y_unit=None, 
             x_quantity=None, y_quantity=None
         ):
         self.x = make_numpy_array(x) 
         self.y = make_numpy_array(y)
         self.metadata = metadata
-        self.x_errors = x_errors
-        self.y_errors = y_errors
+        self.x_errors = make_numpy_array_or_scalar(x_errors)
+        self.y_errors = make_numpy_array_or_scalar(y_errors)
         self.x_unit = x_unit
         self.y_unit = y_unit
         self.x_quantity = x_quantity
