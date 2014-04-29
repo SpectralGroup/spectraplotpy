@@ -84,8 +84,20 @@ def test_add():
     s2 = spp.Spectrum(ds2)
 
     s = s1 + s2
-    print s.dataset.x_errors
-    
+
+    assert np.array_equal(s.dataset.x, ds1.x)
+    assert np.array_equal(s.dataset.y, ds1.y + ds2.y)
+    assert np.array_equal(s.dataset.x_errors, ds1.x_errors + ds2.x_errors)
+    assert np.array_equal(s.dataset.y_errors, ds1.y_errors + ds2.y_errors)
+
+def test_add_errors_scalar():
+    ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6], x_errors=[0.1, 0.2, 0.3], y_errors=[0.1, 0.1, 0.1])
+    ds2 = spp.Dataset(x=[1, 2, 3], y=[2, 3, 4], x_errors=0.1, y_errors=0.2)
+    s1 = spp.Spectrum(ds1)
+    s2 = spp.Spectrum(ds2)
+
+    s = s1 + s2
+
     assert np.array_equal(s.dataset.x, ds1.x)
     assert np.array_equal(s.dataset.y, ds1.y + ds2.y)
     assert np.array_equal(s.dataset.x_errors, ds1.x_errors + ds2.x_errors)
@@ -108,14 +120,17 @@ def test_add_value():
     assert all(s.dataset.y == s_y_np2)
 
 def test_sub():
-    ds = create_fake_dataset()
-    s = spp.Spectrum(ds)
-    s1 = s.copy()
-    s2 = s - s1
-    s.sub(s1)
+    ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6], x_errors=[0.1, 0.2, 0.3], y_errors=[0.1, 0.1, 0.1])
+    ds2 = spp.Dataset(x=[1, 2, 3], y=[2, 3, 4], x_errors=[0.1, 0.1, 0.1], y_errors=[0.2, 0.2, 0.2])
+    s1 = spp.Spectrum(ds1)
+    s2 = spp.Spectrum(ds2)
 
-    assert all(s.dataset.x == s2.dataset.x)
-    assert all(s.dataset.y == s2.dataset.y)
+    s = s1 - s2
+
+    assert np.array_equal(s.dataset.x, ds1.x)
+    assert np.array_equal(s.dataset.y, ds1.y - ds2.y)
+    assert np.array_equal(s.dataset.x_errors, ds1.x_errors + ds2.x_errors)
+    assert np.array_equal(s.dataset.y_errors, ds1.y_errors + ds2.y_errors)
 
 def test_sub_value():
     s_y_np = np.array([2,4,6,8])

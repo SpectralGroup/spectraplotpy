@@ -107,6 +107,8 @@ class Spectrum(object):
         """
         check_compatible_x(self, other)
         self.dataset.y -= other.dataset.y
+        self.dataset.x_errors += other.dataset.x_errors
+        self.dataset.y_errors += other.dataset.y_errors
 
     def __rmul__(self, const):
         """
