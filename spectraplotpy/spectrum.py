@@ -75,7 +75,26 @@ class Spectrum(object):
 
 #    def __str__(self):
 #        return 'spectum('self.dataset.metadata.filename))
-
+    def add_absolute_errors(self, other):
+        """
+        Adds the absolute errors (when adding or substracting two spectra)
+        
+        The addition is not done in-place, due to broadcasting
+        The problem is:
+        
+            a = np.array([1, 2, 3])
+            b = np.array([[1, 2, 3],[-1 ,-1, -1]])
+        
+        then
+           * a + b work
+           * a += b fail
+           * b += a work
+        
+        Would this ever be problematic? Don't want to go into premature optimizations...
+        """
+        self.dataset.x_errors = self.dataset.x_errors + other.dataset.x_errors
+        self.dataset.y_errors = self.dataset.y_errors + other.dataset.y_errors
+        
     def __add__(self, other):
         """
         adds two spectra, returns third spectrum
@@ -90,8 +109,7 @@ class Spectrum(object):
         """
         check_compatible_x(self, other)
         self.dataset.y += other.dataset.y
-        self.dataset.x_errors = self.dataset.x_errors + other.dataset.x_errors
-        self.dataset.y_errors = self.dataset.y_errors + other.dataset.y_errors
+        self.add_absolute_errors(other)
 
     def __sub__(self, other):
         """
@@ -107,8 +125,7 @@ class Spectrum(object):
         """
         check_compatible_x(self, other)
         self.dataset.y -= other.dataset.y
-        self.dataset.x_errors = self.dataset.x_errors + other.dataset.x_errors
-        self.dataset.y_errors = self.dataset.y_errors + other.dataset.y_errors
+        self.add_absolute_errors(other)
 
     def __rmul__(self, const):
         """
