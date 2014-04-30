@@ -164,10 +164,13 @@ class Spectrum(object):
         """
         multiplies a spectrum with a number a in place
         """
-        if const == 0.:
+        # cast to float to avoid surprises with integer division
+        fconst = float(const)
+        if fconst == 0.:
             raise(ZeroDivisionError, "Spectrum can not be divided by 0")
-        self.dataset.y = self.dataset.y / const
-        self.dataset.y_errors = self.dataset.y_errors / const
+
+        self.dataset.y = self.dataset.y / fconst
+        self.dataset.y_errors = self.dataset.y_errors / fconst
 
     def copy(self):
         """

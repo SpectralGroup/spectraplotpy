@@ -287,6 +287,7 @@ def test_div_inplace():
     # y_errors are scaled
     assert np.array_equal(s1.dataset.y_errors, ds.y_errors/-2.0)
 
+
 def test_div_exceptions():
     ds = create_fake_dataset()
     s = spp.Spectrum(ds)
@@ -297,6 +298,19 @@ def test_div_exceptions():
         s/0
     with pt.raises(ZeroDivisionError):
         s/0.
+
+
+def test_div_with_integer():
+    """Division with integer should be floating division"""
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    s1 = s/3
+    s2 = s/3.0
+
+    assert np.array_equal(s1.dataset.x, s2.dataset.x)
+    assert np.array_equal(s1.dataset.y, s2.dataset.y)
+    assert np.array_equal(s1.dataset.x_errors, s2.dataset.x_errors)
+    assert np.array_equal(s1.dataset.y_errors, s2.dataset.y_errors)
 
 
 def test_mock_plot():
