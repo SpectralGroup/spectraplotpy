@@ -30,14 +30,16 @@ from mock import MagicMock
 
 def create_fake_dataset():
     ds = spp.Dataset()
-    ds.x = np.array([1,2,3,4])
-    ds.y = np.array([2,4,6,8])
-    ds.error_y = np.array([1,1,1,1])
+    ds.x = np.array([1, 2, 3, 4])
+    ds.y = np.array([2, 4, 6, 8])
+    ds.error_y = np.array([1, 1, 1, 1])
     return ds
+
 
 def test_construction():
     ds = spp.Dataset()
     assert spp.Spectrum(ds)
+
 
 def test_copy():
     ds = create_fake_dataset()
@@ -49,6 +51,7 @@ def test_copy():
 
     s1.dataset.x[2] = 100
     assert not all(s.dataset.x == s1.dataset.x)
+
 
 def test_Length_Error_exception():
     ds = create_fake_dataset()
@@ -64,6 +67,7 @@ def test_Length_Error_exception():
     with pt.raises(spp.XCompatibilityError):
         s - s1
 
+
 def test_different_x_values_exception():
     """Test for exception raised if x-values are diffrent"""
     ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6])
@@ -77,9 +81,12 @@ def test_different_x_values_exception():
     with pt.raises(spp.XCompatibilityError):
         s1 - s2
 
+
 def test_add():
-    ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6], x_errors=[0.1, 0.2, 0.3], y_errors=[0.1, 0.1, 0.1])
-    ds2 = spp.Dataset(x=[1, 2, 3], y=[2, 3, 4], x_errors=[0.1, 0.1, 0.1], y_errors=[0.2, 0.2, 0.2])
+    ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6],
+                      x_errors=[0.1, 0.2, 0.3], y_errors=[0.1, 0.1, 0.1])
+    ds2 = spp.Dataset(x=[1, 2, 3], y=[2, 3, 4],
+                      x_errors=[0.1, 0.1, 0.1], y_errors=[0.2, 0.2, 0.2])
     s1 = spp.Spectrum(ds1)
     s2 = spp.Spectrum(ds2)
 
@@ -89,10 +96,13 @@ def test_add():
     assert np.array_equal(s.dataset.y, ds1.y + ds2.y)
     assert np.array_equal(s.dataset.x_errors, ds1.x_errors + ds2.x_errors)
     assert np.array_equal(s.dataset.y_errors, ds1.y_errors + ds2.y_errors)
+
 
 def test_add_errors_scalar():
-    ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6], x_errors=[0.1, 0.2, 0.3], y_errors=0.2)
-    ds2 = spp.Dataset(x=[1, 2, 3], y=[2, 3, 4], x_errors=0.1, y_errors=[0.1, 0.1, 0.1])
+    ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6],
+                      x_errors=[0.1, 0.2, 0.3], y_errors=0.2)
+    ds2 = spp.Dataset(x=[1, 2, 3], y=[2, 3, 4],
+                      x_errors=0.1, y_errors=[0.1, 0.1, 0.1])
     s1 = spp.Spectrum(ds1)
     s2 = spp.Spectrum(ds2)
 
@@ -103,8 +113,10 @@ def test_add_errors_scalar():
     assert np.array_equal(s.dataset.x_errors, ds1.x_errors + ds2.x_errors)
     assert np.array_equal(s.dataset.y_errors, ds1.y_errors + ds2.y_errors)
 
+
 def test_add_errors_2N():
-    ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6], x_errors=[0.1, 0.2, 0.3], y_errors=[0.1, 0.1, 0.1])
+    ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6],
+                      x_errors=[0.1, 0.2, 0.3], y_errors=[0.1, 0.1, 0.1])
     ds2 = spp.Dataset(x=[1, 2, 3], y=[2, 3, 4],
                       x_errors=[[0.1, 0.2, 0.3], [0.1, 0.1, 0.1]], y_errors=0.2)
     s1 = spp.Spectrum(ds1)
@@ -117,8 +129,9 @@ def test_add_errors_2N():
     assert np.array_equal(s.dataset.x_errors, ds1.x_errors + ds2.x_errors)
     assert np.array_equal(s.dataset.y_errors, ds1.y_errors + ds2.y_errors)
 
+
 def test_add_value():
-    s_y_np = np.array([2,4,6,8])
+    s_y_np = np.array([2, 4, 6, 8])
     s_y_np1 = s_y_np.copy()
     s_y_np2 = s_y_np + s_y_np1
 
@@ -133,8 +146,10 @@ def test_add_value():
     assert all(s.dataset.y == s_y_np2)
 
 def test_sub():
-    ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6], x_errors=[0.1, 0.2, 0.3], y_errors=[0.1, 0.1, 0.1])
-    ds2 = spp.Dataset(x=[1, 2, 3], y=[2, 3, 4], x_errors=[0.1, 0.1, 0.1], y_errors=[0.2, 0.2, 0.2])
+    ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6],
+                      x_errors=[0.1, 0.2, 0.3], y_errors=[0.1, 0.1, 0.1])
+    ds2 = spp.Dataset(x=[1, 2, 3], y=[2, 3, 4],
+                      x_errors=[0.1, 0.1, 0.1], y_errors=[0.2, 0.2, 0.2])
     s1 = spp.Spectrum(ds1)
     s2 = spp.Spectrum(ds2)
 
@@ -145,8 +160,9 @@ def test_sub():
     assert np.array_equal(s.dataset.x_errors, ds1.x_errors + ds2.x_errors)
     assert np.array_equal(s.dataset.y_errors, ds1.y_errors + ds2.y_errors)
 
+
 def test_sub_value():
-    s_y_np = np.array([2,4,6,8])
+    s_y_np = np.array([2, 4, 6, 8])
     s_y_np1 = s_y_np.copy()
     s_y_np2 = s_y_np - s_y_np1
 
@@ -159,6 +175,7 @@ def test_sub_value():
     s.sub(s1)
 
     assert all(s.dataset.y == s_y_np2)
+
 
 def test_mul():
     ds = create_fake_dataset()
@@ -177,9 +194,8 @@ def test_mul():
     assert np.array_equal(s.dataset.y, s2.dataset.y)
 
 
-
 def test_mul_value():
-    s_y_np = np.array([2,4,6,8])
+    s_y_np = np.array([2, 4, 6, 8])
     s_y_np1 = 3.0 * s_y_np
 
     ds = create_fake_dataset()
@@ -187,9 +203,10 @@ def test_mul_value():
 
     assert all(s.dataset.y == s_y_np)
 
-    s1 =  3.0 * s
+    s1 = 3.0 * s
 
     assert all(s1.dataset.y == s_y_np1)
+
 
 def test_div():
     ds = create_fake_dataset()
@@ -200,8 +217,8 @@ def test_div():
     s1 = s / 3.0
 
     assert np.array_equal(s1.dataset.x, ds.x)
-    assert np.array_equal(s1.dataset.y, ds.y/3.0)    
-    
+    assert np.array_equal(s1.dataset.y, ds.y/3.0)
+
     s.div(3.0)
 
     assert np.array_equal(s1.dataset.x, s.dataset.x)
@@ -218,7 +235,8 @@ def test_mock_plot():
     mock_axes = MagicMock()
     mock_axes.plot = MagicMock()
     s.plot(axes=mock_axes)
-    mock_axes.plot.assert_called_once_with(s.dataset.x, s.dataset.y, axes=mock_axes)
+    mock_axes.plot.assert_called_once_with(s.dataset.x, s.dataset.y,
+                                           axes=mock_axes)
 
 
 def test_errorbar():
@@ -239,6 +257,7 @@ def test_errorbar():
                                                y_errors, x_errors,
                                                axes=mock_axes)
 
+
 def test_errorfill():
     #ds = spp.Dataset(x=[1, 2, 3], y = [1, 2, 5], y_errors = [0.1, 0.2, 0.5])
     ds = create_fake_dataset()
@@ -251,8 +270,9 @@ def test_errorfill():
     mock_axes.plot.assert_called_once()
     mock_axes.fill_between.assert_called_once()
 
+
 def test_errorfill_alpha_fill():
-    ds = spp.Dataset(x=[1, 2, 3], y = [1, 2, 5], y_errors = [0.1, 0.2, 0.5])
+    ds = spp.Dataset(x=[1, 2, 3], y=[1, 2, 5], y_errors=[0.1, 0.2, 0.5])
     ds = create_fake_dataset()
     s = spp.Spectrum(ds)
 
@@ -262,6 +282,7 @@ def test_errorfill_alpha_fill():
     s.errorfill(axes=mock_axes, alpha_fill=0.1)
     mock_axes.plot.assert_called_once()
     mock_axes.fill_between.assert_called_once()
+
 
 def test_errorfill_no_erros():
     """ What happens if no errors are present ... just plot """
