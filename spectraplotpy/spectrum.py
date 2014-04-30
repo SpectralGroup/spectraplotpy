@@ -164,6 +164,8 @@ class Spectrum(object):
         """
         multiplies a spectrum with a number a in place
         """
+        if const == 0.:
+            raise(ZeroDivisionError, "Spectrum can not be divided by 0")
         self.dataset.y = self.dataset.y / const
 
     def copy(self):

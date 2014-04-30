@@ -179,6 +179,7 @@ def test_sub_value():
 
 
 def test_mul_all():
+    """All methods of multiplication should yield the same results"""
     ds = create_fake_dataset()
     s = spp.Spectrum(ds)
     s1 = s * 3.0
@@ -247,21 +248,48 @@ def test_mul_value():
     assert all(s1.dataset.y == s_y_np1)
 
 
+def test_div_all():
+    """Both methods of division (inplace, copy)
+    should yield the same results"""
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    s1 = s / 3.0
+    s2 = s.copy()
+    s2.div(3.0)
+
+    assert np.array_equal(s1.dataset.x, s2.dataset.x)
+    assert np.array_equal(s1.dataset.y, s2.dataset.y)
+
+
 def test_div():
     ds = create_fake_dataset()
     s = spp.Spectrum(ds)
-    with pt.raises(TypeError):
-        3.0 / s
-
     s1 = s / 3.0
 
     assert np.array_equal(s1.dataset.x, ds.x)
     assert np.array_equal(s1.dataset.y, ds.y/3.0)
 
-    s.div(3.0)
 
-    assert np.array_equal(s1.dataset.x, s.dataset.x)
-    assert np.array_equal(s1.dataset.y, s.dataset.y)
+def test_div_inplace():
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    s1 = s.copy()
+    s1.div(3.0)
+
+    assert np.array_equal(s1.dataset.x, ds.x)
+    assert np.array_equal(s1.dataset.y, ds.y/3.0)
+
+
+def test_div_exceptions():
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    # not yet supported
+    with pt.raises(TypeError):
+        3.0/s
+    with pt.raises(ZeroDivisionError):
+        s/0
+    with pt.raises(ZeroDivisionError):
+        s/0.
 
 
 def test_mock_plot():
