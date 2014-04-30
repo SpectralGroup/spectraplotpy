@@ -32,7 +32,7 @@ def create_fake_dataset():
     ds = spp.Dataset()
     ds.x = np.array([1, 2, 3, 4])
     ds.y = np.array([2, 4, 6, 8])
-    ds.error_y = np.array([1, 1, 1, 1])
+    ds.error_y = np.array([.1, .2, .2, .3])
     return ds
 
 
@@ -177,21 +177,47 @@ def test_sub_value():
     assert all(s.dataset.y == s_y_np2)
 
 
-def test_mul():
+def test_mul_all():
     ds = create_fake_dataset()
     s = spp.Spectrum(ds)
     s1 = s * 3.0
     s2 = 3.0 * s
+    s3 = s.copy()
+    s3.mul(3.0)
+
+    # all ways of multiplication should yield the same results
+    assert np.array_equal(s3.dataset.x, s1.dataset.x)
+    assert np.array_equal(s3.dataset.y, s1.dataset.y)
+    assert np.array_equal(s3.dataset.x, s2.dataset.x)
+    assert np.array_equal(s3.dataset.y, s2.dataset.y)
+
+
+def test_mul():
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    s1 = s * 3.0
 
     assert np.array_equal(s1.dataset.x, ds.x)
     assert np.array_equal(s1.dataset.y, 3*ds.y)
 
-    s.mul(3.0)
 
-    assert np.array_equal(s.dataset.x, s1.dataset.x)
-    assert np.array_equal(s.dataset.y, s1.dataset.y)
-    assert np.array_equal(s.dataset.x, s2.dataset.x)
-    assert np.array_equal(s.dataset.y, s2.dataset.y)
+def test_rmul():
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    s1 = 3.0 * s
+
+    assert np.array_equal(s1.dataset.x, ds.x)
+    assert np.array_equal(s1.dataset.y, 3*ds.y)
+
+
+def test_mul_inplace():
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    s1 = s.copy()
+    s1.mul(3)
+
+    assert np.array_equal(s1.dataset.x, ds.x)
+    assert np.array_equal(s1.dataset.y, 3*ds.y)
 
 
 def test_mul_value():
