@@ -165,12 +165,18 @@ def test_mul():
     s = spp.Spectrum(ds)
     s1 = s * 3.0
     s2 = 3.0 * s
+
+    assert np.array_equal(s1.dataset.x, ds.x)
+    assert np.array_equal(s1.dataset.y, 3*ds.y)
+
     s.mul(3.0)
 
-    assert all(s.dataset.x == s1.dataset.x)
-    assert all(s.dataset.y == s1.dataset.y)
-    assert all(s.dataset.x == s2.dataset.x)
-    assert all(s.dataset.y == s2.dataset.y)
+    assert np.array_equal(s.dataset.x, s1.dataset.x)
+    assert np.array_equal(s.dataset.y, s1.dataset.y)
+    assert np.array_equal(s.dataset.x, s2.dataset.x)
+    assert np.array_equal(s.dataset.y, s2.dataset.y)
+
+
 
 def test_mul_value():
     s_y_np = np.array([2,4,6,8])
@@ -191,11 +197,15 @@ def test_div():
     with pt.raises(TypeError):
         3.0 / s
 
-    s2 = s / 3.0
+    s1 = s / 3.0
+
+    assert np.array_equal(s1.dataset.x, ds.x)
+    assert np.array_equal(s1.dataset.y, ds.y/3.0)    
+    
     s.div(3.0)
 
-    assert all(s.dataset.x == s2.dataset.x)
-    assert all(s.dataset.y == s2.dataset.y)
+    assert np.array_equal(s1.dataset.x, s.dataset.x)
+    assert np.array_equal(s1.dataset.y, s.dataset.y)
 
 
 def test_mock_plot():
