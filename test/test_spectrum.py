@@ -32,7 +32,8 @@ def create_fake_dataset():
     ds = spp.Dataset()
     ds.x = np.array([1, 2, 3, 4])
     ds.y = np.array([2, 4, 6, 8])
-    ds.error_y = np.array([.1, .2, .2, .3])
+    ds.y_errors = np.array([.1, .2, .2, .3])
+    ds.x_errors = np.array([.1, .1, .1, .1])
     return ds
 
 
@@ -198,26 +199,38 @@ def test_mul():
     s1 = s * 3.0
 
     assert np.array_equal(s1.dataset.x, ds.x)
-    assert np.array_equal(s1.dataset.y, 3*ds.y)
+    assert np.array_equal(s1.dataset.y, 3.0*ds.y)
+    # x_errors are not affected
+    assert np.array_equal(s1.dataset.x_errors, ds.x_errors)
+    # y_errors are scaled
+    assert np.array_equal(s1.dataset.y_errors, ds.y_errors*3.0)
 
 
 def test_rmul():
     ds = create_fake_dataset()
     s = spp.Spectrum(ds)
-    s1 = 3.0 * s
+    s1 = -2.0 * s
 
     assert np.array_equal(s1.dataset.x, ds.x)
-    assert np.array_equal(s1.dataset.y, 3*ds.y)
+    assert np.array_equal(s1.dataset.y, -2*ds.y)
+    # x_errors are not affected
+    assert np.array_equal(s1.dataset.x_errors, ds.x_errors)
+    # y_errors are scaled
+    assert np.array_equal(s1.dataset.y_errors, ds.y_errors*-2.0)
 
 
 def test_mul_inplace():
     ds = create_fake_dataset()
     s = spp.Spectrum(ds)
     s1 = s.copy()
-    s1.mul(3)
+    s1.mul(1./3)
 
     assert np.array_equal(s1.dataset.x, ds.x)
-    assert np.array_equal(s1.dataset.y, 3*ds.y)
+    assert np.array_equal(s1.dataset.y, ds.y*(1./3))
+    # x_errors are not affected
+    assert np.array_equal(s1.dataset.x_errors, ds.x_errors)
+    # y_errors are scaled
+    assert np.array_equal(s1.dataset.y_errors, ds.y_errors*(1./3))
 
 
 def test_mul_value():

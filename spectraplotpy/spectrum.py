@@ -78,23 +78,23 @@ class Spectrum(object):
     def add_absolute_errors(self, other):
         """
         Adds the absolute errors (when adding or substracting two spectra)
-        
+
         The addition is not done in-place, due to broadcasting
         The problem is:
-        
+
             a = np.array([1, 2, 3])
             b = np.array([[1, 2, 3],[-1 ,-1, -1]])
-        
+
         then
            * a + b work
            * a += b fail
            * b += a work
-        
+
         Would this ever be problematic? Don't want to go into premature optimizations...
         """
         self.dataset.x_errors = self.dataset.x_errors + other.dataset.x_errors
         self.dataset.y_errors = self.dataset.y_errors + other.dataset.y_errors
-        
+
     def __add__(self, other):
         """
         adds two spectra, returns third spectrum
@@ -148,6 +148,9 @@ class Spectrum(object):
         multiplies a spectrum with a number in place
         """
         self.dataset.y = const * self.dataset.y
+        # No abs(const) here, because then we would have to manually switch
+        # rows in asymetric errors.
+        self.dataset.y_errors = self.dataset.y_errors * const
 
     def __div__(self, const):
         """
