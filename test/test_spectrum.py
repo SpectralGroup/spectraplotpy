@@ -268,17 +268,24 @@ def test_div():
 
     assert np.array_equal(s1.dataset.x, ds.x)
     assert np.array_equal(s1.dataset.y, ds.y/3.0)
+    # x_errors are not affected
+    assert np.array_equal(s1.dataset.x_errors, ds.x_errors)
+    # y_errors are scaled
+    assert np.array_equal(s1.dataset.y_errors, ds.y_errors/3.0)
 
 
 def test_div_inplace():
     ds = create_fake_dataset()
     s = spp.Spectrum(ds)
     s1 = s.copy()
-    s1.div(3.0)
+    s1.div(-2.0)
 
     assert np.array_equal(s1.dataset.x, ds.x)
-    assert np.array_equal(s1.dataset.y, ds.y/3.0)
-
+    assert np.array_equal(s1.dataset.y, ds.y/-2.0)
+    # x_errors are not affected
+    assert np.array_equal(s1.dataset.x_errors, ds.x_errors)
+    # y_errors are scaled
+    assert np.array_equal(s1.dataset.y_errors, ds.y_errors/-2.0)
 
 def test_div_exceptions():
     ds = create_fake_dataset()
