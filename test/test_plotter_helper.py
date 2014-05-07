@@ -94,5 +94,14 @@ def test_average_spectra_incompatible_x_len():
         sp = spp.average_spectra(sp1, sp2)
     assert e.value[0] == "Lengths of dataset.x are not equal! (4 != 3)"    
 
+def test_average_spectra_wrong_error_type():   
+    sp1 = spp.Spectrum(spp.Dataset(x=[1, 2, 3], y=[1, 2, 3]))
+    sp2 = spp.Spectrum(spp.Dataset(x=[1, 2, 3], y=[1, 2, 3]))
+    
+    with pytest.raises(ValueError) as e:
+        sp = spp.average_spectra(sp1, sp2, error_type='standard_something')
+    assert e.value[0] == ("Error_type shuld be either 'st_dev' or 'st_err'"
+                          "and not 'standard_something'!")
+
 if __name__ == "__main__":
     test_average_spectra_incompatible_x()

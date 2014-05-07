@@ -62,11 +62,14 @@ def average_spectra(*sp_list, **kwargs):
     error_type = : {'st_dev', 'st_err'} = 'st_err' 
         The type of error (uncertantiy) returned. 
         'st_dev' is the standard deviation of the sample
-        'st_err' is the standard  error (st_dev/sqrt(n))
+        'st_err' is the standard error (st_dev/sqrt(n))
         
     """
     ddof = kwargs.get('ddof', 1)
     error_type = kwargs.get('error_type', 'st_err')
+    if not error_type in ('st_dev', 'st_err'):
+        raise ValueError("Error_type shuld be either 'st_dev' or 'st_err'and not '" 
+                         + error_type + "'!")
     N = len(sp_list);
     if N == 0:
         raise ValueError("sp_list can not be empty!")
