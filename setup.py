@@ -74,13 +74,13 @@ setup(
 
     # metadata for upload to PyPI
     author="SpectralGroup",
-    author_email="odarbelaeze@gmail.com",
+    author_email="ajasjaspectralgroup@googlegroups.com",
     description="A spectrum manipulation library",
     license="DBAA",
     keywords="spectrum ploting 2D",
 
     # project home page, if any
-    url="https://github.com/odarbelaeze/spectraplotpy",   
+    url="https://github.com/SpectralGroup/spectraplotpy"   
 
     # could also include long_description, download_url, classifiers, etc.
 )
