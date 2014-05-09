@@ -82,19 +82,19 @@ class CSVExporter(BaseTextExporter):
         strhandler = StringIO("")
         stack = np.column_stack((self.dataset.x, self.dataset.y))
 
-        if self.dataset.errors_y is not None:
+        if self.dataset.y_errors is not None:
 
-            if self.dataset.errors_x is not None:
+            if self.dataset.x_errors is not None:
                 try:
-                    np.column_stack((stack, self.dataset.errors_x))
+                    np.column_stack((stack, self.dataset.x_errors))
                 except ValueError:
-                    error = self.dataset.errors_x * np.ones_like(self.dataset.x)
+                    error = self.dataset.x_errors * np.ones_like(self.dataset.x)
                     np.column_stack((stack, error))
 
             try:
-                np.column_stack((stack, self.dataset.errors_y))
+                np.column_stack((stack, self.dataset.y_errors))
             except ValueError:
-                error = self.dataset.errors_y * np.ones_like(self.dataset.y)
+                error = self.dataset.y_errors * np.ones_like(self.dataset.y)
                 np.column_stack((stack, error))
 
         np.savetxt(strhandler, stack)

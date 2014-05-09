@@ -29,7 +29,7 @@ class SpectraPlotPyError(Exception):
     pass
 
 
-class LengthError(SpectraPlotPyError):
+class XCompatibilityError(SpectraPlotPyError):
     """
     Exception of the SpectraPlotPy library: 
     The length of x and y are different!

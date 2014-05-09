@@ -8,11 +8,12 @@ before_install:
   - sudo apt-get install -qq python-numpy python-scipy python-matplotlib
   - wget http://python-distribute.org/distribute_setup.py
   - sudo python distribute_setup.py
-  - pip install pytest py
+  - pip install pytest py pytest-cov
   - source ci/setup.sh
 
 install: 
   - python setup.py install
+  - pip freeze
 
 script: 
-  - python setup.py test 
+  - py.test --cov spectraplotpy test/

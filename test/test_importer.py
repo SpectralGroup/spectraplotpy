@@ -92,10 +92,10 @@ def test_AvivImporter_basic():
     #print imp.dataset.y
     assert all(imp.dataset.x == [ 320.,   319.5,  319. ])
     assert all(imp.dataset.y == [ 5.396,  6.374,  7.288])
-    assert imp.dataset.dim_x == 'wavelength'
-    assert imp.dataset.dim_y == 'millidegrees'
-    assert imp.dataset.units_x == 'nanometers'
-    assert imp.dataset.units_y == 'millidegrees'
+    assert imp.dataset.x_quantity == 'wavelength'
+    assert imp.dataset.y_quantity == 'millidegrees'
+    assert imp.dataset.x_unit == 'nanometers'
+    assert imp.dataset.y_unit == 'millidegrees'
 
 
 
@@ -135,10 +135,10 @@ def test_MosImporter_basic():
     assert imp.ascii_type() == 'simple'
     assert all(imp.dataset.x == [ 185.,  186.,  187.])
     assert all(imp.dataset.y == [-6.36455, -5.60259, -4.94525])
-    assert imp.dataset.dim_x == 'wavelength'
-    #assert imp.dataset.dim_y == 'millidegrees'
-    assert imp.dataset.units_x == 'nm'
-    assert imp.dataset.units_y == ''
+    assert imp.dataset.x_quantity == 'wavelength'
+    #assert imp.dataset.y_quantity == 'millidegrees'
+    assert imp.dataset.x_unit == 'nm'
+    assert imp.dataset.y_unit == ''
 
 
 mos_multiline="""\
@@ -159,23 +159,23 @@ mos_multiline="""\
 def check_first_multiline_dataset(dataset):
     assert all(dataset.x == [ 185.,  186.,  187.])
     assert all(dataset.y == [-31.6863, -47.5356, -61.078])
-    assert dataset.dim_x == 'wavelength'
-    assert dataset.units_x == 'nm'
-    assert dataset.units_y == 'MilliDegree'
+    assert dataset.x_quantity == 'wavelength'
+    assert dataset.x_unit == 'nm'
+    assert dataset.y_unit == 'MilliDegree'
 
 def check_second_multiline_dataset(dataset):
     assert all(dataset.x == [ 185.,  186.,  187.])
     assert all(dataset.y == [1.34487, 1.32574, 1.29144])
-    assert dataset.dim_x == 'wavelength'
-    assert dataset.units_x == 'nm'
-    assert dataset.units_y == 'AU'
+    assert dataset.x_quantity == 'wavelength'
+    assert dataset.x_unit == 'nm'
+    assert dataset.y_unit == 'AU'
 
 def check_third_multiline_dataset(dataset):
     assert all(dataset.x == [ 185.,  186.,  187.])
     assert all(dataset.y == [ 687.,  608.,  549.])
-    assert dataset.dim_x == 'wavelength'
-    assert dataset.units_x == 'nm'
-    assert dataset.units_y == 'Volt'
+    assert dataset.x_quantity == 'wavelength'
+    assert dataset.x_unit == 'nm'
+    assert dataset.y_unit == 'Volt'
 
 
 def test_MosImporter_mutiline():
@@ -230,10 +230,10 @@ def test_CSVImporter_basic():
     imp = spp.CSVImporter(StringIO(csv_basic))
     assert all(imp.dataset.x == [320.,  319.,  318.])
     assert all(imp.dataset.y == [0.402335, 0.402692, 0.402974])
-    #assert imp.dataset.dim_x == 'wavelength'
-    #assert imp.dataset.dim_y == 'millidegrees'
-    #assert imp.dataset.units_x == 'nm'
-    #assert imp.dataset.units_y == ''
+    #assert imp.dataset.x_quantity == 'wavelength'
+    #assert imp.dataset.y_quantity == 'millidegrees'
+    #assert imp.dataset.x_unit == 'nm'
+    #assert imp.dataset.y_unit == ''
 
 
 csv_multicol_XYYY = """\

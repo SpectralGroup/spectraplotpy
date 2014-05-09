@@ -110,12 +110,12 @@ def test_csv_exporter():
 def test_csv_exporter_x_errors():
     """Test if the exporter does not stack standalone x errors."""
 
-    dataset = Dataset(x=[1, 2, 3], y=[1, 2, 3], errors_x = -1,
+    dataset = Dataset(x=[1, 2, 3], y=[1, 2, 3], x_errors = -1,
                       metadata={'temp': 10, 'date': 'today'})
     csv_val = CSVExporter(dataset)
     assert not '-1' in csv_val.text()
 
-    dataset = Dataset(x=[1, 2, 3], y=[1, 2, 3], errors_x=[-1, -1, -1],
+    dataset = Dataset(x=[1, 2, 3], y=[1, 2, 3], x_errors=[-1, -1, -1],
                       metadata={'temp': 10, 'date': 'today'})
     csv_val = CSVExporter(dataset)
     assert not '-1' in csv_val.text()
