@@ -13,6 +13,7 @@ before_install:
 
 install: 
   - python setup.py install
+  - pip freeze
 
 script: 
   - python setup.py test 
