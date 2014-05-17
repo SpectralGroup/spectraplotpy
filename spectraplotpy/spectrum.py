@@ -152,17 +152,17 @@ class Spectrum(object):
         # rows in asymetric errors.
         self.dataset.y_errors = self.dataset.y_errors * const
 
-    def __div__(self, const):
+    def __div__(self, const_or_spec):
         """
-        divides a spectrum with number
+        divides a spectrum with a scalar or another spectrum
         """
         copied = self.copy()
-        copied.div(const)
+        copied.div(const_or_spec)
         return copied
 
-    def div(self, const):
+    def div_const(self, const):
         """
-        multiplies a spectrum with a number a in place
+        divides a spectrum with a number in place
         """
         # cast to float to avoid surprises with integer division
         fconst = float(const)
@@ -171,6 +171,25 @@ class Spectrum(object):
 
         self.dataset.y = self.dataset.y / fconst
         self.dataset.y_errors = self.dataset.y_errors / fconst
+
+    def div_spec(self, spec):
+        """
+        Divides a spectrum with  another spectrum in place.
+
+        The division is done elementwise for the y elements.
+        Relative errors are added.
+        """
+        check_compatible_x(self, spec)
+        self.dataset.y /= spec.dataset.y
+
+    def div(self, const_or_spec):
+        """
+        divides a spectrum with a number or another spectrum in place
+        """
+        if np.isscalar(const_or_spec):
+            self.div_const(const_or_spec)
+        else:
+            self.div_spec(const_or_spec)
 
     def copy(self):
         """
