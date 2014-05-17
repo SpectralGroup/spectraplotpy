@@ -95,6 +95,21 @@ class Spectrum(object):
         self.dataset.x_errors = self.dataset.x_errors + other.dataset.x_errors
         self.dataset.y_errors = self.dataset.y_errors + other.dataset.y_errors
 
+    def add_relative_errors(self, other, new_y):
+        """
+        Adds the relative errors (when multiplying or dividig two spectra).
+        Must be called *before* the y-values have allready been modfied.
+
+        The addition is not done in-place, due to broadcasting.
+        
+        Would this ever be problematic? Don't want to go into premature optimizations...
+        """
+        # since the x values are always he same, the absolute errors can just be added         
+        self.dataset.x_errors = self.dataset.x_errors + other.dataset.x_errors
+        self.dataset.y_errors = (self.dataset.y_errors/self.dataset.y + 
+                                other.dataset.y_errors/other.dataset.y) * \
+                                new_y
+
     def __add__(self, other):
         """
         adds two spectra, returns third spectrum
@@ -180,7 +195,10 @@ class Spectrum(object):
         Relative errors are added.
         """
         check_compatible_x(self, spec)
-        self.dataset.y /= spec.dataset.y
+        new_y = self.dataset.y / spec.dataset.y        
+        self.add_relative_errors(spec, new_y)
+        self.dataset.y = new_y
+
 
     def div(self, const_or_spec):
         """

@@ -312,6 +312,7 @@ def test_div_with_integer():
     assert np.array_equal(s1.dataset.x_errors, s2.dataset.x_errors)
     assert np.array_equal(s1.dataset.y_errors, s2.dataset.y_errors)
 
+
 def test_div_compatible_x():
     """devides two spectra"""
     ds1 = spp.Dataset(x=[1, 2, 4], y=[4, 5, 6],
@@ -322,15 +323,15 @@ def test_div_compatible_x():
     s2 = spp.Spectrum(ds2)
 
     with pt.raises(spp.XCompatibilityError):
-        s = s1 / s2
+        s1 / s2
 
 
 def test_div_with_spectra():
     """devides two spectra"""
     ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6],
-                      x_errors=[0.1, 0.2, 0.3], y_errors=[0.1, 0.1, 0.1])
+                      x_errors=[0.1, 0.2, 0.3], y_errors=0.1)
     ds2 = spp.Dataset(x=[1, 2, 3], y=[2, 3, 4],
-                      x_errors=[0.1, 0.1, 0.1], y_errors=[0.2, 0.2, 0.2])
+                      x_errors=0.1, y_errors=[0.2, 0.2, 0.2])
     s1 = spp.Spectrum(ds1)
     s2 = spp.Spectrum(ds2)
 
@@ -338,8 +339,10 @@ def test_div_with_spectra():
 
     assert np.array_equal(s.dataset.x, ds1.x)
     assert np.array_equal(s.dataset.y, ds1.y / ds2.y)
-    #assert np.array_equal(s.dataset.x_errors, ds1.x_errors + ds2.x_errors)
-    #assert np.array_equal(s.dataset.y_errors, ds1.y_errors + ds2.y_errors)
+    print s.dataset.x_errors, s.dataset.y_errors
+    assert np.allclose(s.dataset.x_errors, [0.2, 0.3, 0.4])
+    assert np.allclose(s.dataset.y_errors, [0.25, 0.08666667, 0.06666667])
+
 
 def test_mock_plot():
     """
