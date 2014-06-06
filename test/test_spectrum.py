@@ -433,3 +433,18 @@ def test_y_at_x():
     assert np.isnan(s.y_at_x(0))
     assert all(np.isnan(s.y_at_x([0, 1, 2, 3])) ==
                                  [True, False, False, False])
+
+
+def test_getitem():
+    ds = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6])
+    s = spp.Spectrum(ds)
+    
+    assert s[1] == 4
+    assert s[2] == 5
+    assert s[3] == 6
+
+    # now for some interpoation
+    assert s[1.1] == 4.1
+    assert s[2.5] == 5.5
+
+    assert all(s[[1.3, 2.4, 2.6]] == [4.3, 5.4, 5.6])

@@ -321,3 +321,7 @@ class Spectrum(object):
         """
         return np.interp(x, self.dataset.x, self.dataset.y,
                          left=np.nan, right=np.nan)
+
+    def __getitem__(self, x):
+        "Support for indexing. Returns the value of y_at_x(x)."
+        return self.y_at_x(x)
