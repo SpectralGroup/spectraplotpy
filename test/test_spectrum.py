@@ -413,3 +413,23 @@ def test_errorfill_no_erros():
     mock_axes.fill_between = MagicMock()
     s.errorfill(axes=mock_axes)
     mock_axes.plot.assert_called_once()
+
+
+def test_y_at_x():
+    ds = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6])
+    s = spp.Spectrum(ds)
+
+    assert s.y_at_x(1) == 4
+    assert s.y_at_x(2) == 5
+    assert s.y_at_x(3) == 6
+
+    # now for some interpoation
+    assert s.y_at_x(1.1) == 4.1
+    assert s.y_at_x(2.5) == 5.5
+
+    assert all(s.y_at_x([1.3, 2.4, 2.6]) == [4.3, 5.4, 5.6])
+
+    # now for out of bounds
+    assert np.isnan(s.y_at_x(0))
+    assert all(np.isnan(s.y_at_x([0, 1, 2, 3])) ==
+                                 [True, False, False, False])
