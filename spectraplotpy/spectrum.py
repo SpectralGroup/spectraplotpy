@@ -101,12 +101,12 @@ class Spectrum(object):
         Must be called *before* the y-values have allready been modfied.
 
         The addition is not done in-place, due to broadcasting.
-        
+
         Would this ever be problematic? Don't want to go into premature optimizations...
         """
-        # since the x values are always he same, the absolute errors can just be added         
+        # since the x values are always he same, the absolute errors can just be added
         self.dataset.x_errors = self.dataset.x_errors + other.dataset.x_errors
-        self.dataset.y_errors = (self.dataset.y_errors/self.dataset.y + 
+        self.dataset.y_errors = (self.dataset.y_errors/self.dataset.y +
                                 other.dataset.y_errors/other.dataset.y) * \
                                 new_y
 
@@ -195,7 +195,7 @@ class Spectrum(object):
         Relative errors are added.
         """
         check_compatible_x(self, spec)
-        new_y = self.dataset.y / spec.dataset.y        
+        new_y = self.dataset.y / spec.dataset.y
         self.add_relative_errors(spec, new_y)
         self.dataset.y = new_y
 
@@ -303,3 +303,25 @@ class Spectrum(object):
             holdwindow = eval('numpy.'+window+'(window_len)')
 
         self.dataset.y = np.convolve(holdwindow/holdwindow.sum(), holdspec, mode='valid')
+
+    def y_at_x(self, x):
+        """Returns the y value at a specified x value.
+        Any values between min and max x are accepted. The returned value is a
+        linear interpolation.
+
+        Parameters:
+        -----------
+            x : array_like
+                The x-coordinates of the interpolated values.
+        Returns:
+        --------
+            y : {float, ndarray}
+                The interpolated values, same shape as x.
+                numpy.NaN is returned for x values outside of xmin and xmax,
+        """
+        return np.interp(x, self.dataset.x, self.dataset.y,
+                         left=np.nan, right=np.nan)
+
+    def __getitem__(self, x):
+        "Support for indexing. Returns the value of y_at_x(x)."
+        return self.y_at_x(x)
