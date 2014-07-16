@@ -123,8 +123,10 @@ def get_poly_baseline(spectrum, indices, deg=3):
     deg  = 3
         The degree of the polynomial.
     """
+        
     x = spectrum.dataset.x[indices]
-    y = spectrum.dataset.x[indices]
+    y = spectrum.dataset.y[indices]
+    #TODO give errors as weights.    
     poly = np.polyfit(x, y, deg=deg)
     result_spectrum = spectrum.copy()
     result_spectrum.dataset.name = "Baseline of " + result_spectrum.dataset.name
