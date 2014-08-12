@@ -118,6 +118,13 @@ class Spectrum(object):
         copied.add(other)
         return copied
 
+    def __iadd__(self, other):
+        """
+        adds two spectra in place
+        """
+        self.add(other)
+        return self
+
     def add(self, other):
         """
         adds two spectra in place
@@ -133,6 +140,13 @@ class Spectrum(object):
         copied = self.copy()
         copied.sub(other)
         return copied
+    
+    def __isub__(self, other):
+        """
+        Substracs two spectra in place. Eqvivalent to self -= other.        
+        """   
+        self.sub(other)
+        return self
 
     def sub(self, other):
         """
@@ -158,6 +172,15 @@ class Spectrum(object):
         copied.mul(const)
         return copied
 
+    def __imul__(self, const):
+        """
+        multiplies a spectrum with number in place. 
+        Equivalent to self *= const.
+        """
+        self.mul(const)
+        return self
+
+
     def mul(self, const):
         """
         multiplies a spectrum with a number in place
@@ -174,6 +197,13 @@ class Spectrum(object):
         copied = self.copy()
         copied.div(const_or_spec)
         return copied
+
+    def __idiv__(self, const_or_spec):
+        """
+        divides a spectrum with a scalar or another spectrum
+        """        
+        self.div(const_or_spec)
+        return self
 
     def div_const(self, const):
         """

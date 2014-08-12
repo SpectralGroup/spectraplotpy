@@ -145,6 +145,22 @@ def test_add_value():
     s.add(s1)
 
     assert all(s.dataset.y == s_y_np2)
+    
+def test_iadd_value():
+    s_y_np = np.array([2, 4, 6, 8])
+    s_y_np1 = s_y_np.copy()
+    s_y_np2 = s_y_np + s_y_np1
+
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    s1 = s.copy()
+
+    assert all(s.dataset.y == s_y_np)
+
+    s1 += s
+
+    assert all(s.dataset.y == s_y_np)
+    assert all(s1.dataset.y == s_y_np2)    
 
 def test_sub():
     ds1 = spp.Dataset(x=[1, 2, 3], y=[4, 5, 6],
@@ -174,6 +190,22 @@ def test_sub_value():
     assert all(s.dataset.y == s_y_np)
 
     s.sub(s1)
+
+    assert all(s.dataset.y == s_y_np2)
+
+
+def test_isub_value():
+    s_y_np = np.array([2, 4, 6, 8])
+    s_y_np1 = s_y_np.copy()
+    s_y_np2 = s_y_np - s_y_np1
+
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    s1 = s.copy()
+
+    assert all(s.dataset.y == s_y_np)
+
+    s -= s1
 
     assert all(s.dataset.y == s_y_np2)
 
@@ -233,6 +265,22 @@ def test_mul_inplace():
     # y_errors are scaled
     assert np.array_equal(s1.dataset.y_errors, ds.y_errors*(1./3))
 
+def test_imul_inplace():
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    s1 = s.copy()
+    s1 *= 1./3
+
+    assert np.array_equal(s1.dataset.x, ds.x)
+    assert np.array_equal(s1.dataset.y, ds.y*(1./3))
+    #original should not be modified
+    assert np.array_equal(s.dataset.y, ds.y)
+
+    # x_errors are not affected
+    assert np.array_equal(s1.dataset.x_errors, ds.x_errors)
+    # y_errors are scaled
+    assert np.array_equal(s1.dataset.y_errors, ds.y_errors*(1./3))
+
 
 def test_mul_value():
     s_y_np = np.array([2, 4, 6, 8])
@@ -287,6 +335,18 @@ def test_div_inplace():
     # y_errors are scaled
     assert np.array_equal(s1.dataset.y_errors, ds.y_errors/-2.0)
 
+def test_idiv():
+    ds = create_fake_dataset()
+    s = spp.Spectrum(ds)
+    s1 = s.copy()
+    s1 /=-2.0
+
+    assert np.array_equal(s1.dataset.x, ds.x)
+    assert np.array_equal(s1.dataset.y, ds.y/-2.0)
+    # x_errors are not affected
+    assert np.array_equal(s1.dataset.x_errors, ds.x_errors)
+    # y_errors are scaled
+    assert np.array_equal(s1.dataset.y_errors, ds.y_errors/-2.0)
 
 def test_div_exceptions():
     ds = create_fake_dataset()
