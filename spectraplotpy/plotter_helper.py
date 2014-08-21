@@ -39,7 +39,7 @@ def plot_spectra(*sp_list,  **kwargs):
     for sp in sp_list:
         # here we pass an axes named argument the value of the axes
         # local variable
-        sp.plot(axes=axes)
+        sp.plot(axes=axes, label=sp.dataset.name)
 
     return axes
 
