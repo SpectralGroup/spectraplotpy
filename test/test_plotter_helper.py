@@ -154,6 +154,12 @@ def test_get_poly_baseline():
     
     assert(np.all(baseline.dataset.x == s.dataset.x))
     assert(np.allclose(baseline.dataset.y, target_y))
+
+def test_minmax_norm():
+    sp = spp.Spectrum(spp.Dataset(x=[1, 2, 3, 4], y=[-1, 2, 3, -4]))
+    spp.minmax_normalize(sp)
+    
+    assert(np.all(sp.dataset.y == np.array([-1, 2, 3, -4])/4.))
     
 
 if __name__ == "__main__":

@@ -132,3 +132,11 @@ def get_poly_baseline(spectrum, indices, deg=3):
     result_spectrum.dataset.name = "Baseline of " + result_spectrum.dataset.name
     result_spectrum.dataset.y = np.polyval(poly, result_spectrum.dataset.x)
     return result_spectrum
+
+def minmax_normalize(spec):
+    """Normalize a spectrum in place by dividing it by the max(abs(y)).
+    After normalization all the y values are between [-1 and 1].
+    """
+    ymax = np.max(np.abs(spec.dataset.y))
+    spec /= ymax
+    
