@@ -160,7 +160,26 @@ def test_minmax_norm():
     spp.minmax_normalize(sp)
     
     assert(np.all(sp.dataset.y == np.array([-1, 2, 3, -4])/4.))
+
+
+def test_integrate_inplace():
+    sp = spp.Spectrum(spp.Dataset(x=[1, 2, 3, 4], y=[-1, 2, 3, -4]))
     
+    spp.integrate(sp, inplace=True)
+    assert(np.allclose(sp.dataset.x, [1, 2, 3, 4]))
+    assert(np.allclose(sp.dataset.y, [-1, 1, 4, 0]))
+
+def test_integrate_copy():
+    sp = spp.Spectrum(spp.Dataset(x=[1, 2, 3, 4], y=[-1, 2, 3, -4]))
+    
+    sp1 = spp.integrate(sp, inplace=False)
+    
+    assert(np.allclose(sp.dataset.x, [1, 2, 3, 4]))
+    assert(np.allclose(sp.dataset.y, [-1, 2, 3, -4]))
+
+    assert(np.allclose(sp1.dataset.x, [1, 2, 3, 4]))
+    assert(np.allclose(sp1.dataset.y, [-1, 1, 4, 0]))
+
 
 if __name__ == "__main__":
     test_average_spectra_incompatible_x()
