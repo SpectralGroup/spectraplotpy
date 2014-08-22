@@ -140,7 +140,7 @@ def minmax_normalize(spec):
     ymax = np.max(np.abs(spec.dataset.y))
     spec /= ymax
     
-def integrate(spectrum, inplace=False):
+def integrate(spectrum, inplace=True):
     """
     Integrates a spectrum. 
     
