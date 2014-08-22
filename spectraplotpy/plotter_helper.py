@@ -39,7 +39,7 @@ def plot_spectra(*sp_list,  **kwargs):
     for sp in sp_list:
         # here we pass an axes named argument the value of the axes
         # local variable
-        sp.plot(axes=axes)
+        sp.plot(axes=axes, label=sp.dataset.name)
 
     return axes
 
@@ -132,3 +132,11 @@ def get_poly_baseline(spectrum, indices, deg=3):
     result_spectrum.dataset.name = "Baseline of " + result_spectrum.dataset.name
     result_spectrum.dataset.y = np.polyval(poly, result_spectrum.dataset.x)
     return result_spectrum
+
+def minmax_normalize(spectrum):
+    """Normalize a spectrum in place by dividing it by the max(abs(y)).
+    After normalization all the y values are between [-1 and 1].
+    """
+    ymax = np.max(np.abs(spectrum.dataset.y))
+    spectrum /= ymax
+    
