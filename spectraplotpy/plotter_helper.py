@@ -140,3 +140,21 @@ def minmax_normalize(spectrum):
     ymax = np.max(np.abs(spectrum.dataset.y))
     spectrum /= ymax
     
+def integrate(spectrum, inplace=True):
+    """
+    Integrates a spectrum. 
+    
+    Parameters
+    ----------
+    spectrum :
+    inplace = False
+        if the sepctrum should be modified in place or not
+    
+    #Todo: what to do with errors?
+    """    
+    if not inplace:
+        spectrum = spectrum.copy()
+    yint = np.cumsum(spectrum.dataset.y)
+    spectrum.dataset.y = yint
+    return spectrum
+
