@@ -104,11 +104,7 @@ def test_average_spectra_wrong_error_type():
                           "and not 'standard_something'!")
 
 
-
-def test_get_poly_baseline():
-    """This is a bit of a brittle test, as we compare a fit 
-    to a precalculated fit. But probably better than nothing"""
-    target_y = np.array([  9.95847828e-01,   9.98809914e-01,   1.00097735e+00,
+target_y_3P = np.array([  9.95847828e-01,   9.98809914e-01,   1.00097735e+00,
          1.00236653e+00,   1.00299384e+00,   1.00287565e+00,
          1.00202835e+00,   1.00046833e+00,   9.98211967e-01,
          9.95275652e-01,   9.91675766e-01,   9.87428695e-01,
@@ -142,6 +138,11 @@ def test_get_poly_baseline():
         -2.02834889e-03,  -2.87564682e-03,  -2.99383678e-03,
         -2.36653431e-03,  -9.77354971e-04,   1.19008569e-03,
          4.15217213e-03])
+
+def test_get_poly_baseline():
+    """This is a bit of a brittle test, as we compare a fit 
+    to a precalculated fit. But probably better than nothing"""
+
     x = range(1,101)
     y = np.random.rand(100)
     y[0:10]  = 1
@@ -153,7 +154,7 @@ def test_get_poly_baseline():
     baseline = spp.get_poly_baseline(s, indices, deg = 3)   
     
     assert(np.all(baseline.dataset.x == s.dataset.x))
-    assert(np.allclose(baseline.dataset.y, target_y))
+    assert(np.allclose(baseline.dataset.y, target_y_3P))
 
 def test_minmax_norm():
     sp = spp.Spectrum(spp.Dataset(x=[1, 2, 3, 4], y=[-1, 2, 3, -4]))
@@ -181,5 +182,15 @@ def test_integrate_copy():
     assert(np.allclose(sp1.dataset.y, [-1, 1, 4, 0]))
 
 
+
+def test_basline_correct():
+    """This is a bit of a brittle test, as we compare a fit 
+    to a precalculated fit. But probably better than nothing"""
+    
+    sp = spp.Spectrum(spp.Dataset(x= range(1,101), y=target_y_3P))
+    spp.baseline_correct(sp, left_num=10, right_num=10)
+    print sp.dataset.y
+    assert np.allclose(sp.dataset.y, np.zeros(100))
+    
 if __name__ == "__main__":
     test_average_spectra_incompatible_x()

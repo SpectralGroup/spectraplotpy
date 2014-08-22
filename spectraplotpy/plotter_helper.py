@@ -133,6 +133,7 @@ def get_poly_baseline(spectrum, indices, deg=3):
     result_spectrum.dataset.y = np.polyval(poly, result_spectrum.dataset.x)
     return result_spectrum
 
+
 def minmax_normalize(spectrum):
     """Normalize a spectrum in place by dividing it by the max(abs(y)).
     After normalization all the y values are between [-1 and 1].
@@ -140,13 +141,32 @@ def minmax_normalize(spectrum):
     ymax = np.max(np.abs(spectrum.dataset.y))
     spectrum /= ymax
     
-def integrate(spectrum, inplace=True):
-    """
-    Integrates a spectrum. 
+    
+def baseline_correct(spectrum, left_num=100, right_num=100, deg=3):
+    """ Substracts the baseline in place.
+    Currently only a polynomial baseline is supported.
     
     Parameters
     ----------
     spectrum :
+        spectrum-like object
+    left_num = 100 :
+        Number of point on the left side to take as baseline for fitting.
+    right_num = 100 :
+        Number of point on the right side to take as baseline for fitting.        
+    deg  = 3 :
+        The degree of the polynomial.
+    """
+    left = range(0,left_num)
+    right = range(-right_num,0,1)
+    indices = np.append(left, right)
+    baseline = spp.get_poly_baseline(spectrum, indices, deg=deg)
+    spectrum -= baseline
+    return spectrum      
+
+def integrate(spectrum, inplace=True):
+    """
+    Integrates a spectrum. 
     inplace = False
         if the sepctrum should be modified in place or not
     
@@ -157,4 +177,5 @@ def integrate(spectrum, inplace=True):
     yint = np.cumsum(spectrum.dataset.y)
     spectrum.dataset.y = yint
     return spectrum
+
 
