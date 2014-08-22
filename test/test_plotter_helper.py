@@ -156,6 +156,33 @@ def test_get_poly_baseline():
     assert(np.all(baseline.dataset.x == s.dataset.x))
     assert(np.allclose(baseline.dataset.y, target_y_3P))
 
+def test_minmax_norm():
+    sp = spp.Spectrum(spp.Dataset(x=[1, 2, 3, 4], y=[-1, 2, 3, -4]))
+    spp.minmax_normalize(sp)
+    
+    assert(np.all(sp.dataset.y == np.array([-1, 2, 3, -4])/4.))
+
+
+def test_integrate_inplace():
+    sp = spp.Spectrum(spp.Dataset(x=[1, 2, 3, 4], y=[-1, 2, 3, -4]))
+    
+    spp.integrate(sp, inplace=True)
+    assert(np.allclose(sp.dataset.x, [1, 2, 3, 4]))
+    assert(np.allclose(sp.dataset.y, [-1, 1, 4, 0]))
+
+def test_integrate_copy():
+    sp = spp.Spectrum(spp.Dataset(x=[1, 2, 3, 4], y=[-1, 2, 3, -4]))
+    
+    sp1 = spp.integrate(sp, inplace=False)
+    
+    assert(np.allclose(sp.dataset.x, [1, 2, 3, 4]))
+    assert(np.allclose(sp.dataset.y, [-1, 2, 3, -4]))
+
+    assert(np.allclose(sp1.dataset.x, [1, 2, 3, 4]))
+    assert(np.allclose(sp1.dataset.y, [-1, 1, 4, 0]))
+
+
+
 def test_basline_correct():
     """This is a bit of a brittle test, as we compare a fit 
     to a precalculated fit. But probably better than nothing"""

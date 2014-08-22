@@ -39,7 +39,7 @@ def plot_spectra(*sp_list,  **kwargs):
     for sp in sp_list:
         # here we pass an axes named argument the value of the axes
         # local variable
-        sp.plot(axes=axes)
+        sp.plot(axes=axes, label=sp.dataset.name)
 
     return axes
 
@@ -132,6 +132,15 @@ def get_poly_baseline(spectrum, indices, deg=3):
     result_spectrum.dataset.name = "Baseline of " + result_spectrum.dataset.name
     result_spectrum.dataset.y = np.polyval(poly, result_spectrum.dataset.x)
     return result_spectrum
+
+
+def minmax_normalize(spectrum):
+    """Normalize a spectrum in place by dividing it by the max(abs(y)).
+    After normalization all the y values are between [-1 and 1].
+    """
+    ymax = np.max(np.abs(spectrum.dataset.y))
+    spectrum /= ymax
+    
     
 def baseline_correct(spectrum, left_num=100, right_num=100, deg=3):
     """ Substracts the baseline in place.
@@ -154,3 +163,19 @@ def baseline_correct(spectrum, left_num=100, right_num=100, deg=3):
     baseline = spp.get_poly_baseline(spectrum, indices, deg=deg)
     spectrum -= baseline
     return spectrum      
+
+def integrate(spectrum, inplace=True):
+    """
+    Integrates a spectrum. 
+    inplace = False
+        if the sepctrum should be modified in place or not
+    
+    #Todo: what to do with errors?
+    """    
+    if not inplace:
+        spectrum = spectrum.copy()
+    yint = np.cumsum(spectrum.dataset.y)
+    spectrum.dataset.y = yint
+    return spectrum
+
+
