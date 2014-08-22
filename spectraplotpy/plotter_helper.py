@@ -132,3 +132,25 @@ def get_poly_baseline(spectrum, indices, deg=3):
     result_spectrum.dataset.name = "Baseline of " + result_spectrum.dataset.name
     result_spectrum.dataset.y = np.polyval(poly, result_spectrum.dataset.x)
     return result_spectrum
+    
+def baseline_correct(spectrum, left_num=100, right_num=100, deg=3):
+    """ Substracts the baseline in place.
+    Currently only a polynomial baseline is supported.
+    
+    Parameters
+    ----------
+    spectrum :
+        spectrum-like object
+    left_num = 100 :
+        Number of point on the left side to take as baseline for fitting.
+    right_num = 100 :
+        Number of point on the right side to take as baseline for fitting.        
+    deg  = 3 :
+        The degree of the polynomial.
+    """
+    left = range(0,left_num)
+    right = range(-right_num,0,1)
+    indices = np.append(left, right)
+    baseline = spp.get_poly_baseline(spectrum, indices, deg=deg)
+    spectrum -= baseline
+    return spectrum      
