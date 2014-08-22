@@ -133,12 +133,12 @@ def get_poly_baseline(spectrum, indices, deg=3):
     result_spectrum.dataset.y = np.polyval(poly, result_spectrum.dataset.x)
     return result_spectrum
 
-def minmax_normalize(spec):
+def minmax_normalize(spectrum):
     """Normalize a spectrum in place by dividing it by the max(abs(y)).
     After normalization all the y values are between [-1 and 1].
     """
-    ymax = np.max(np.abs(spec.dataset.y))
-    spec /= ymax
+    ymax = np.max(np.abs(spectrum.dataset.y))
+    spectrum /= ymax
     
 def integrate(spectrum, inplace=True):
     """
@@ -157,3 +157,4 @@ def integrate(spectrum, inplace=True):
     yint = np.cumsum(spectrum.dataset.y)
     spectrum.dataset.y = yint
     return spectrum
+
